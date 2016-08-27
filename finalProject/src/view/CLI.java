@@ -28,10 +28,14 @@ public class CLI {
 		    	 		input = in.readLine();
 				 }
 			} catch (IOException e) {
-				out.println(e.getMessage());
-				out.flush();
+				print(e.getMessage());
 			}
 		   }
 		 }).start();
+	}
+	
+	public void print(String str){
+		out.println(str);
+		out.flush();
 	}
 }

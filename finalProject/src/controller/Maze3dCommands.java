@@ -1,5 +1,7 @@
 package controller;
 
+import java.io.File;
+
 import model.Model;
 import view.View;
 
@@ -23,16 +25,39 @@ public class Maze3dCommands extends CommonCommandsManager {
 
 		@Override
 		public void doCommand(String[] args) {
-			
-			System.out.println("Work!");
-
+			File path=new File(args[1]);
+			File[] files=path.listFiles();
+			PrintDIRhelp(files);
 		}
-	}
+		
+		public void PrintDIRhelp(File[] files){
+			for (File file : files) {
+				if(!file.isFile()){
+					PrintDIRhelp(file.listFiles());
+					view.print(file.getName());
+				}
+				else
+				{
+					view.print(file.getName());	
+				}
+			}
+		}
 
+	}
+	
+	
 	class generate_mazeCommand implements Command {
 
 		@Override
 		public void doCommand(String[] args) {
+			
+			String zs=args[2];
+			String ys=args[3];
+			String xs=args[4];
+			
+			int z = Integer.parseInt(zs);
+			int y = Integer.parseInt(ys);
+			int x = Integer.parseInt(xs);
 
 		}
 	}

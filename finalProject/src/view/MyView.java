@@ -26,5 +26,9 @@ public class MyView implements View {
 		cli.start();
 
 	}
-
+	
+	@Override
+	public void print(String str){
+		cli.print(str);
+	}
 }

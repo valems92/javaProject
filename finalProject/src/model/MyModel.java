@@ -9,6 +9,7 @@ public class MyModel implements Model {
 	public MyModel(Controller controller) {
 		this.controller = controller;
 	}
+	
 
 
 }
