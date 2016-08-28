@@ -2,6 +2,9 @@ package controller;
 
 import java.io.File;
 
+import algorithms.mazeGenerators.Position;
+import algorithms.search.Searcher;
+
 public class Maze3dCommands extends CommonCommandsManager {
 
 	@Override
@@ -65,55 +68,73 @@ public class Maze3dCommands extends CommonCommandsManager {
 	}
 
 	class displayCommand implements Command {
-
 		@Override
 		public void doCommand(String[] args) {
-
+			if (args.length > 1) {
+				String name = args[1];
+				model.displayMazeByName(name);
+			} else
+				view.println("No maze name was received");
 		}
 	}
 
 	class display_cross_sectionCommand implements Command {
-
 		@Override
 		public void doCommand(String[] args) {
-
+			model.displayCrossSection();
 		}
 	}
 
 	class save_mazeCommand implements Command {
-
 		@Override
 		public void doCommand(String[] args) {
-
+			if (args.length >= 3) {
+				String mazeName = args[1];
+				String fileName = args[2];
+				model.saveMazeByName(mazeName, fileName);
+			} else
+				view.println("Missing parameters. Maze name and file name are needed");
 		}
 	}
 
 	class load_mazeCommand implements Command {
-
 		@Override
 		public void doCommand(String[] args) {
-
+			if (args.length >= 3) {
+				String fileName = args[1];
+				String mazeName = args[2];
+				model.loadMaze(fileName, mazeName);
+			} else
+				view.println("Missing parameters. File name and maze name are needed");
 		}
 	}
 
 	class solveCommand implements Command {
-
 		@Override
 		public void doCommand(String[] args) {
-
+			if (args.length >= 3) {
+				String mazeName = args[1];
+				String algorithm = args[2];
+				
+				//Searcher<Position> c= Class.forName(algorithm)<Position>.newInstance();
+				//model.solveMaze(mazeName, algorithm);
+			} else
+				view.println("Missing parameters. Maze name and searcher algorithm are needed");
 		}
 	}
 
 	class display_solutionCommand implements Command {
-
 		@Override
 		public void doCommand(String[] args) {
-
+			if (args.length > 1) {
+				String name = args[1];
+				model.displaySolutionByName(name);
+			} else
+				view.println("No maze name was received");
 		}
 	}
 
 	class exitCommand implements Command {
-
 		@Override
 		public void doCommand(String[] args) {
 
