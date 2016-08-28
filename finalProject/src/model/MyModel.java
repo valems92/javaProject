@@ -17,6 +17,7 @@ import algorithms.mazeGenerators.Maze3d;
 import algorithms.mazeGenerators.Maze3dGenerator;
 import algorithms.mazeGenerators.Position;
 import algorithms.mazeGenerators.RandomSelectMethod;
+import algorithms.search.CostStateComperator;
 import algorithms.search.Searchable;
 import algorithms.search.Searcher;
 import controller.Controller;
@@ -156,11 +157,12 @@ public class MyModel implements Model {
 						Class<?> cls = Class.forName("algorithms.search." + algorithmClassName);
 						Searcher<Position> searcher;
 						
-						//boolean hasPrams = hasParameterConstructor(cls);
-						/*if(hasPrams){
-							Class<?> clsComp = Class.forName("algorithms.search." + comperatorClassName);
-							searcher = (Searcher<Position>) cls.newInstance(clsComp.ne);
-						} else */
+//						boolean hasPrams = hasParameterConstructor(cls);
+//						if(hasPrams){
+//							Class<?> clsComp = Class.forName("algorithms.search." + comperatorClassName);
+//							searcher = (Searcher<Position>) cls.newInstance(); 
+//							
+//						} 
 						searcher = (Searcher<Position>) cls.newInstance();
 						
 						ArrayList<Position> solution = searcher.search(mazeDomain);

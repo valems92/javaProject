@@ -6,6 +6,6 @@ public interface Model {
 	public void displayCrossSection(String name, int index, String section);
 	public void saveMazeByName(String name, String fileName);
 	public void loadMaze(String fileName, String name);
-	public void solveMaze(String name, String algorithmClassName, String comperatorClassName);
-	public void displaySolutionByName(String name); // ALGORITHM
+	public void solveMaze(String name, String algorithmClassName, String comperatorClassName); // ALGORITHM
+	public void displaySolutionByName(String name); 
 }
