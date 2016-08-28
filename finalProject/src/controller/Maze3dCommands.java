@@ -85,7 +85,15 @@ public class Maze3dCommands extends CommonCommandsManager {
 	class display_cross_sectionCommand implements Command {
 		@Override
 		public void doCommand(String[] args) {
-			model.displayCrossSection();
+			if(args.length >= 4){
+			String name=args[1];
+			int index=Integer.parseInt(args[2]);
+			String section=args[3];
+			model.displayCrossSection(name,index,section);
+			}
+			else
+				view.println("Missing parameters. Maze name, Index value and Section name are needed");
+
 		}
 	}
 

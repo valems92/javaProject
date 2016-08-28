@@ -64,8 +64,35 @@ public class MyModel implements Model {
 			controller.println("Maze with name " + name + " doesn't exist");
 	}
 
-	public void displayCrossSection() {
+	public void displayCrossSection(String name, int index, String section) {
+		if(index<0){
+			controller.println("Invalid Index!");
+		}
+		
 
+		else if(generatedMazes.containsKey(name)){
+			Maze3d maze=generatedMazes.get(name);
+			
+			switch (section) {
+			case "x":
+			case "X":  controller.println(PrintMaze2d(maze.getCrossSectionByX(index),maze.getZ(),maze.getY()));
+		
+				break;
+				
+			case "y":
+			case "Y":  controller.println(PrintMaze2d(maze.getCrossSectionByY(index),maze.getZ(),maze.getX()));
+				break;
+				
+			case "z":
+			case "Z":  controller.println(PrintMaze2d(maze.getCrossSectionByZ(index),maze.getY(),maze.getX()));
+				break;
+
+			default: controller.println("Invalid Section!");
+				break;
+			}
+		}
+		else
+			controller.println("Maze with name " + name + " doesn't exist");
 	}
 
 	@Override
@@ -169,5 +196,18 @@ public class MyModel implements Model {
 			controller.println(solution.toString());
 		else
 			controller.println("Maze " + name + " wasn't solved yet");
+	}
+	
+	public static String PrintMaze2d(int[][] maze, int end1,int end2){
+		StringBuilder sb=new StringBuilder();
+		for (int start1=0;start1<end1;start1++){
+			for(int start2=0;start2<end2;start2++){
+						sb.append(maze[start1][start2]);
+				}
+				sb.append("\n");
+			}
+
+		return sb.toString();
+		
 	}
 }
