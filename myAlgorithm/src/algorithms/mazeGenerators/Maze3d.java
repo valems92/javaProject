@@ -48,16 +48,16 @@ public class Maze3d {
 	 */
 	public Maze3d(byte[] b) {
 		// size
-		this.z = (int) b[0];
-		this.y = (int) b[1];
-		this.x = (int) b[2];
+		this.z = (int) b[1];
+		this.y = (int) b[2];
+		this.x = (int) b[3];
 		maze = new int[z][y][x];
 
-		startPosition = new Position((int) b[3], (int) b[4], (int) b[5]);
-		goalPosition = new Position((int) b[6], (int) b[7], (int) b[8]);
+		startPosition = new Position((int) b[4], (int) b[5], (int) b[6]);
+		goalPosition = new Position((int) b[7], (int) b[8], (int) b[9]);
 
 		// values
-		int index = 9;
+		int index = 10;
 		for (int i = 0; i < z; i++) {
 			for (int j = 0; j < y; j++) {
 				for (int k = 0; k < x; k++) {
@@ -253,25 +253,27 @@ public class Maze3d {
 	 * @return The array
 	 */
 	public byte[] toByteArray() {
-		byte[] byteMaze = new byte[z * y * x + 9];
+		int length = z * y * x + 10;
+		byte[] byteMaze = new byte[length];
 
+		byteMaze[0] = (byte) length;
 		// size
-		byteMaze[0] = (byte) z;
-		byteMaze[1] = (byte) y;
-		byteMaze[2] = (byte) x;
+		byteMaze[1] = (byte) z;
+		byteMaze[2] = (byte) y;
+		byteMaze[3] = (byte) x;
 
 		// start position
-		byteMaze[3] = (byte) startPosition.z;
-		byteMaze[4] = (byte) startPosition.y;
-		byteMaze[5] = (byte) startPosition.x;
+		byteMaze[4] = (byte) startPosition.z;
+		byteMaze[5] = (byte) startPosition.y;
+		byteMaze[6] = (byte) startPosition.x;
 
 		// goal position
-		byteMaze[6] = (byte) goalPosition.z;
-		byteMaze[7] = (byte) goalPosition.y;
-		byteMaze[8] = (byte) goalPosition.x;
+		byteMaze[7] = (byte) goalPosition.z;
+		byteMaze[8] = (byte) goalPosition.y;
+		byteMaze[9] = (byte) goalPosition.x;
 
 		// values
-		int index = 9;
+		int index = 10;
 		for (int i = 0; i < z; i++) {
 			for (int j = 0; j < y; j++) {
 				for (int k = 0; k < x; k++) {

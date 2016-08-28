@@ -14,7 +14,7 @@ import java.io.InputStream;
  */
 public class MyDecompressorInputStream extends InputStream {
 	private InputStream in;
-	private final int FIXED_DATA_SIZE = 9;
+	private final int FIXED_DATA_SIZE = 10;
 
 	/**
 	 * Initialize the input stream.
@@ -36,33 +36,26 @@ public class MyDecompressorInputStream extends InputStream {
 	 */
 	@Override
 	public int read(byte[] b) throws IOException {
-		in.read(b);
-
+		byte[] compressed = new byte[b.length];
+		in.read(compressed);
+		
 		int i, index = FIXED_DATA_SIZE, count = 0;
 		byte byteToWrite = 0;
-		byte[] decompressB = new byte[b.length];
-
+		
 		for (i = 0; i < FIXED_DATA_SIZE; i++)
-			decompressB[i] = b[i];
-
-		for (i = FIXED_DATA_SIZE; i < b.length; i = i + 2) {
-			count = b[i];
+			b[i] = compressed[i];
+		
+		for (i = FIXED_DATA_SIZE; i < compressed.length; i = i + 2) {
+			count = compressed[i];
 
 			if (count != 0) {
-				byteToWrite = b[i + 1];
+				byteToWrite = compressed[i + 1];
 				for (int j = 0; j < count; j++) {
-					decompressB[index] = byteToWrite;
+					b[index] = byteToWrite;
 					index++;
 				}
-			} else {
-				for (int k = 0; k < b.length; k++) {
-					b[k] = decompressB[k];
-				}
+			} else
 				return 0;
-			}
-		}
-		for (int k = 0; k < b.length; k++) {
-			b[k] = (b[k] != 0) ? decompressB[k] : 0;
 		}
 		return 0;
 	}
