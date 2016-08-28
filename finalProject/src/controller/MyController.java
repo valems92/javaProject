@@ -30,7 +30,15 @@ public class MyController implements Controller {
 	@Override
 	public void executeCommand(String commandLine) throws IOException{
 		commandsManager.executeCommand(commandLine);
-
 	}
 
+	@Override
+	public void print(String str) {
+		view.print(str);
+	}
+
+	@Override
+	public void println(String str) {
+		view.println(str);
+	}
 }

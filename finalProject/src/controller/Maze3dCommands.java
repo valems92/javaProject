@@ -1,10 +1,6 @@
 package controller;
 
 import java.io.File;
-import java.io.IOException;
-
-import model.Model;
-import view.View;
 
 public class Maze3dCommands extends CommonCommandsManager {
 
@@ -39,10 +35,10 @@ public class Maze3dCommands extends CommonCommandsManager {
 
 		public void PrintDIRhelp(File[] files, int tabs) {
 			for (File file : files) {
-				for(int i = 0; i < tabs; i++)
+				for (int i = 0; i < tabs; i++)
 					view.print("\t");
 				view.println(file.getName());
-				
+
 				if (!file.isFile())
 					PrintDIRhelp(file.listFiles(), tabs + 1);
 			}
@@ -51,18 +47,20 @@ public class Maze3dCommands extends CommonCommandsManager {
 	}
 
 	class generate_mazeCommand implements Command {
-
 		@Override
 		public void doCommand(String[] args) {
-
-			//String zs = args[2];
-			//String ys = args[3];
-			//String xs = args[4];
-
-			//int z = Integer.parseInt(zs);
-			//int y = Integer.parseInt(ys);
-			//int x = Integer.parseInt(xs);
-
+			if (args.length >= 5) {
+				String name = args[1];
+				try {
+					int z = Integer.parseInt(args[2]);
+					int y = Integer.parseInt(args[3]);
+					int x = Integer.parseInt(args[4]);
+					model.generateMaze(name, z, y, x);
+				} catch (NumberFormatException e) {
+					view.println("There are at least one improper dimension. Maze name, number of floors, columns and rows are needed");
+				}
+			} else
+				view.println("Missing parameters. Maze name, number of floors, columns and rows are needed");
 		}
 	}
 
