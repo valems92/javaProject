@@ -1,8 +1,12 @@
 package controller;
 
 import java.io.File;
+import java.util.ArrayList;
 
+import algorithms.demo.Maze3dDomain;
+import algorithms.mazeGenerators.Maze3d;
 import algorithms.mazeGenerators.Position;
+import algorithms.search.Searchable;
 import algorithms.search.Searcher;
 
 public class Maze3dCommands extends CommonCommandsManager {
@@ -116,8 +120,11 @@ public class Maze3dCommands extends CommonCommandsManager {
 				String mazeName = args[1];
 				String algorithm = args[2];
 				
-				//Searcher<Position> c= Class.forName(algorithm)<Position>.newInstance();
-				//model.solveMaze(mazeName, algorithm);
+				String comperator = null;
+				if(args.length >= 4)
+					 comperator = args[3];
+				
+				model.solveMaze(mazeName, algorithm, comperator);
 			} else
 				view.println("Missing parameters. Maze name and searcher algorithm are needed");
 		}

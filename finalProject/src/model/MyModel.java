@@ -1,14 +1,15 @@
 package model;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Scanner;
 
 import algorithms.demo.Maze3dDomain;
 import algorithms.mazeGenerators.GrowingTreeGenerator;
@@ -16,7 +17,6 @@ import algorithms.mazeGenerators.Maze3d;
 import algorithms.mazeGenerators.Maze3dGenerator;
 import algorithms.mazeGenerators.Position;
 import algorithms.mazeGenerators.RandomSelectMethod;
-import algorithms.search.DepthFirstSearch;
 import algorithms.search.Searchable;
 import algorithms.search.Searcher;
 import controller.Controller;
@@ -25,13 +25,17 @@ import io.MyDecompressorInputStream;
 
 public class MyModel implements Model {
 	private Controller controller;
-	private HashMap<String, Maze3d> generatedMazes;
+	public HashMap<String, Maze3d> generatedMazes;
 	private HashMap<String, ArrayList<Position>> solutions;
 
 	public MyModel(Controller controller) {
 		this.controller = controller;
 		generatedMazes = new HashMap<String, Maze3d>();
 		solutions = new HashMap<String, ArrayList<Position>>();
+	}
+	
+	public HashMap<String, Maze3d> getArrays(){
+		return generatedMazes;
 	}
 
 	@Override
@@ -54,14 +58,14 @@ public class MyModel implements Model {
 	@Override
 	public void displayMazeByName(String name) {
 		Maze3d maze = generatedMazes.get(name);
-		if (maze != null) 
+		if (maze != null)
 			controller.println(maze.toString());
 		else
 			controller.println("Maze with name " + name + " doesn't exist");
 	}
-	
+
 	public void displayCrossSection() {
-		
+
 	}
 
 	@Override
@@ -73,7 +77,7 @@ public class MyModel implements Model {
 				out.write(maze.toByteArray());
 				out.flush();
 				out.close();
-				controller.println("The "+name+ " saved seccessfully!");
+				controller.println("The " + name + " saved seccessfully!");
 			} catch (FileNotFoundException e) {
 				controller.println("Error occured while creating file");
 			} catch (IOException e) {
@@ -85,55 +89,83 @@ public class MyModel implements Model {
 
 	@Override
 	public void loadMaze(String fileName, String name) {
-		if (generatedMazes.containsKey(name)!=true) {
-			try{
+		if (!generatedMazes.containsKey(name)) {
+			try {
 				InputStream in = new MyDecompressorInputStream(new FileInputStream(fileName));
-					Scanner scanner=new Scanner(in);
-					int size=(int)scanner.nextByte();
-					byte b[] = new byte[size]; // need the size
-					in.read(b);
-					in.close();
-					Maze3d mazeLoaded = new Maze3d(b);
-					generatedMazes.put(name, mazeLoaded);
-					controller.println("The "+name+ " loaded seccessfully!");
+
+				File file = new File(fileName);
+				FileInputStream reader = new FileInputStream(file);
+				byte b[] = new byte[reader.read()]; // need the size
+				reader.close();
 				
-			}
-			catch (FileNotFoundException e) {
+				in.read(b);
+				in.close();
+				Maze3d mazeLoaded = new Maze3d(b);
+				generatedMazes.put(name, mazeLoaded);
+				controller.println("The " + name + " loaded seccessfully!");
+
+			} catch (FileNotFoundException e) {
 				controller.println("Error occured while finding file");
 			} catch (IOException e) {
 				controller.println("Error occured while reading to file");
-				}
-		}
-			
-		else
-			controller.println("This name exist already!");
-			
+			}
+		} else
+			controller.println("This name exist already");
+
 	}
-	
 
 	@Override
-	public void solveMaze(String name, Searcher algorithm) {
-		// TODO: USE ALGORITHM RECEIVED!
+	public void solveMaze(String name, String algorithmClassName, String comperatorClassName) {
+		if (solutions.containsKey(name)) 
+			return;
+		
 		new Thread(new Runnable() {
 			public void run() {
 				Maze3d maze = generatedMazes.get(name);
 				if (maze != null) {
-					Searchable<Position> mazeDomain = new Maze3dDomain(maze);
-					Searcher<Position> alg = new DepthFirstSearch<Position>();
-					ArrayList<Position> solution = alg.search(mazeDomain);
-					
-					solutions.put(name, solution);
-					controller.println("Solution for " + name + " is ready");
+					try {
+						Searchable<Position> mazeDomain = new Maze3dDomain(maze);
+						
+						Class<?> cls = Class.forName("algorithms.search." + algorithmClassName);
+						Searcher<Position> searcher;
+						
+						//boolean hasPrams = hasParameterConstructor(cls);
+						/*if(hasPrams){
+							Class<?> clsComp = Class.forName("algorithms.search." + comperatorClassName);
+							searcher = (Searcher<Position>) cls.newInstance(clsComp.ne);
+						} else */
+						searcher = (Searcher<Position>) cls.newInstance();
+						
+						ArrayList<Position> solution = searcher.search(mazeDomain);
+						solutions.put(name, solution);
+						
+						controller.println("Solution for " + algorithmClassName + " is ready");
+					} catch (ClassNotFoundException e) {
+						controller.println("The algorithm doesn't exist");
+					} catch (InstantiationException e) {
+						controller.println(e.getMessage());
+					} catch (IllegalAccessException e) {
+						controller.println(e.getMessage());
+					}
 				} else
 					controller.println("Maze with name " + name + " doesn't exist");
 			}
 		}).start();
 	}
+	
+	private boolean hasParameterConstructor(Class<?> cls) {
+	    for (Constructor<?> constructor : cls.getConstructors()) {
+	        if (constructor.getParameterCount() != 0) { 
+	            return true;
+	        }
+	    }
+	    return false;
+	}
 
 	@Override
 	public void displaySolutionByName(String name) {
 		ArrayList<Position> solution = solutions.get(name);
-		if(solution != null) 
+		if (solution != null)
 			controller.println(solution.toString());
 		else
 			controller.println("Maze " + name + " wasn't solved yet");

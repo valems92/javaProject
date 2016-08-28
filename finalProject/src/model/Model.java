@@ -1,5 +1,8 @@
 package model;
 
+import java.util.HashMap;
+
+import algorithms.mazeGenerators.Maze3d;
 import algorithms.search.Searcher;
 
 public interface Model {
@@ -8,6 +11,6 @@ public interface Model {
 	public void displayCrossSection(); // TO DO
 	public void saveMazeByName(String name, String fileName);
 	public void loadMaze(String fileName, String name);  // TO DO
-	public void solveMaze(String name, Searcher algorithm);
+	public void solveMaze(String name, String algorithmClassName, String comperatorClassName);
 	public void displaySolutionByName(String name); // ALGORITHM
 }
