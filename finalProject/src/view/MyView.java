@@ -22,13 +22,16 @@ public class MyView implements View {
 
 	@Override
 	public void start() {
-		// TODO Auto-generated method stub
 		cli.start();
-
 	}
 	
 	@Override
 	public void print(String str){
 		cli.print(str);
+	}
+	
+	@Override
+	public void println(String str){
+		cli.println(str);
 	}
 }

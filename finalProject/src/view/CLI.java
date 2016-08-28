@@ -28,14 +28,19 @@ public class CLI {
 		    	 		input = in.readLine();
 				 }
 			} catch (IOException e) {
-				print(e.getMessage());
+				println(e.getMessage());
 			}
 		   }
 		 }).start();
 	}
 	
-	public void print(String str){
+	public void println(String str){
 		out.println(str);
+		out.flush();
+	}
+	
+	public void print(String str){
+		out.print(str);
 		out.flush();
 	}
 }
