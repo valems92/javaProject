@@ -7,7 +7,7 @@ import java.util.Random;
  * <h1>RandomSelectMethod</h1> Pull a random position from the list.
  * <p>
  * 
- * @author Valentina Munoz
+ * @author Valentina Munoz & Moris Amon
  * @implements SelectMethod
  *
  */

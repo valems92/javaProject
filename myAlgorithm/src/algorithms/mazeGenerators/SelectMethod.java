@@ -7,7 +7,7 @@ import java.util.ArrayList;
  * cell from a list
  * <p>
  * 
- * @author Valentina Munoz
+ * @author Valentina Munoz & Moris Amon
  */
 public interface SelectMethod {
 	/**

@@ -10,7 +10,7 @@ import algorithms.search.State;
  * according to the direction received.
  * <p>
  * 
- * @author Valentina Munoz
+ * @author Valentina Munoz & Moris Amon
  *
  */
 public class Maze3dStateFactory {

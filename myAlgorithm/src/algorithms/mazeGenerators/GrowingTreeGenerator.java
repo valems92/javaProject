@@ -10,7 +10,7 @@ import java.util.Random;
  * list at random) or "last selected" (pull the newest cell).
  * <p>
  * 
- * @author Valentina Munoz
+ * @author Valentina Munoz & Moris Amon
  * @extends CommonMaze3dGenerator
  */
 public class GrowingTreeGenerator extends CommonMaze3dGenerator {

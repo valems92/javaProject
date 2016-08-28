@@ -7,7 +7,7 @@ import java.util.Random;
  * maze generators.
  * <p>
  * 
- * @author Valentina Munoz
+ * @author Valentina Munoz & Moris Amon
  * @implements Maze3dGenerator
  *
  */

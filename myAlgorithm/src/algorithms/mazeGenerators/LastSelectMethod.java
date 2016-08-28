@@ -6,7 +6,7 @@ import java.util.ArrayList;
  * <h1>LastSelectMethod</h1> Pull the last (the newest) position from the list.
  * <p>
  * 
- * @author Valentina Munoz
+ * @author Valentina Munoz & Moris Amon
  * @implements SelectMethod
  *
  */

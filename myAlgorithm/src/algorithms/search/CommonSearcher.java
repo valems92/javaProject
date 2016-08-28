@@ -8,7 +8,7 @@ import java.util.Collections;
  * <h1>CommonSearcher</h1> A class that contains common methods of searchers
  * <p>
  * 
- * @author Valentina Munoz
+ * @author Valentina Munoz & Moris Amon
  * @implements Searcher
  *
  */

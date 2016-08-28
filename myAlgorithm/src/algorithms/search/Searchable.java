@@ -8,7 +8,7 @@ import java.util.ArrayList;
  * object.
  * <p>
  * 
- * @author Valentina Munoz
+ * @author Valentina Munoz & Moris Amon
  *
  * @param <T>
  *            What the searchable object contains (for example, a 3D maze

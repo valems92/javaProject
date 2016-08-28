@@ -6,7 +6,7 @@ package algorithms.search;
  * state and a camfrom state.
  * <p>
  * 
- * @author Valentina Munoz
+ * @author Valentina Munoz & Moris Amon
  *
  * @param <T>
  *            The way to represent a state (for example, in the 3D maze the

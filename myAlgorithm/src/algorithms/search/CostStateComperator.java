@@ -6,7 +6,7 @@ import java.util.Comparator;
  * <h1>CostStateComperator</h1> Compare two states by their cost.
  * <p>
  * 
- * @author Valentina Munoz
+ * @author Valentina Munoz & Moris Amon
  */
 public class CostStateComperator<T> implements Comparator<State<T>> {
 

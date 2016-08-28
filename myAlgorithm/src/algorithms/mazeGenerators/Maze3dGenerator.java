@@ -5,7 +5,7 @@ package algorithms.mazeGenerators;
  * generate a 3D maze.
  * <p>
  * 
- * @author Valentina Munoz
+ * @author Valentina Munoz & Moris Amon
  */
 public interface Maze3dGenerator {
 	/**

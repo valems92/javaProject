@@ -11,7 +11,7 @@ import algorithms.search.State;
  * <h1>Maze3dDomain</h1> Represent a searchable object of type 3D maze.
  * <p>
  * 
- * @author Valentina Munoz
+ * @author Valentina Munoz & Moris Amon
  * @implements Searchable
  *
  */

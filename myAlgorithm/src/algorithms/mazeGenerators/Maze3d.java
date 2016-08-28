@@ -9,7 +9,7 @@ import java.util.Scanner;
  * dimmension in order to create an instance of this class.
  * <p>
  * 
- * @author Valentina Munoz
+ * @author Valentina Munoz & Moris Amon
  */
 public class Maze3d {
 	private int[][][] maze;

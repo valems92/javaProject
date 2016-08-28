@@ -11,7 +11,7 @@ import java.util.PriorityQueue;
  * choose the better solution. like by best cost (cost comparator).
  * <p>
  * 
- * @author Valentina Munoz
+ * @author Valentina Munoz & Moris Amon
  * @extends CommonSearcher
  */
 public class BestFirstSearch<T> extends CommonSearcher<T> {

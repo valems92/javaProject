@@ -20,6 +20,14 @@ import algorithms.search.Searcher;
 import io.MyCompressorOutputStream;
 import io.MyDecompressorInputStream;
 
+/**
+ * <h1>Demo</h1> A demo class of maze generator algorithm, search algorithm and
+ * compress/decompress classes.
+ * <p>
+ * 
+ * @author Valentina Munoz & Moris Amon
+ *
+ */
 public class Demo {
 	public void run() throws IOException {
 		Maze3dGenerator mg = new GrowingTreeGenerator(new RandomSelectMethod());
@@ -40,19 +48,17 @@ public class Demo {
 		System.out.println("BestFirstSearch: " + solution.toString());
 		System.out.println("evaluated nodes: " + algorithm.getNumberOfNodesEvaluated() + "\n");
 
-		// add test for compress and decompress the maze
-
 		OutputStream out = new MyCompressorOutputStream(new FileOutputStream("1.bit"));
-		out.write(maze.toByteArray());// to compress
+		out.write(maze.toByteArray());
 		out.flush();
 		out.close();
-		
+
 		try {
 			InputStream in = new MyDecompressorInputStream(new FileInputStream("1.bit"));
 			byte b[] = new byte[maze.toByteArray().length];
 			in.read(b);
 			in.close();
-			
+
 			Maze3d loaded = new Maze3d(b);
 			System.out.println(loaded.toString());
 		} catch (Exception e) {

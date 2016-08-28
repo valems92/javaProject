@@ -9,7 +9,7 @@ import java.util.Stack;
  * the DFS algorithm.
  * <p>
  * 
- * @author Valentina Munoz
+ * @author Valentina Munoz & Moris Amon
  * @extends CommonSearcher
  */
 public class DepthFirstSearch<T> extends CommonSearcher<T> {

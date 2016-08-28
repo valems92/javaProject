@@ -9,7 +9,7 @@ import java.util.Random;
  * smaller then the sum of floors, rows and columns, it open a random neighbor.
  * <p>
  * 
- * @author Valentina Munoz
+ * @author Valentina Munoz & Moris Amon
  * @extends CommonMaze3dGenerator
  *
  */

@@ -5,7 +5,7 @@ package algorithms.mazeGenerators;
  * x coordinates.
  * <p>
  * 
- * @author Valentina Munoz
+ * @author Valentina Munoz & Moris Amon
  */
 public class Position {
 	public int z;
