@@ -9,7 +9,14 @@ import algorithms.mazeGenerators.Maze3dGenerator;
 import algorithms.mazeGenerators.Position;
 import algorithms.search.Searchable;
 import algorithms.search.Searcher;
-
+/**
+ * 
+ * <h1>dirCommand</h1> This class includes the Maze3d commands and implanted all command according the protocol
+ *  * <p>	
+ *
+ * @author Valentina Munoz & Moris Amon
+ *
+ */
 public class Maze3dCommands extends CommonCommandsManager {
 	private Maze3dAlgorithmFactory algorithms;
 	
