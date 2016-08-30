@@ -18,11 +18,13 @@ public abstract class CommonCommandsManager implements CommandsManager{
 		setCommands();
 	}
 
-	public void executeCommand(String commandLine) throws IOException {
+	public void executeCommand(String commandLine) {
 		String[] values = commandLine.split(" ");		
 		Command cmd = commands.get(values[0]);
-		if (cmd == null)
-			throw new IOException("Invalid command");
+		if (cmd == null){
+			view.println("Invalid command");
+			return;
+		}
 		cmd.doCommand(values);
 	}
 	
