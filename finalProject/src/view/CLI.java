@@ -17,7 +17,10 @@ public class CLI {
 		this.out = out;
 		this.cmd = cmd;
 	}
-
+	/**
+	 * <h1>exit</h1> Responsible to exit the game, this method close the Input Source, Output Source and the Thread channel
+	 * <p>
+	 */
 	public void start() {
 		new Thread(new Runnable() {
 			public void run() {
@@ -34,15 +37,39 @@ public class CLI {
 			}
 		}).start();
 	}
-
+	/**
+	 * <h1>print</h1> Responsible to receive the data for write to CLI
+	 * <p>
+	 * @param str - String for write to Output Source
+	 */
 	public void exit() {
+		try {
+			this.in.close();
+		} catch (IOException e) {
+			println(e.getMessage());
+		}
+		System.out.println("The game closed");
+		this.out.close();
+		Thread.interrupted();
+		return;
 	}
 
+	/**
+	 * <h1>print</h1> Responsible to write the data that receive from view to Output Output Source
+	 * <p>
+	 * @param str - String for write to Output Source
+	 */
+	
 	public void println(String str) {
 		out.println(str);
 		out.flush();
 	}
 
+	/**
+	 * <h1>print</h1> Responsible to write the data that receive from view to Output Output Source
+	 * <p>
+	 * @param str - String for write to Output Source
+	 */
 	public void print(String str) {
 		out.print(str);
 		out.flush();

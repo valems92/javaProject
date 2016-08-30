@@ -168,7 +168,11 @@ public class Maze3dCommands extends CommonCommandsManager {
 	class exitCommand implements Command {
 		@Override
 		public void doCommand(String[] args) {
-
+			if(args.length==1){
+				view.exit();
+			}
+			else
+				view.println("Invalid command");
 		}
 	}
 

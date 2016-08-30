@@ -34,4 +34,9 @@ public class MyView implements View {
 	public void println(String str){
 		cli.println(str);
 	}
+
+	@Override
+	public void exit() {
+		cli.exit();	
+	}
 }
