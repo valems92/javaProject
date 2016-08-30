@@ -5,12 +5,19 @@ import java.util.ArrayList;
 
 import algorithms.demo.Maze3dDomain;
 import algorithms.mazeGenerators.Maze3d;
+import algorithms.mazeGenerators.Maze3dGenerator;
 import algorithms.mazeGenerators.Position;
 import algorithms.search.Searchable;
 import algorithms.search.Searcher;
 
 public class Maze3dCommands extends CommonCommandsManager {
-
+	private Maze3dAlgorithmFactory algorithms;
+	
+	public Maze3dCommands() {
+		super();
+		algorithms = new Maze3dAlgorithmFactory();
+	}
+	
 	@Override
 	public void setCommands() {
 		commands.put("dir", new dirCommand());
@@ -22,7 +29,6 @@ public class Maze3dCommands extends CommonCommandsManager {
 		commands.put("solve", new solveCommand());
 		commands.put("display_solution", new display_solutionCommand());
 		commands.put("exit", new exitCommand());
-
 	}
 
 	class dirCommand implements Command {
@@ -56,18 +62,26 @@ public class Maze3dCommands extends CommonCommandsManager {
 	class generate_mazeCommand implements Command {
 		@Override
 		public void doCommand(String[] args) {
-			if (args.length >= 5) {
+			if (args.length >= 6) {
 				String name = args[1];
 				try {
 					int z = Integer.parseInt(args[2]);
 					int y = Integer.parseInt(args[3]);
 					int x = Integer.parseInt(args[4]);
-					model.generateMaze(name, z, y, x);
+					
+					String alg = args[5];
+					String arg = (args.length >= 7) ? args[6] : "";
+					Maze3dGenerator mg = algorithms.createGenerateAlgorithm(alg, arg);
+					
+					if(mg != null)
+						model.generateMaze(name, z, y, x, mg);
+					else
+						view.println("Wrong algorithm");
 				} catch (NumberFormatException e) {
 					view.println("There are at least one improper dimension. Maze name, number of floors, columns and rows are needed");
 				}
 			} else
-				view.println("Missing parameters. Maze name, number of floors, columns and rows are needed");
+				view.println("Missing parameters. Maze name, number of floors, columns and rows and algorithm are needed");
 		}
 	}
 
@@ -126,13 +140,15 @@ public class Maze3dCommands extends CommonCommandsManager {
 		public void doCommand(String[] args) {
 			if (args.length >= 3) {
 				String mazeName = args[1];
-				String algorithm = args[2];
 				
-				String comperator = null;
-				if(args.length >= 4)
-					 comperator = args[3];
+				String alg = args[2];
+				String arg = (args.length >= 4) ? args[3] : "";
+				Searcher<Position> searcher = algorithms.createSeacherAlgorithm(alg, arg);
 				
-				model.solveMaze(mazeName, algorithm, comperator);
+				if(searcher != null)
+					model.solveMaze(mazeName, searcher);
+				else
+					view.println("Wrong algorithm");
 			} else
 				view.println("Missing parameters. Maze name and searcher algorithm are needed");
 		}
