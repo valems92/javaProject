@@ -24,6 +24,14 @@ import controller.Controller;
 import io.MyCompressorOutputStream;
 import io.MyDecompressorInputStream;
 
+/**
+ * <h1>MyModel</h1> Implements all model interface functoins. Also save all
+ * mazes created / loaded and their's solution if were solved.
+ * <p>
+ * 
+ * @author Valentina Munoz & Moris Amon
+ *
+ */
 public class MyModel implements Model {
 	private Controller controller;
 	public HashMap<String, Maze3d> generatedMazes;
@@ -33,10 +41,6 @@ public class MyModel implements Model {
 		this.controller = controller;
 		generatedMazes = new HashMap<String, Maze3d>();
 		solutions = new HashMap<String, ArrayList<Position>>();
-	}
-
-	public HashMap<String, Maze3d> getArrays() {
-		return generatedMazes;
 	}
 
 	@Override
@@ -149,10 +153,10 @@ public class MyModel implements Model {
 		new Thread(new Runnable() {
 			public void run() {
 				Maze3d maze = generatedMazes.get(name);
-				if (maze != null) {				
+				if (maze != null) {
 					Searchable<Position> mazeDomain = new Maze3dDomain(maze);
 					ArrayList<Position> solution = searcher.search(mazeDomain);
-					
+
 					solutions.put(name, solution);
 					controller.println("Solution for " + name + " is ready");
 				} else

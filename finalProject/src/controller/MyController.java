@@ -7,12 +7,23 @@ import java.io.PrintWriter;
 import model.Model;
 import view.View;
 
+/**
+ * <h1>MyController</h1> Implements all controller interface functoins.
+ * <p>
+ * 
+ * @author Valentina Munoz & Moris Amon
+ *
+ */
 public class MyController implements Controller {
 
 	private Model model;
 	private View view;
 	private CommandsManager commandsManager;
 
+	/**
+	 * Initialize the commandsManager data member
+	 * @param commandsManager The command manager class that contains all wanted commands to be known
+	 */
 	public MyController(CommandsManager commandsManager){
 		this.commandsManager = commandsManager;
 	}
