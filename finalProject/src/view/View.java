@@ -15,9 +15,7 @@ import controller.CommandsManager;
 
 public interface View {
 	/**
-	 * 	 * <h1>setCLI</h1> Responsible for the read command from Input Source,
-	 * update the controller and write to Output Source the relevant messages.
-	 * <p>
+	 * 	 <h1>setCLI</h1> Responsible for initialization the CLI process
 	 * 
 	 * @param in - Input Source
 	 * @param out - Output Source

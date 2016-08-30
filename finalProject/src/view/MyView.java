@@ -6,6 +6,12 @@ import java.io.PrintWriter;
 import controller.CommandsManager;
 import controller.Controller;
 
+/**
+ * <h1>MyView</h1> Responsible for communicate the view to CLI view.
+ * * <p>
+ * @author Valentina Munoz & Moris Amon
+ */
+
 public class MyView implements View {
 
 	private Controller controller;

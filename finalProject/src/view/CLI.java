@@ -5,6 +5,13 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import controller.CommandsManager;
 
+/**
+ * <h1>CLI</h1> Responsible for the read command, by thread channel, from Input Source,
+ * update the controller and write to Output Source the relevant messages.
+ * * <p>
+ * @author Valentina Munoz & Moris Amon
+ */
+
 public class CLI {
 
 	private BufferedReader in;
@@ -18,7 +25,8 @@ public class CLI {
 		this.cmd = cmd;
 	}
 	/**
-	 * <h1>exit</h1> Responsible to exit the game, this method close the Input Source, Output Source and the Thread channel
+	 * <h1>exit</h1> Responsible to exit the game, this method close the Input Source, Output Source
+	 * and the Thread channel.
 	 * <p>
 	 */
 	public void start() {
