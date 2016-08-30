@@ -30,7 +30,16 @@ public class Maze3dCommands extends CommonCommandsManager {
 		commands.put("display_solution", new display_solutionCommand());
 		commands.put("exit", new exitCommand());
 	}
-
+	
+	/**
+	 * 
+	 * <h1>dirCommand</h1> Command for write the dir path list for specific file
+	 * to Out Source.
+	 * <p>
+	 * 
+	 * @author Valentina Munoz & Moris Amon
+	 * 
+	 */
 	class dirCommand implements Command {
 		@Override
 		public void doCommand(String[] args) {
@@ -59,6 +68,16 @@ public class Maze3dCommands extends CommonCommandsManager {
 
 	}
 
+	/**
+	 * 
+	 * <h1>generate_mazeCommand</h1> Command for generate the maze according to specific generator algorithm
+	 * (such as: GrowingTreeGenerator, SimpleMaze3dGenerator).
+	 * <p>
+	 * 
+	 * @author Valentina Munoz & Moris Amon
+	 * 
+	 */
+	
 	class generate_mazeCommand implements Command {
 		@Override
 		public void doCommand(String[] args) {
@@ -85,6 +104,14 @@ public class Maze3dCommands extends CommonCommandsManager {
 		}
 	}
 
+	/**
+	 * 
+	 * <h1>displayCommand</h1> Command for display a maze by the name.
+	 * <p>
+	 * 
+	 * @author Valentina Munoz & Moris Amon
+	 * 
+	 */
 	class displayCommand implements Command {
 		@Override
 		public void doCommand(String[] args) {
@@ -96,6 +123,14 @@ public class Maze3dCommands extends CommonCommandsManager {
 		}
 	}
 
+	/**
+	 * 
+	 * <h1>display_cross_sectionCommand</h1> Command for display a maze by cross section
+	 * <p>
+	 * 
+	 * @author Valentina Munoz & Moris Amon
+	 * 
+	 */
 	class display_cross_sectionCommand implements Command {
 		@Override
 		public void doCommand(String[] args) {
@@ -111,6 +146,14 @@ public class Maze3dCommands extends CommonCommandsManager {
 		}
 	}
 
+	/**
+	 * 
+	 * <h1>save_mazeCommand</h1> Command for save a maze with a name to file
+	 * <p>
+	 * 
+	 * @author Valentina Munoz & Moris Amon
+	 * 
+	 */
 	class save_mazeCommand implements Command {
 		@Override
 		public void doCommand(String[] args) {
@@ -123,6 +166,14 @@ public class Maze3dCommands extends CommonCommandsManager {
 		}
 	}
 
+	/**
+	 * 
+	 * <h1>load_mazeCommand</h1> Command for load a maze from file with a new name
+	 * <p>
+	 * 
+	 * @author Valentina Munoz & Moris Amon
+	 * 
+	 */
 	class load_mazeCommand implements Command {
 		@Override
 		public void doCommand(String[] args) {
@@ -135,6 +186,14 @@ public class Maze3dCommands extends CommonCommandsManager {
 		}
 	}
 
+	/**
+	 * 
+	 * <h1>solveCommand</h1> Command for solve a maze according by any search algorithm
+	 * (such as: BestFirstSearch, DepthFirstSearch).
+	 * <p>
+	 * 
+	 * @author Valentina Munoz & Moris Amon
+	 */
 	class solveCommand implements Command {
 		@Override
 		public void doCommand(String[] args) {
@@ -154,6 +213,14 @@ public class Maze3dCommands extends CommonCommandsManager {
 		}
 	}
 
+	/**
+	 * 
+	 * <h1>display_solutionCommand</h1> Command for display maze solve according the maze's name
+	 * (such as: BestFirstSearch, DepthFirstSearch).
+	 * <p>
+	 * 
+	 * @author Valentina Munoz & Moris Amon
+	 */
 	class display_solutionCommand implements Command {
 		@Override
 		public void doCommand(String[] args) {
@@ -165,6 +232,14 @@ public class Maze3dCommands extends CommonCommandsManager {
 		}
 	}
 
+	/**
+	 * 
+	 * <h1>display_solutionCommand</h1> Command for exit from the game.
+	 * 
+	 * <p>
+	 * 
+	 * @author Valentina Munoz & Moris Amon
+	 */
 	class exitCommand implements Command {
 		@Override
 		public void doCommand(String[] args) {
