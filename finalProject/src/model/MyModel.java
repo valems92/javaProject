@@ -173,7 +173,14 @@ public class MyModel implements Model {
 		else
 			controller.println("Maze " + name + " wasn't solved yet");
 	}
-
+	
+	/**
+	 * <h1>PrintMaze2d</h1> Help to print the 2d maze from cross by section methods
+	 * @param maze - 2d maze that create by cross by section method
+	 * @param end1 - Total size of argument1 of 2d maze
+	 * @param end2 - Total size of argument2 of 2d maze
+	 * @return String of a 2d maze that created by "cross by section" method
+	 */
 	public static String PrintMaze2d(int[][] maze, int end1, int end2) {
 		StringBuilder sb = new StringBuilder();
 		for (int start1 = 0; start1 < end1; start1++) {
