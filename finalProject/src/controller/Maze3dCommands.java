@@ -149,7 +149,6 @@ public class Maze3dCommands extends CommonCommandsManager {
 			}
 			else
 				view.println("Missing parameters. Maze name, Index value and Section name are needed");
-
 		}
 	}
 

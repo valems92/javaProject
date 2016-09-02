@@ -186,6 +186,7 @@ public class MyModel implements Model {
 		for (int start1 = 0; start1 < end1; start1++) {
 			for (int start2 = 0; start2 < end2; start2++) {
 				sb.append(maze[start1][start2]);
+				sb.append(" ");
 			}
 			sb.append("\n");
 		}

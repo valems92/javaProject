@@ -38,7 +38,7 @@ public class CLI {
 						cmd.executeCommand(input);
 						input = in.readLine();
 					}
-					exit();
+					cmd.executeCommand(input);
 				} catch (IOException e) {
 					println(e.getMessage());
 				}

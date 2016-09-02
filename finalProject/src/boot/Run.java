@@ -15,8 +15,6 @@ import view.View;
 public class Run {
 
 	public static void main(String[] args) throws Exception{
-		// TODO Auto-generated method stub
-		
 		MyController controller = new MyController(new Maze3dCommands());
 		Model model = new MyModel(controller);
 		View view = new MyView(controller);
@@ -25,10 +23,9 @@ public class Run {
 		PrintWriter out = new PrintWriter(System.out);
 		
 		controller.setModelAndView(model, view);
-
 		controller.setViewCLI(in, out);
 		
-		
+		view.println("Please start entering commands:");
 		view.start();
 	}
 
