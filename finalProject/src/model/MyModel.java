@@ -10,6 +10,8 @@ import java.io.OutputStream;
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.locks.ReentrantLock;
 
 import algorithms.demo.Maze3dDomain;
@@ -37,36 +39,32 @@ public class MyModel implements Model {
 	private Controller controller;
 	public HashMap<String, Maze3d> generatedMazes;
 	private HashMap<String, ArrayList<Position>> solutions;
-	private ReentrantLock generate;
-	private ReentrantLock solve;
+
+	private ExecutorService executorGenerate;
+	private ExecutorService executorSolve;
 
 	public MyModel(Controller controller) {
 		this.controller = controller;
 		generatedMazes = new HashMap<String, Maze3d>();
 		solutions = new HashMap<String, ArrayList<Position>>();
 
-		generate = new ReentrantLock();
-		solve = new ReentrantLock();
+		executorGenerate = Executors.newSingleThreadExecutor();
+		executorSolve = Executors.newSingleThreadExecutor();
 	}
 
 	@Override
 	public void generateMaze(String name, int z, int y, int x, Maze3dGenerator mg) {
-		new Thread(new Runnable() {
+		executorGenerate.execute(new Runnable() {
 			public void run() {
-				boolean g = generate.tryLock();
-				if (g) {
-					if (generatedMazes.containsKey(name)) {
-						controller.println("Maze " + name + " already exist");
-					} else {
-						Maze3d maze = mg.generate(z, y, x);
-						generatedMazes.put(name, maze);
-						controller.println("Maze " + name + " is ready");
-					}
-					generate.unlock();
-				} else
-					controller.println("Another maze is being generated. Plase wait for it to finish.");
+				if (generatedMazes.containsKey(name)) {
+					controller.println("Maze " + name + " already exist");
+				} else {
+					Maze3d maze = mg.generate(z, y, x);
+					generatedMazes.put(name, maze);
+					controller.println("Maze " + name + " is ready");
+				}
 			}
-		}).start();
+		});
 	}
 
 	@Override
@@ -161,24 +159,20 @@ public class MyModel implements Model {
 		if (solutions.containsKey(name))
 			return;
 
-		new Thread(new Runnable() {
+		executorSolve.execute(new Runnable() {
 			public void run() {
-				boolean s = solve.tryLock();
-				if (s) {
-					Maze3d maze = generatedMazes.get(name);
-					if (maze != null) {
-						Searchable<Position> mazeDomain = new Maze3dDomain(maze);
-						ArrayList<Position> solution = searcher.search(mazeDomain);
 
-						solutions.put(name, solution);
-						controller.println("Solution for " + name + " is ready");
-					} else
-						controller.println("Maze with name " + name + " doesn't exist");
-					solve.unlock();
+				Maze3d maze = generatedMazes.get(name);
+				if (maze != null) {
+					Searchable<Position> mazeDomain = new Maze3dDomain(maze);
+					ArrayList<Position> solution = searcher.search(mazeDomain);
+
+					solutions.put(name, solution);
+					controller.println("Solution for " + name + " is ready");
 				} else
-					controller.println("Another maze is being solved. Plase wait for it to finish.");
+					controller.println("Maze with name " + name + " doesn't exist");
 			}
-		}).start();
+		});
 	}
 
 	@Override
