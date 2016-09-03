@@ -10,6 +10,7 @@ import java.io.OutputStream;
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.concurrent.locks.ReentrantLock;
 
 import algorithms.demo.Maze3dDomain;
 import algorithms.mazeGenerators.GrowingTreeGenerator;
@@ -36,24 +37,34 @@ public class MyModel implements Model {
 	private Controller controller;
 	public HashMap<String, Maze3d> generatedMazes;
 	private HashMap<String, ArrayList<Position>> solutions;
+	private ReentrantLock generate;
+	private ReentrantLock solve;
 
 	public MyModel(Controller controller) {
 		this.controller = controller;
 		generatedMazes = new HashMap<String, Maze3d>();
 		solutions = new HashMap<String, ArrayList<Position>>();
+
+		generate = new ReentrantLock();
+		solve = new ReentrantLock();
 	}
 
 	@Override
 	public void generateMaze(String name, int z, int y, int x, Maze3dGenerator mg) {
 		new Thread(new Runnable() {
 			public void run() {
-				if (generatedMazes.containsKey(name)) {
-					controller.println("Maze " + name + " already exist");
-				} else {
-					Maze3d maze = mg.generate(z, y, x);
-					generatedMazes.put(name, maze);
-					controller.println("Maze " + name + " is ready");
-				}
+				boolean g = generate.tryLock();
+				if (g) {
+					if (generatedMazes.containsKey(name)) {
+						controller.println("Maze " + name + " already exist");
+					} else {
+						Maze3d maze = mg.generate(z, y, x);
+						generatedMazes.put(name, maze);
+						controller.println("Maze " + name + " is ready");
+					}
+					generate.unlock();
+				} else
+					controller.println("Another maze is being generated. Plase wait for it to finish.");
 			}
 		}).start();
 	}
@@ -152,15 +163,20 @@ public class MyModel implements Model {
 
 		new Thread(new Runnable() {
 			public void run() {
-				Maze3d maze = generatedMazes.get(name);
-				if (maze != null) {
-					Searchable<Position> mazeDomain = new Maze3dDomain(maze);
-					ArrayList<Position> solution = searcher.search(mazeDomain);
+				boolean s = solve.tryLock();
+				if (s) {
+					Maze3d maze = generatedMazes.get(name);
+					if (maze != null) {
+						Searchable<Position> mazeDomain = new Maze3dDomain(maze);
+						ArrayList<Position> solution = searcher.search(mazeDomain);
 
-					solutions.put(name, solution);
-					controller.println("Solution for " + name + " is ready");
+						solutions.put(name, solution);
+						controller.println("Solution for " + name + " is ready");
+					} else
+						controller.println("Maze with name " + name + " doesn't exist");
+					solve.unlock();
 				} else
-					controller.println("Maze with name " + name + " doesn't exist");
+					controller.println("Another maze is being solved. Plase wait for it to finish.");
 			}
 		}).start();
 	}
@@ -173,12 +189,17 @@ public class MyModel implements Model {
 		else
 			controller.println("Maze " + name + " wasn't solved yet");
 	}
-	
+
 	/**
-	 * <h1>PrintMaze2d</h1> Help to print the 2d maze from cross by section methods
-	 * @param maze - 2d maze that create by cross by section method
-	 * @param end1 - Total size of argument1 of 2d maze
-	 * @param end2 - Total size of argument2 of 2d maze
+	 * <h1>PrintMaze2d</h1> Help to print the 2d maze from cross by section
+	 * methods
+	 * 
+	 * @param maze
+	 *            - 2d maze that create by cross by section method
+	 * @param end1
+	 *            - Total size of argument1 of 2d maze
+	 * @param end2
+	 *            - Total size of argument2 of 2d maze
 	 * @return String of a 2d maze that created by "cross by section" method
 	 */
 	public static String PrintMaze2d(int[][] maze, int end1, int end2) {
