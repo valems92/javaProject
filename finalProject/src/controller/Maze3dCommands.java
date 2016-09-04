@@ -251,6 +251,7 @@ public class Maze3dCommands extends CommonCommandsManager {
 		public void doCommand(String[] args) {
 			if(args.length==1){
 				view.exit();
+				model.exit();
 			}
 			else
 				view.println("Invalid command");

@@ -98,4 +98,6 @@ public interface Model {
 	 *            The maze name
 	 */
 	public void displaySolutionByName(String name);
+
+	public void exit();
 }

@@ -10,6 +10,7 @@ import java.io.OutputStream;
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.locks.ReentrantLock;
@@ -37,20 +38,38 @@ import io.MyDecompressorInputStream;
  */
 public class MyModel implements Model {
 	private Controller controller;
-	public HashMap<String, Maze3d> generatedMazes;
-	private HashMap<String, ArrayList<Position>> solutions;
-
+	public ConcurrentHashMap<String, Maze3d> generatedMazes;
+	private ConcurrentHashMap<String, ArrayList<Position>> solutions;
+	
 	private ExecutorService executorGenerate;
 	private ExecutorService executorSolve;
 
 	public MyModel(Controller controller) {
 		this.controller = controller;
-		generatedMazes = new HashMap<String, Maze3d>();
-		solutions = new HashMap<String, ArrayList<Position>>();
-
+		generatedMazes=new  ConcurrentHashMap<String, Maze3d>();
+		solutions=new  ConcurrentHashMap<String, ArrayList<Position>>();
 		executorGenerate = Executors.newSingleThreadExecutor();
 		executorSolve = Executors.newSingleThreadExecutor();
 	}
+
+	
+
+	/**
+	 * @param executorGenerate the executorGenerate to set
+	 */
+	public void setExecutorGenerate(ExecutorService executorGenerate) {
+		this.executorGenerate = executorGenerate;
+	}
+
+
+
+	/**
+	 * @param executorSolve the executorSolve to set
+	 */
+	public void setExecutorSolve(ExecutorService executorSolve) {
+		this.executorSolve = executorSolve;
+	}
+
 
 	@Override
 	public void generateMaze(String name, int z, int y, int x, Maze3dGenerator mg) {
@@ -208,5 +227,13 @@ public class MyModel implements Model {
 
 		return sb.toString();
 
+	}
+
+
+
+	@Override
+	public void exit() {
+		this.executorGenerate.shutdown();
+		this.executorSolve.shutdown();
 	}
 }

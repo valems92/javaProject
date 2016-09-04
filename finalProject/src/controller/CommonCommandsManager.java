@@ -2,6 +2,7 @@ package controller;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 import model.Model;
 import view.View;
@@ -10,11 +11,11 @@ public abstract class CommonCommandsManager implements CommandsManager{
 	
 	protected Model model;
 	protected View view;
-	protected HashMap<String, Command> commands;
+	protected ConcurrentHashMap<String, Command> commands;
 	
 	public CommonCommandsManager() {
 		super();
-		this.commands = new HashMap<String, Command>();
+		this.commands = new ConcurrentHashMap<String, Command>();
 		setCommands();
 	}
 

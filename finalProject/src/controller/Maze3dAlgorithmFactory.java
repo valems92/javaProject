@@ -2,6 +2,7 @@ package controller;
 
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 import algorithms.mazeGenerators.GrowingTreeGenerator;
 import algorithms.mazeGenerators.LastSelectMethod;
@@ -28,11 +29,11 @@ import algorithms.search.State;
  *
  */
 public class Maze3dAlgorithmFactory {
-	HashMap<String, solveCreator> solve;
-	HashMap<String, comperatorCreator> comperator;
+	ConcurrentHashMap<String, solveCreator> solve;
+	ConcurrentHashMap<String, comperatorCreator> comperator;
 
-	HashMap<String, generateCreator> generate;
-	HashMap<String, selectCellCreator> selectCell;
+	ConcurrentHashMap<String, generateCreator> generate;
+	ConcurrentHashMap<String, selectCellCreator> selectCell;
 
 	/**
 	 * <h1>Maze3dAlgorithmFactory</h1> Initialize hashmaps with all existing
@@ -40,11 +41,11 @@ public class Maze3dAlgorithmFactory {
 	 * <p>
 	 */
 	public Maze3dAlgorithmFactory() {
-		solve = new HashMap<String, solveCreator>();
-		comperator = new HashMap<String, comperatorCreator>();
+		solve = new ConcurrentHashMap<String, solveCreator>();
+		comperator = new ConcurrentHashMap<String, comperatorCreator>();
 
-		generate = new HashMap<String, generateCreator>();
-		selectCell = new HashMap<String, selectCellCreator>();
+		generate = new ConcurrentHashMap<String, generateCreator>();
+		selectCell = new ConcurrentHashMap<String, selectCellCreator>();
 
 		solve.put("DFS", new DfsCreator());
 		solve.put("BFS", new BfsCreator());

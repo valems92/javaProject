@@ -13,68 +13,105 @@ import java.util.Random;
  * @extends CommonMaze3dGenerator
  *
  */
+
 public class SimpleMaze3dGenerator extends CommonMaze3dGenerator {
-
+	
 	@Override
-	public Maze3d generate(int z, int y, int x) {
-		Maze3d maze = new Maze3d(z, y, x);
-		Random rand = new Random();
-
-		// Choose a random start position and turn in to a free cell
-		Position pos = chooseRandomPosition(z, y, x);
-		maze.setStartPosition(pos);
-		maze.setCellValue(pos, Maze3d.FREE);
-
-		int counter = z + y + x;
-		while (counter >= 0) {
-			// Get all neighbors that are walls
-			ArrayList<Position> allNeighbors = getNeighborsWithoutWalls(pos, z, y, x);
-			ArrayList<Position> neighbors = maze.getNeighborsByValue(allNeighbors, Maze3d.WALL);
-
-			// If there are walls neighbors, choose random one and turn it to
-			// free cell
-			if (neighbors.size() > 0) {
-				pos = neighbors.get(rand.nextInt(neighbors.size()));
-				maze.setCellValue(pos, Maze3d.FREE);
-				counter--;
-			} else
-				break;
+	public Maze3d generate(int z,int y,int x) {
+		
+	
+		//new maze
+		Maze3d maze3d=new Maze3d(z,y,x);
+		this.InitMaze(maze3d);
+		Random rand=new Random();
+		
+		//set 0 and 1 values in the maze
+		int randnum=0;
+		for(int floor=0;floor<z;floor++){
+			for(int row=0;row<y;row++){
+				for(int columns=0;columns<x;columns++){
+					randnum=rand.nextInt(2);
+					maze3d.setCellValue(new Position(floor, row, columns), randnum);
+				}
+			}
 		}
-		// Set the last chosen position to be the goal position
-		maze.setGoalPosition(pos);
-		return maze;
+		
+		//random for start position
+		int floor=rand.nextInt(z);
+		int row=rand.nextInt(y);
+		int columns=rand.nextInt(x);
+		
+		maze3d.setStartPosition(new Position(floor,row,columns));
+		maze3d.setCellValue(new Position(floor, row, columns), 0); //set the cell to 0
+		
+		//random for goal position
+		floor=rand.nextInt(z);
+		row=rand.nextInt(y);
+		columns=rand.nextInt(x);
+		
+		maze3d.setGoalPosition(new Position(floor,row,columns));
+		
+		
+		//if the start and goal equals - fix it
+		while(maze3d.getStartPosition().equals(maze3d.getGoalPosition())==true){
+			floor=rand.nextInt(z);
+			row=rand.nextInt(y);
+			columns=rand.nextInt(x);
+			maze3d.setGoalPosition(new Position(floor,row,columns));
+		}
+		maze3d.setCellValue(new Position(floor, row, columns), 0); //set the cell's value to 0
+		
+		//temp for start and goal positions
+		Position current=new Position(maze3d.getStartPosition().z,maze3d.getStartPosition().y,maze3d.getStartPosition().x);
+		Position goaltemp=new Position(maze3d.getGoalPosition().z,maze3d.getGoalPosition().y,maze3d.getGoalPosition().x);
+		
+		//go from start to end and set zero in the cells
+		while(current.equals(goaltemp)==false){
+			if(current.z<goaltemp.z){
+				current.z++;
+				maze3d.setCellValue(new Position(current.z,current.y,current.x), 0);
+			}
+			else if(current.z>goaltemp.z){
+				current.z--;
+				maze3d.setCellValue(new Position(current.z,current.y,current.x), 0);
+			}
+			
+			if(current.y<goaltemp.y){
+				current.y++;
+				maze3d.setCellValue(new Position(current.z,current.y,current.x), 0);
+			}
+			else if(current.y>goaltemp.y){
+				current.y--;
+				maze3d.setCellValue(new Position(current.z,current.y,current.x), 0);
+			}
+			if(current.x<goaltemp.x){
+				current.x++;
+				maze3d.setCellValue(new Position(current.z,current.y,current.x), 0);
+			}
+			else if(current.x>goaltemp.x){
+				current.x--;
+				maze3d.setCellValue(new Position(current.z,current.y,current.x), 0);
+			}
+		}
+	
+		return maze3d; //return the simple maze
 	}
 
 	/**
-	 * <h1>getNeighborsWithoutWalls</h1> Create a list of position received
-	 * neighbors.
-	 * <p>
-	 * 
-	 * @param p
-	 *            Position in maze. A list of it's neighbors is return
-	 * @param z
-	 *            Total floors in the 3D maze
-	 * @param y
-	 *            Total rows is the 3D maze
-	 * @param x
-	 *            Total columns in the 3D maze
-	 * @return A list of position received (p) neighbors
+	 * Initiation the maze to 1
+	 * @param maze
 	 */
+			public void InitMaze(Maze3d maze){
+				for(int floor=0;floor<maze.getZ();floor++){
+					for(int row=0;row<maze.getY();row++){
+						for(int columns=0;columns<maze.getZ();columns++){
+							maze.setCellValue(new Position(floor,row,columns), 1);
+						}
+					}
+				}
+			}
 
-	private ArrayList<Position> getNeighborsWithoutWalls(Position p, int z, int y, int x) {
-		ArrayList<Position> neighbors = new ArrayList<Position>();
-		if (p.z > 0)
-			neighbors.add(new Position(p.z - 1, p.y, p.x));
-		if (p.z < (z - 1))
-			neighbors.add(new Position(p.z + 1, p.y, p.x));
-		if (p.y > 0)
-			neighbors.add(new Position(p.z, p.y - 1, p.x));
-		if (p.y < (y - 1))
-			neighbors.add(new Position(p.z, p.y + 1, p.x));
-		if (p.x > 0)
-			neighbors.add(new Position(p.z, p.y, p.x - 1));
-		if (p.x < (x - 1))
-			neighbors.add(new Position(p.z, p.y, p.x + 1));
-		return neighbors;
-	}
 }
+
+
+

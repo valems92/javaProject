@@ -42,4 +42,6 @@ public abstract class CommonMaze3dGenerator implements Maze3dGenerator {
 		int newZ = rand.nextInt(z), newY = rand.nextInt(y), newX = rand.nextInt(x);
 		return new Position(newZ, newY, newX);
 	}
+	
+
 }
