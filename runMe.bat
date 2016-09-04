@@ -1,2 +1,2 @@
-java -classpath project.jar;myAlgorithm.jar boot.Run
+java -classpath finalProject.jar;myAlgorithm.jar boot.Run
 pause
