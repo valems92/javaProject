@@ -29,7 +29,7 @@ public class Run {
 		model.addObserver(presenter);
 	
 		
-		view.run();
+		view.start();
 		
 		
 	}

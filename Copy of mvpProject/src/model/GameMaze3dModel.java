@@ -14,6 +14,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import algorithms.demo.Maze3dDomain;
 import algorithms.mazeGenerators.Maze3d;
@@ -34,7 +35,7 @@ public class GameMaze3dModel extends Observable implements Model {
 	private ExecutorService executorGenerate;
 	private ExecutorService executorSolve;
 	
-	boolean done=false;
+	//AtomicBoolean done=new AtomicBoolean(false);
 
 	public GameMaze3dModel(/*Presenter presenter*/) {
 		//this.presenter = presenter;
@@ -63,6 +64,10 @@ public class GameMaze3dModel extends Observable implements Model {
 	public void setPresenter(Presenter presenter) {
 		this.presenter = presenter;
 	}
+	
+	public void notify(String args){
+		this.notifyObservers();
+	}
 
 
 
@@ -75,18 +80,19 @@ public class GameMaze3dModel extends Observable implements Model {
 				} else {
 					Maze3d maze = mg.generate(z, y, x);
 					generatedMazes.put(name, maze);
-					done=true;
-					////presenter.println("Maze " + name + " is ready");
+//					done.set(true);
+					//presenter.println("Maze " + name + " is ready");
+					setChanged();
+					notifyObservers("generateResult " + name);
+					
 				}
 			}
 		});
-		if(done){
-			done=false;
-			setChanged();
-			this.notifyObservers("generateResult " + name);
-			
-		}
-		
+//		if(done.get()){
+//			setChanged();
+//			this.notifyObservers("generateResult " + name);
+//		}
+
 	}
 
 	@Override
