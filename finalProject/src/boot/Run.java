@@ -2,7 +2,6 @@ package boot;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 
 import controller.Maze3dCommands;
@@ -18,7 +17,6 @@ public class Run {
 		MyController controller = new MyController(new Maze3dCommands());
 		Model model = new MyModel(controller);
 		View view = new MyView(controller);
-		
 		BufferedReader in=new BufferedReader(new InputStreamReader(System.in));
 		PrintWriter out = new PrintWriter(System.out);
 		

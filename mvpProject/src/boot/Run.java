@@ -9,10 +9,12 @@ import view.View;
 public class Run {
 
 	public static void main(String[] args) {
-		Model model = new GameMaze3dModel();
-		View ui = new GameMaze3dView();
+		GameMaze3dModel model = new GameMaze3dModel();
+		GameMaze3dView ui = new GameMaze3dView();
 		
 		Presenter presenter = new Presenter(ui, model);
+		model.addObserver(presenter);
+		ui.addObserver(presenter);
 		
 	}
 
