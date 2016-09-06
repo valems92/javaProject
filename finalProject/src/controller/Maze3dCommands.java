@@ -98,9 +98,8 @@ public class Maze3dCommands extends CommonCommandsManager {
 					int x = Integer.parseInt(args[4]);
 
 					if (z > 30 || y > 30 || x > 30) {
-						view.println(
-								"There is at least one dimension too big. The maximum number of floors, rows and columns is 30");
-						// return;
+						view.println("There is at least one dimension too big. The maximum number of floors, rows and columns is 30");
+						return;
 					}
 
 					String alg = args[5];
@@ -127,7 +126,7 @@ public class Maze3dCommands extends CommonCommandsManager {
 	 * <p>
 	 * 
 	 * @author Valentina Munoz & Moris Amon
-	 * 
+	 *      
 	 */
 	class displayCommand implements Command {
 		@Override

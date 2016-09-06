@@ -61,7 +61,7 @@ public class CLI {
 		Thread.interrupted();	
 		return;
 	}
-
+	
 	/**
 	 * <h1>print</h1> Responsible to write the data that receive from view to Output Output Source
 	 * <p>
