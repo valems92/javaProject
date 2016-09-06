@@ -13,6 +13,7 @@ import java.util.HashMap;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.ReentrantLock;
 
 import algorithms.demo.Maze3dDomain;
@@ -40,36 +41,35 @@ public class MyModel implements Model {
 	private Controller controller;
 	public ConcurrentHashMap<String, Maze3d> generatedMazes;
 	private ConcurrentHashMap<String, ArrayList<Position>> solutions;
-	
+
 	private ExecutorService executorGenerate;
 	private ExecutorService executorSolve;
 
 	public MyModel(Controller controller) {
 		this.controller = controller;
-		generatedMazes=new  ConcurrentHashMap<String, Maze3d>();
-		solutions=new  ConcurrentHashMap<String, ArrayList<Position>>();
+
+		generatedMazes = new ConcurrentHashMap<String, Maze3d>();
+		solutions = new ConcurrentHashMap<String, ArrayList<Position>>();
+
 		executorGenerate = Executors.newSingleThreadExecutor();
 		executorSolve = Executors.newSingleThreadExecutor();
 	}
 
-	
-
 	/**
-	 * @param executorGenerate the executorGenerate to set
+	 * @param executorGenerate
+	 *            the executorGenerate to set
 	 */
 	public void setExecutorGenerate(ExecutorService executorGenerate) {
 		this.executorGenerate = executorGenerate;
 	}
 
-
-
 	/**
-	 * @param executorSolve the executorSolve to set
+	 * @param executorSolve
+	 *            the executorSolve to set
 	 */
 	public void setExecutorSolve(ExecutorService executorSolve) {
 		this.executorSolve = executorSolve;
 	}
-
 
 	@Override
 	public void generateMaze(String name, int z, int y, int x, Maze3dGenerator mg) {
@@ -175,12 +175,13 @@ public class MyModel implements Model {
 
 	@Override
 	public void solveMaze(String name, Searcher<Position> searcher) {
-		if (solutions.containsKey(name))
+		if (solutions.containsKey(name)) {
+			controller.println("Solution for " + name + " already exist");
 			return;
+		}
 
 		executorSolve.execute(new Runnable() {
 			public void run() {
-
 				Maze3d maze = generatedMazes.get(name);
 				if (maze != null) {
 					Searchable<Position> mazeDomain = new Maze3dDomain(maze);
@@ -224,16 +225,18 @@ public class MyModel implements Model {
 			}
 			sb.append("\n");
 		}
-
 		return sb.toString();
-
 	}
-
-
 
 	@Override
 	public void exit() {
-		this.executorGenerate.shutdown();
-		this.executorSolve.shutdown();
+		executorGenerate.shutdown();
+		executorSolve.shutdown();
+		try {
+			executorGenerate.awaitTermination(Integer.MAX_VALUE, TimeUnit.SECONDS);
+			executorSolve.awaitTermination(Integer.MAX_VALUE, TimeUnit.SECONDS);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 	}
 }

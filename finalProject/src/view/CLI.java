@@ -58,8 +58,7 @@ public class CLI {
 		}
 		System.out.println("The game closed");
 		this.out.close();
-		Thread.interrupted();
-		
+		Thread.interrupted();	
 		return;
 	}
 

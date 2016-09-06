@@ -99,5 +99,11 @@ public interface Model {
 	 */
 	public void displaySolutionByName(String name);
 
+	/**
+	 * <h1>exit</h1> Shutdown all executors. i.e, executors won't accept new
+	 * task. Also waits until all the task that have already been submitted
+	 * finish what they are doing (or until the timeout is reached = which
+	 * problably won't happen)
+	 */
 	public void exit();
 }
