@@ -1,7 +1,5 @@
 package controller;
 
-import java.io.IOException;
-import java.util.HashMap;
 import java.util.concurrent.ConcurrentHashMap;
 
 import model.Model;

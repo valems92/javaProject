@@ -1,13 +1,9 @@
 package controller;
 
 import java.io.File;
-import java.util.ArrayList;
 
-import algorithms.demo.Maze3dDomain;
-import algorithms.mazeGenerators.Maze3d;
 import algorithms.mazeGenerators.Maze3dGenerator;
 import algorithms.mazeGenerators.Position;
-import algorithms.search.Searchable;
 import algorithms.search.Searcher;
 
 /**
