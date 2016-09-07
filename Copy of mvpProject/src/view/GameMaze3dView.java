@@ -39,17 +39,11 @@ public class GameMaze3dView extends Observable implements View {
 	
 		Scanner scanner = new Scanner(System.in);
 		System.out.println("Please insert the generate command to test: ");
-		
-		executorInput.execute(new Runnable() {
-			@Override
-			public void run() {
-				String commandLine = scanner.nextLine();
-				setChanged();
-				notifyObservers(commandLine);
+		String commandLine = scanner.nextLine();
+		setChanged();
+		notifyObservers(commandLine);
 				
-			}
-		});
-		
+	
 	}
 		
 		
