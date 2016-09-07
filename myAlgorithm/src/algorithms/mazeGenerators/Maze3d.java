@@ -20,6 +20,7 @@ public class Maze3d {
 
 	public static final int FREE = 0;
 	public static final int WALL = 1;
+	private final int FIXED_DATA_SIZE = 11;
 
 	/**
 	 * Create the 3D array according to the dimmension received.
@@ -47,16 +48,16 @@ public class Maze3d {
 	 */
 	public Maze3d(byte[] b) {
 		// size
-		this.z = (int) b[1];
-		this.y = (int) b[2];
-		this.x = (int) b[3];
+		this.z = (int) b[2];
+		this.y = (int) b[3];
+		this.x = (int) b[4];
 		maze = new int[z][y][x];
 
-		startPosition = new Position((int) b[4], (int) b[5], (int) b[6]);
-		goalPosition = new Position((int) b[7], (int) b[8], (int) b[9]);
+		startPosition = new Position((int) b[5], (int) b[6], (int) b[7]);
+		goalPosition = new Position((int) b[8], (int) b[9], (int) b[10]);
 
 		// values
-		int index = 10;
+		int index = FIXED_DATA_SIZE;
 		for (int i = 0; i < z; i++) {
 			for (int j = 0; j < y; j++) {
 				for (int k = 0; k < x; k++) {
@@ -273,35 +274,41 @@ public class Maze3d {
 	 * @return The array
 	 */
 	public byte[] toByteArray() {
-		int length = z * y * x + 10;
+		int index = 0, length = z * y * x + FIXED_DATA_SIZE;
 		byte[] byteMaze = new byte[length];
 
-		byteMaze[0] = (byte) length;
+		int fracPart = 0, intPart = 0; 
+		if(length <= Byte.MAX_VALUE) 
+			fracPart = length;
+		else {
+			intPart = length / Byte.MAX_VALUE;
+			fracPart = length - (intPart * Byte.MAX_VALUE) ;
+		}
+		
+		//array length
+		byteMaze[index++] = (byte) intPart;
+		byteMaze[index++] = (byte) fracPart;
+		
 		// size
-		byteMaze[1] = (byte) z;
-		byteMaze[2] = (byte) y;
-		byteMaze[3] = (byte) x;
+		byteMaze[index++] = (byte) z;
+		byteMaze[index++] = (byte) y;
+		byteMaze[index++] = (byte) x;
 
 		// start position
-		byteMaze[4] = (byte) startPosition.z;
-		byteMaze[5] = (byte) startPosition.y;
-		byteMaze[6] = (byte) startPosition.x;
+		byteMaze[index++] = (byte) startPosition.z;
+		byteMaze[index++] = (byte) startPosition.y;
+		byteMaze[index++] = (byte) startPosition.x;
 
 		// goal position
-		byteMaze[7] = (byte) goalPosition.z;
-		byteMaze[8] = (byte) goalPosition.y;
-		byteMaze[9] = (byte) goalPosition.x;
+		byteMaze[index++] = (byte) goalPosition.z;
+		byteMaze[index++] = (byte) goalPosition.y;
+		byteMaze[index++] = (byte) goalPosition.x;
 
 		// values
-		int index = 10;
-		for (int i = 0; i < z; i++) {
-			for (int j = 0; j < y; j++) {
-				for (int k = 0; k < x; k++) {
-					byteMaze[index] = (byte) (maze[i][j][k]);
-					index++;
-				}
-			}
-		}
+		for (int i = 0; i < z; i++) 
+			for (int j = 0; j < y; j++) 
+				for (int k = 0; k < x; k++) 
+					byteMaze[index++] = (byte) (maze[i][j][k]);
 
 		return byteMaze;
 	}

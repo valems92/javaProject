@@ -14,7 +14,7 @@ import java.io.InputStream;
  */
 public class MyDecompressorInputStream extends InputStream {
 	private InputStream in;
-	private final int FIXED_DATA_SIZE = 10;
+	private final int FIXED_DATA_SIZE = 11;
 
 	/**
 	 * Initialize the input stream.

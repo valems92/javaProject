@@ -1,0 +1,1 @@
+java -classpath mvcProject.jar‫:‬myAlgorithm.jar boot.Run

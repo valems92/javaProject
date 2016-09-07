@@ -15,7 +15,7 @@ import java.io.OutputStream;
 public class MyCompressorOutputStream extends OutputStream {
 
 	private OutputStream out;
-	private final int FIXED_DATA_SIZE = 10;
+	private final int FIXED_DATA_SIZE = 11;
 
 	/**
 	 * Initialize the output stream.

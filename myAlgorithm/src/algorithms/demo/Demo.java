@@ -1,17 +1,20 @@
 package algorithms.demo;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 import algorithms.mazeGenerators.GrowingTreeGenerator;
 import algorithms.mazeGenerators.Maze3d;
 import algorithms.mazeGenerators.Maze3dGenerator;
 import algorithms.mazeGenerators.Position;
 import algorithms.mazeGenerators.RandomSelectMethod;
+import algorithms.mazeGenerators.SimpleMaze3dGenerator;
 import algorithms.search.BestFirstSearch;
 import algorithms.search.CostStateComperator;
 import algorithms.search.DepthFirstSearch;
@@ -31,9 +34,11 @@ import io.MyDecompressorInputStream;
 public class Demo {
 	public void run() throws IOException {
 		Maze3dGenerator mg = new GrowingTreeGenerator(new RandomSelectMethod());
-		Maze3d maze = mg.generate(4, 6, 7);
+		//Maze3dGenerator mg = new SimpleMaze3dGenerator();
+		Maze3d maze = mg.generate(10, 10, 10);
 		System.out.println("Maze generated: \n" + maze);
 
+		
 		Searchable<Position> mazeDomain = new Maze3dDomain(maze);
 
 		Searcher<Position> algorithm = new DepthFirstSearch<Position>();
@@ -41,13 +46,13 @@ public class Demo {
 
 		System.out.println("DepthFirstSearch: " + solution.toString());
 		System.out.println("evaluated nodes: " + algorithm.getNumberOfNodesEvaluated() + "\n");
-
+		
 		algorithm = new BestFirstSearch<Position>(new CostStateComperator<Position>());
 		solution = algorithm.search(mazeDomain);
 
 		System.out.println("BestFirstSearch: " + solution.toString());
 		System.out.println("evaluated nodes: " + algorithm.getNumberOfNodesEvaluated() + "\n");
-
+		
 		OutputStream out = new MyCompressorOutputStream(new FileOutputStream("1.bit"));
 		out.write(maze.toByteArray());
 		out.flush();
@@ -55,7 +60,12 @@ public class Demo {
 
 		try {
 			InputStream in = new MyDecompressorInputStream(new FileInputStream("1.bit"));
-			byte b[] = new byte[maze.toByteArray().length];
+			
+			File file = new File("1.bit");
+			FileInputStream reader = new FileInputStream(file);
+			byte b[] = new byte[(reader.read() * Byte.MAX_VALUE) + reader.read()];
+			reader.close();
+
 			in.read(b);
 			in.close();
 
@@ -64,6 +74,5 @@ public class Demo {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
 	}
 }
