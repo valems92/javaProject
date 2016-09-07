@@ -11,14 +11,14 @@ import presenter.Presenter;
 public class GameMaze3dView extends Observable implements View {
 
 	private Presenter presenter;
-	private ExecutorService executorinput;
+	private ExecutorService executorInput;
 	
 	/**
 	 * @return the presenter
 	 */
 	public Presenter getPresenter() {
 		return presenter;
-		executorinput = Executors.newSingleThreadExecutor();
+		//executorInput = ExecutorService.newSingleThreadExecutor();
 	}
 
 	/**
@@ -40,7 +40,7 @@ public class GameMaze3dView extends Observable implements View {
 		Scanner scanner = new Scanner(System.in);
 		System.out.println("Please insert the generate command to test: ");
 		
-		executorinput.execute(new Runnable() {
+		executorInput.execute(new Runnable() {
 			@Override
 			public void run() {
 				String commandLine = scanner.nextLine();
