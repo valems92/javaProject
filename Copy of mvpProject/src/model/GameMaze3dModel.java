@@ -50,6 +50,9 @@ public class GameMaze3dModel extends Observable implements Model {
 
 		try {
 			Maze3d maze = generatedMaze.get();
+			while(maze==null){
+				maze = generatedMaze.get();
+			}
 			generatedMazes.put(name, maze);
 			
 			setChanged();
@@ -76,7 +79,6 @@ public class GameMaze3dModel extends Observable implements Model {
 			@Override
 			public ArrayList<Position> call() throws Exception {
 				Maze3d maze = generatedMazes.get(name);
-
 				Searchable<Position> mazeDomain = new Maze3dDomain(maze);
 				ArrayList<Position> solution = searcher.search(mazeDomain);
 				
@@ -86,6 +88,9 @@ public class GameMaze3dModel extends Observable implements Model {
 		
 		try {
 			ArrayList<Position> solution = generatedSolution.get();
+			while(solution==null){
+				solution = generatedSolution.get();
+			}
 			solutions.put(name, solution);
 			
 			setChanged();
