@@ -1,53 +1,35 @@
 package view;
 
+import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Scanner;
-import java.util.concurrent.Executor;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
-import presenter.Presenter;
+import algorithms.mazeGenerators.Maze3d;
+import algorithms.mazeGenerators.Position;
 
 public class GameMaze3dView extends Observable implements View {
-
-	private Presenter presenter;
-	private ExecutorService executorInput;
-	
-	/**
-	 * @return the presenter
-	 */
-	public Presenter getPresenter() {
-		return presenter;
-		//executorInput = ExecutorService.newSingleThreadExecutor();
-	}
-
-	/**
-	 * @param presenter the presenter to set
-	 */
-	public void setPresenter(Presenter presenter) {
-		this.presenter = presenter;
-	}
-
-	@Override
-	public void DisplayMaze(String currCMD) {
-		System.out.println(currCMD);
-	}
-
 	@Override
 	public void start() {
-		
-	
-		Scanner scanner = new Scanner(System.in);
 		System.out.println("Please insert the generate command to test: ");
+		
+		Scanner scanner = new Scanner(System.in);	
 		String commandLine = scanner.nextLine();
-		setChanged();
-		notifyObservers(commandLine);
-				
-	
+		
+		while(commandLine != "exit") {
+			setChanged();
+			notifyObservers(commandLine);
+			
+			commandLine = scanner.nextLine();
+		}
 	}
-		
-		
 	
+	@Override
+	public void displayMaze(Maze3d maze) {
+		System.out.println(maze);
+	}
 
-	
+	@Override
+	public void displaySolution(ArrayList<Position> solution) {
+		System.out.println(solution);
+	}
 }

@@ -9,29 +9,18 @@ import view.GameMaze3dView;
 public class Run {
 
 	public static void main(String[] args) {
-		
-		CommandsManager mngr=new Maze3dCommands();
-		mngr.setCommands();
-
-		
 		GameMaze3dModel model = new GameMaze3dModel();
 		GameMaze3dView view = new GameMaze3dView();
-		
-		
-		mngr.setModelView(model, view);
-		
-		Presenter presenter = new Presenter(view, model,mngr);
-		model.setPresenter(presenter);
-		view.setPresenter(presenter);
 
-		
+		CommandsManager commandManager = new Maze3dCommands();
+		commandManager.setCommands();
+		commandManager.setModelView(model, view);
+
+		Presenter presenter = new Presenter(view, model, commandManager);
+
 		view.addObserver(presenter);
 		model.addObserver(presenter);
-	
-		
-		view.start();
-		
-		
-	}
 
+		view.start();
+	}
 }

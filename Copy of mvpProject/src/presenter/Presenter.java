@@ -4,48 +4,44 @@ import java.io.IOException;
 import java.util.Observable;
 import java.util.Observer;
 
-import algorithms.mazeGenerators.Maze3d;
 import model.Model;
 import view.View;
 
 public class Presenter implements Observer {
 	private View ui;
 	private Model model;
-	private CommandsManager mngr;
-	
-	public Presenter(View ui, Model model, CommandsManager mngr) {
+	private CommandsManager commandsManager;
+
+	public Presenter(View ui, Model model, CommandsManager commandsManager) {
 		this.ui = ui;
 		this.model = model;
-		this.mngr=mngr;
+		this.commandsManager = commandsManager;
 	}
 
 	@Override
 	public void update(Observable o, Object commandLine) {
-		System.out.println("received");
-		if(o==ui){
-			try {
-				mngr.executeCommand((String)commandLine);
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
+		String cmd = (String) commandLine;
 		
-		if(o==model){
-			
-			try {
-				mngr.executeCommand((String)commandLine);
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			
-		}
+		if (o == ui) 
+			updateUi(cmd);
 		
+		else if (o == model) 
+			updateModel(cmd);
 	}
 
-	public void SendMazeToView(String maze3d) {
-		ui.DisplayMaze(maze3d);
-		
+	private void updateUi(String commandLine) {
+		try {
+			commandsManager.executeCommand(commandLine);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	private void updateModel(String commandLine) {
+		try {
+			commandsManager.executeCommand(commandLine);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 }
