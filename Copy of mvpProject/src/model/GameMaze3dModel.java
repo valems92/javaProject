@@ -2,9 +2,12 @@ package model;
 
 import java.util.ArrayList;
 import java.util.Observable;
+import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 import algorithms.demo.Maze3dDomain;
 import algorithms.mazeGenerators.Maze3d;
@@ -37,15 +40,25 @@ public class GameMaze3dModel extends Observable implements Model {
 			return;
 		}
 
-		executorGenerate.execute(new Runnable() {
-			public void run() {
+		Future<Maze3d> generatedMaze = executorGenerate.submit(new Callable<Maze3d>() {
+			@Override
+			public Maze3d call() throws Exception {
 				Maze3d maze = mg.generate(z, y, x);
-				generatedMazes.put(name, maze);
-
-				setChanged();
-				notifyObservers("display_maze " + name);
+				return maze;
 			}
 		});
+
+		try {
+			Maze3d maze = generatedMaze.get();
+			generatedMazes.put(name, maze);
+			
+			setChanged();
+			notifyObservers("display_maze " + name);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		} catch (ExecutionException e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override
@@ -59,22 +72,32 @@ public class GameMaze3dModel extends Observable implements Model {
 			return;
 		}
 
-		executorSolve.execute(new Runnable() {
-			public void run() {
+		Future<ArrayList<Position>> generatedSolution = executorSolve.submit(new Callable<ArrayList<Position>>() {
+			@Override
+			public ArrayList<Position> call() throws Exception {
 				Maze3d maze = generatedMazes.get(name);
-				
+
 				Searchable<Position> mazeDomain = new Maze3dDomain(maze);
 				ArrayList<Position> solution = searcher.search(mazeDomain);
-
-				solutions.put(name, solution);
 				
-				setChanged();
-				notifyObservers("display_solution " + name);
+				return solution;
 			}
 		});
+		
+		try {
+			ArrayList<Position> solution = generatedSolution.get();
+			solutions.put(name, solution);
+			
+			setChanged();
+			notifyObservers("display_solution " + name);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		} catch (ExecutionException e) {
+			e.printStackTrace();
+		}
 	}
 
-	public ArrayList<Position> getSolutionByMazeName(String name){
+	public ArrayList<Position> getSolutionByMazeName(String name) {
 		return solutions.get(name);
 	}
 }
