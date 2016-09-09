@@ -66,7 +66,8 @@ public class GameMaze3dModel extends Observable implements Model {
 
 	public void solveMaze(String name, Searcher<Position> searcher) {
 		if (solutions.containsKey(name)) {
-			// presenter.println("Solution for " + name + " already exist");
+			setChanged();
+			notifyObservers("display_solution " + name);
 			return;
 		}
 
