@@ -26,11 +26,12 @@ public class Maze3dCommands extends CommonCommandsManager {
 
 	@Override
 	public void setCommands() {
-		//Model commands
+		// Model commands
 		commands.put("generate_maze", new GenerateMazeCommand());
 		commands.put("solve", new SolveMazeCommand());
+		commands.put("save_maze", new SaveDataCommand());
 
-		//Ui commands
+		// Ui commands
 		commands.put("display_maze", new DisplayMazeCommand());
 		commands.put("display_solution", new DisplaySolutionCommand());
 	}
@@ -38,23 +39,20 @@ public class Maze3dCommands extends CommonCommandsManager {
 	class GenerateMazeCommand implements Command {
 		@Override
 		public void doCommand(String[] args) {
-			if (args.length >= 6) {
-				String name = args[1];
-				try {
-					int z = Integer.parseInt(args[2]);
-					int y = Integer.parseInt(args[3]);
-					int x = Integer.parseInt(args[4]);
+			String name = args[1];
+			
+			try {
+				int z = Integer.parseInt(args[2]);
+				int y = Integer.parseInt(args[3]);
+				int x = Integer.parseInt(args[4]);
 
-					String alg = args[5];
-					String arg = (args.length >= 7) ? args[6] : "";
-					Maze3dGenerator mg = algorithms.createGenerateAlgorithm(alg, arg);
+				Maze3dGenerator mg = algorithms.createGenerateAlgorithm(Properties.properites.getGenerateAlgorithm(),
+						Properties.properites.getSelectCellMethod());
+				model.generateMaze(name, z, y, x, mg);
 
-					model.generateMaze(name, z, y, x, mg);
-
-				} catch (NumberFormatException e) {
-					e.printStackTrace();
-				}
-			} 
+			} catch (NumberFormatException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 
@@ -62,6 +60,7 @@ public class Maze3dCommands extends CommonCommandsManager {
 		@Override
 		public void doCommand(String[] args) {
 			String name = args[1];
+			
 			Maze3d maze = model.getMazeByName(name);
 			ui.displayMaze(maze);
 		}
@@ -70,15 +69,11 @@ public class Maze3dCommands extends CommonCommandsManager {
 	class SolveMazeCommand implements Command {
 		@Override
 		public void doCommand(String[] args) {
-			if (args.length >= 3) {
-				String mazeName = args[1];
+			String mazeName = args[1];
 
-				String alg = args[2];
-				String arg = (args.length >= 4) ? args[3] : "";
-				Searcher<Position> searcher = algorithms.createSeacherAlgorithm(alg, arg);
-
-				model.solveMaze(mazeName, searcher);
-			}
+			Searcher<Position> searcher = algorithms.createSeacherAlgorithm(Properties.properites.getSolveAlgorithm(),
+					Properties.properites.getComparator());
+			model.solveMaze(mazeName, searcher);
 		}
 	}
 
@@ -86,8 +81,18 @@ public class Maze3dCommands extends CommonCommandsManager {
 		@Override
 		public void doCommand(String[] args) {
 			String name = args[1];
+			
 			ArrayList<Position> solution = model.getSolutionByMazeName(name);
 			ui.displaySolution(solution);
+		}
+	}
+
+	class SaveDataCommand implements Command {
+		@Override
+		public void doCommand(String[] args) {
+			String fileName = args[1];
+			
+			model.saveData(fileName);
 		}
 	}
 }

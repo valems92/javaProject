@@ -21,4 +21,6 @@ public interface Model {
 	public void solveMaze(String name, Searcher<Position> searcher);
 
 	public ArrayList<Position> getSolutionByMazeName(String name);
+	
+	public void saveData(String fileName);
 }

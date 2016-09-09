@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<java version="1.8.0_102" class="java.beans.XMLDecoder">
+ <object class="presenter.Properties">
+  <void property="comparator">
+   <string>Cost</string>
+  </void>
+  <void property="generateAlgorithm">
+   <string>GrowingTree</string>
+  </void>
+  <void property="numberOfThreads">
+   <int>5</int>
+  </void>
+  <void property="selectCellMethod">
+   <string>Random</string>
+  </void>
+  <void property="solveAlgorithm">
+   <string>BFS</string>
+  </void>
+ </object>
+</java>

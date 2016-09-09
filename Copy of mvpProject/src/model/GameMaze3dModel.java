@@ -1,5 +1,7 @@
 package model;
 
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Observable;
 import java.util.concurrent.Callable;
@@ -8,6 +10,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.zip.GZIPOutputStream;
 
 import algorithms.demo.Maze3dDomain;
 import algorithms.mazeGenerators.Maze3d;
@@ -15,6 +18,8 @@ import algorithms.mazeGenerators.Maze3dGenerator;
 import algorithms.mazeGenerators.Position;
 import algorithms.search.Searchable;
 import algorithms.search.Searcher;
+import io.MyCompressorOutputStream;
+import presenter.Properties;
 
 public class GameMaze3dModel extends Observable implements Model {
 	public ConcurrentHashMap<String, Maze3d> generatedMazes;
@@ -27,8 +32,8 @@ public class GameMaze3dModel extends Observable implements Model {
 		generatedMazes = new ConcurrentHashMap<String, Maze3d>();
 		solutions = new ConcurrentHashMap<String, ArrayList<Position>>();
 
-		executorGenerate = Executors.newSingleThreadExecutor();
-		executorSolve = Executors.newSingleThreadExecutor();
+		executorGenerate = Executors.newFixedThreadPool(Properties.properites.getNumberOfThreads());
+		executorSolve = Executors.newFixedThreadPool(Properties.properites.getNumberOfThreads());
 	}
 
 	@Override
@@ -97,5 +102,22 @@ public class GameMaze3dModel extends Observable implements Model {
 
 	public ArrayList<Position> getSolutionByMazeName(String name) {
 		return solutions.get(name);
+	}
+
+	public void saveData(String fileName) {
+		try {
+			MyCompressorOutputStream file = new MyCompressorOutputStream(new FileOutputStream(fileName));
+			
+			GZIPOutputStream out = new GZIPOutputStream(file, 100000);
+			//OutputStream out = new MyCompressorOutputStream(file);
+			
+			for (Maze3d maze : generatedMazes.values()) {
+				out.write(maze.toByteArray());
+			}
+			out.finish();
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 }
