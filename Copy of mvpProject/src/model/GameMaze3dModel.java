@@ -23,8 +23,6 @@ public class GameMaze3dModel extends Observable implements Model {
 	private ExecutorService executorGenerate;
 	private ExecutorService executorSolve;
 
-	// AtomicBoolean done=new AtomicBoolean(false);
-
 	public GameMaze3dModel() {
 		generatedMazes = new ConcurrentHashMap<String, Maze3d>();
 		solutions = new ConcurrentHashMap<String, ArrayList<Position>>();
@@ -50,11 +48,8 @@ public class GameMaze3dModel extends Observable implements Model {
 
 		try {
 			Maze3d maze = generatedMaze.get();
-			while(maze==null){
-				maze = generatedMaze.get();
-			}
 			generatedMazes.put(name, maze);
-			
+
 			setChanged();
 			notifyObservers("display_maze " + name);
 		} catch (InterruptedException e) {
@@ -81,18 +76,15 @@ public class GameMaze3dModel extends Observable implements Model {
 				Maze3d maze = generatedMazes.get(name);
 				Searchable<Position> mazeDomain = new Maze3dDomain(maze);
 				ArrayList<Position> solution = searcher.search(mazeDomain);
-				
+
 				return solution;
 			}
 		});
-		
+
 		try {
 			ArrayList<Position> solution = generatedSolution.get();
-			while(solution==null){
-				solution = generatedSolution.get();
-			}
 			solutions.put(name, solution);
-			
+
 			setChanged();
 			notifyObservers("display_solution " + name);
 		} catch (InterruptedException e) {
