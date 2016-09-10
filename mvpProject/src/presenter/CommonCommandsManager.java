@@ -8,7 +8,7 @@ import view.View;
 public abstract class CommonCommandsManager implements CommandsManager{
 	
 	protected Model model;
-	protected View view;
+	protected View ui;
 	protected ConcurrentHashMap<String, Command> commands;
 	
 	public CommonCommandsManager() {
@@ -28,9 +28,9 @@ public abstract class CommonCommandsManager implements CommandsManager{
 	}
 	
 	@Override
-	public void setModelView(Model model, View view) {
+	public void setModelView(Model model, View ui) {
 		this.model = model;
-		this.view = view;
+		this.ui = ui;
 	}
 
 }

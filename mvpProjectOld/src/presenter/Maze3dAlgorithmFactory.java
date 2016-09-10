@@ -201,11 +201,7 @@ public class Maze3dAlgorithmFactory {
 		public Searcher<Position> create(String arg) {
 			Comparator<State<Position>> c = createComperatorAlgorithm(arg);
 			if (c != null)
-				try {
-					return new BestFirstSearch<Position>(c);
-				} catch (Exception e) {
-					return null;
-				}
+				return new BestFirstSearch<Position>(c);
 			return null;
 		}
 	}

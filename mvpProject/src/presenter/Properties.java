@@ -3,12 +3,15 @@ package presenter;
 public class Properties {
 	public static Properties properites = new Properties();
 	private String viewType;
+	private int viewWidth;
+	private int viewHeight;
+	
 	private String generateAlgorithm;
 	private String selectCellMethod;
 	private String solveAlgorithm;
 	private String comparator;
 	private int numberOfThreads;
-
+	
 	public String getGenerateAlgorithm() {
 		return generateAlgorithm;
 	}
@@ -55,5 +58,21 @@ public class Properties {
 
 	public void setViewType(String viewType) {
 		this.viewType = viewType;
+	}
+
+	public int getViewHeight() {
+		return viewHeight;
+	}
+
+	public void setViewHeight(int viewHeight) {
+		this.viewHeight = viewHeight;
+	}
+
+	public int getViewWidth() {
+		return viewWidth;
+	}
+
+	public void setViewWidth(int viewWidth) {
+		this.viewWidth = viewWidth;
 	}
 }
