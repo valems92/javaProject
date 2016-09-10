@@ -15,7 +15,10 @@ import java.util.Stack;
 public class DepthFirstSearch<T> extends CommonSearcher<T> {
 
 	@Override
-	public ArrayList<T> search(Searchable<T> s) {
+	public ArrayList<T> search(Searchable<T> s) throws Exception {
+		if(s.getInitialState() == null || s.getGoalState() == null)
+			throw new Exception("The maze doesn't have an inital or goal position");
+		
 		Stack<State<T>> openList = new Stack<State<T>>();
 		HashSet<State<T>> visited = new HashSet<State<T>>();
 

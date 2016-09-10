@@ -20,7 +20,7 @@ public interface Maze3dGenerator {
 	 *            Total columns wanted in the 3D maze
 	 * @return A 3D maze with the desired dimmension
 	 */
-	public Maze3d generate(int z, int y, int x);
+	public Maze3d generate(int z, int y, int x) throws Exception;
 
 	/**
 	 * <h1>measureAlgorithmTime</h1> Calculate the time it take to crate a 3D
@@ -35,5 +35,5 @@ public interface Maze3dGenerator {
 	 *            Total columns in the 3D maze
 	 * @return Seconds it take to crate the 3D maze
 	 */
-	public String measureAlgorithmTime(int z, int y, int x);
+	public String measureAlgorithmTime(int z, int y, int x) throws Exception;
 }

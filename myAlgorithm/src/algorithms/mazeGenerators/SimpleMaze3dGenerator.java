@@ -16,7 +16,7 @@ import java.util.Random;
 public class SimpleMaze3dGenerator extends CommonMaze3dGenerator {
 
 	@Override
-	public Maze3d generate(int z, int y, int x) {
+	public Maze3d generate(int z, int y, int x) throws Exception {
 		Maze3d maze3d = new Maze3d(z, y, x);
 		Random rand = new Random();
 

@@ -32,13 +32,12 @@ import io.MyDecompressorInputStream;
  *
  */
 public class Demo {
-	public void run() throws IOException {
+	public void run() throws Exception {
 		Maze3dGenerator mg = new GrowingTreeGenerator(new RandomSelectMethod());
-		//Maze3dGenerator mg = new SimpleMaze3dGenerator();
-		Maze3d maze = mg.generate(10, 10, 10);
+		// Maze3dGenerator mg = new SimpleMaze3dGenerator();
+		Maze3d maze = mg.generate(1, 2, 2);
 		System.out.println("Maze generated: \n" + maze);
 
-		
 		Searchable<Position> mazeDomain = new Maze3dDomain(maze);
 
 		Searcher<Position> algorithm = new DepthFirstSearch<Position>();
@@ -46,13 +45,16 @@ public class Demo {
 
 		System.out.println("DepthFirstSearch: " + solution.toString());
 		System.out.println("evaluated nodes: " + algorithm.getNumberOfNodesEvaluated() + "\n");
-		
-		algorithm = new BestFirstSearch<Position>(new CostStateComperator<Position>());
-		solution = algorithm.search(mazeDomain);
 
-		System.out.println("BestFirstSearch: " + solution.toString());
-		System.out.println("evaluated nodes: " + algorithm.getNumberOfNodesEvaluated() + "\n");
-		
+		try {
+			algorithm = new BestFirstSearch<Position>(new CostStateComperator<Position>());
+			solution = algorithm.search(mazeDomain);
+
+			System.out.println("BestFirstSearch: " + solution.toString());
+			System.out.println("evaluated nodes: " + algorithm.getNumberOfNodesEvaluated() + "\n");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		OutputStream out = new MyCompressorOutputStream(new FileOutputStream("1.bit"));
 		out.write(maze.toByteArray());
 		out.flush();
@@ -60,7 +62,7 @@ public class Demo {
 
 		try {
 			InputStream in = new MyDecompressorInputStream(new FileInputStream("1.bit"));
-			
+
 			File file = new File("1.bit");
 			FileInputStream reader = new FileInputStream(file);
 			byte b[] = new byte[(reader.read() * Byte.MAX_VALUE) + reader.read()];

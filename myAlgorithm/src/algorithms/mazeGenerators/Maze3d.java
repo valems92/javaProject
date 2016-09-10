@@ -32,7 +32,10 @@ public class Maze3d {
 	 * @param x
 	 *            Total columns in the 3D maze
 	 */
-	public Maze3d(int z, int y, int x) {
+	public Maze3d(int z, int y, int x) throws Exception {
+		if(z == 0 || y < 3 || x < 3)
+			throw new ExceptionInInitializerError();
+		
 		this.z = z;
 		this.y = y;
 		this.x = x;

@@ -13,10 +13,10 @@ import java.util.Random;
  */
 public abstract class CommonMaze3dGenerator implements Maze3dGenerator {
 	@Override
-	public abstract Maze3d generate(int z, int y, int x);
+	public abstract Maze3d generate(int z, int y, int x) throws Exception;
 
 	@Override
-	public String measureAlgorithmTime(int z, int y, int x) {
+	public String measureAlgorithmTime(int z, int y, int x) throws Exception{
 		long startTime = System.currentTimeMillis();
 		this.generate(z, y, x);
 		long endTime = System.currentTimeMillis();

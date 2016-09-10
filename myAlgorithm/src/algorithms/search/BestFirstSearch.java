@@ -23,13 +23,18 @@ public class BestFirstSearch<T> extends CommonSearcher<T> {
 	 * @param comp
 	 *            The way to comparate between states.
 	 */
-	public BestFirstSearch(Comparator<State<T>> comp) {
+	public BestFirstSearch(Comparator<State<T>> comp) throws Exception { 
 		super();
+		if(comp == null)
+			throw new ExceptionInInitializerError("Comperator is null");
 		openList = new PriorityQueue<State<T>>(comp);
 	}
 
 	@Override
-	public ArrayList<T> search(Searchable<T> s) {
+	public ArrayList<T> search(Searchable<T> s) throws Exception {	
+		if(s.getInitialState() == null || s.getGoalState() == null)
+			throw new Exception("The maze doesn't have an inital or goal position");
+		
 		openList.add(s.getInitialState());
 		HashSet<State<T>> closedSet = new HashSet<State<T>>();
 
