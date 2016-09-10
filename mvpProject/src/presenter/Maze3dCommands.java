@@ -35,6 +35,8 @@ public class Maze3dCommands extends CommonCommandsManager {
 		// Ui commands
 		commands.put("display_maze", new DisplayMazeCommand());
 		commands.put("display_solution", new DisplaySolutionCommand());
+		
+		commands.put("exit", new ExitCommand());
 	}
 
 	class GenerateMazeCommand implements Command {
@@ -102,6 +104,14 @@ public class Maze3dCommands extends CommonCommandsManager {
 		public void doCommand(String[] args) {
 			String path = args[1];
 			model.loadGameProperties(path);
+		}
+	}
+	
+	class ExitCommand implements Command {
+		@Override
+		public void doCommand(String[] args) {
+			model.exit();
+			ui.exit();
 		}
 	}
 }

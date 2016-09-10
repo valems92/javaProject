@@ -16,6 +16,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
 import java.util.zip.GZIPOutputStream;
 
 import algorithms.demo.Maze3dDomain;
@@ -75,6 +76,7 @@ public class GameMaze3dModel extends Observable implements Model {
 		return generatedMazes.get(name);
 	}
 
+	@Override
 	public void solveMaze(String name, Searcher<Position> searcher) {
 		if (solutions.containsKey(name)) {
 			setChanged();
@@ -106,9 +108,12 @@ public class GameMaze3dModel extends Observable implements Model {
 		}
 	}
 
+	@Override
 	public ArrayList<Position> getSolutionByMazeName(String name) {
 		return solutions.get(name);
 	}
+
+	@Override
 	public void saveData(String fileName) {
 		try {
 			MyCompressorOutputStream file = new MyCompressorOutputStream(new FileOutputStream(fileName));
@@ -126,12 +131,25 @@ public class GameMaze3dModel extends Observable implements Model {
 		}
 	}
 
+	@Override
 	public void loadGameProperties(String path) {
 		try {
 			XMLDecoder decoder = new XMLDecoder(new BufferedInputStream(new FileInputStream(path)));
-			Properties.properites = (Properties)decoder.readObject();
+			Properties.properites = (Properties) decoder.readObject();
 			decoder.close();
 		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+	}
+
+	@Override
+	public void exit() {
+		executorGenerate.shutdown();
+		executorSolve.shutdown();
+		try {
+			executorGenerate.awaitTermination(Integer.MAX_VALUE, TimeUnit.SECONDS);
+			executorSolve.awaitTermination(Integer.MAX_VALUE, TimeUnit.SECONDS);
+		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
 	}

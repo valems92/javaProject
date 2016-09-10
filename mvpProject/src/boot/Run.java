@@ -24,6 +24,7 @@ public class Run {
 		try {
 			readProperties();
 		} catch (Exception e) {	
+			//generateProperties();
 			return;
 		}
 		
@@ -54,5 +55,27 @@ public class Run {
 		XMLDecoder decoder = new XMLDecoder(new BufferedInputStream(new FileInputStream(FILE_NAME)));
 		Properties.properites = (Properties)decoder.readObject();
 		decoder.close();
+	}
+	
+	public static void writeProperties() throws Exception {
+		XMLEncoder encoder = new XMLEncoder(new BufferedOutputStream(new FileOutputStream(FILE_NAME)));
+		encoder.writeObject(Properties.properites);
+		encoder.close();
+	}
+	
+	private static void generateProperties() {
+		Properties.properites.setViewType("text");
+		Properties.properites.setGenerateAlgorithm("GrowingTree");
+		Properties.properites.setSelectCellMethod("Random");
+		Properties.properites.setSolveAlgorithm("BFS");
+		Properties.properites.setComparator("Cost");
+		Properties.properites.setNumberOfThreads(5);
+		
+		try {
+			writeProperties();
+			System.out.println("properties.xml is missing so default properties file was crated");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 }

@@ -23,6 +23,11 @@ public class GameMaze3dGuiView extends CommonMaze3dView {
 	public void displaySolution(ArrayList<Position> solution) {
 		
 	}
+
+	@Override
+	public void exit() {
+		
+	}
 	
 	public void update(String command){
 		setChanged();

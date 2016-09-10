@@ -5,8 +5,10 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 
@@ -18,6 +20,12 @@ public class Maze3dGameWindow extends BasicWindow {
 	public Maze3dGameWindow(int width, int height, GameMaze3dGuiView view) {
 		super(width, height);
 		this.view = view;
+
+		shell.addListener(SWT.Close, new Listener() {
+			public void handleEvent(Event event) {
+				exitGame();
+			}
+		});
 	}
 
 	@Override
@@ -44,9 +52,9 @@ public class Maze3dGameWindow extends BasicWindow {
 		fileItem.setText("File");
 		fileItem.setMenu(fileMenu);
 
-		MenuItem newItem = new MenuItem(fileMenu, SWT.NONE);
-		newItem.setText("Open properties");
-		newItem.addSelectionListener(new SelectionListener() {
+		MenuItem propItem = new MenuItem(fileMenu, SWT.NONE);
+		propItem.setText("Open properties");
+		propItem.addSelectionListener(new SelectionListener() {
 			@Override
 			public void widgetSelected(SelectionEvent arg0) {
 				openProperties();
@@ -56,7 +64,20 @@ public class Maze3dGameWindow extends BasicWindow {
 			public void widgetDefaultSelected(SelectionEvent arg0) {
 			}
 		});
-		
+
+		MenuItem exitItem = new MenuItem(fileMenu, SWT.NONE);
+		exitItem.setText("Exit");
+		exitItem.addSelectionListener(new SelectionListener() {
+			@Override
+			public void widgetSelected(SelectionEvent arg0) {
+				shell.close();
+			}
+
+			@Override
+			public void widgetDefaultSelected(SelectionEvent arg0) {
+			}
+		});
+
 		shell.setMenuBar(menuBar);
 	}
 
@@ -64,12 +85,14 @@ public class Maze3dGameWindow extends BasicWindow {
 		FileDialog fileDialog = new FileDialog(shell, SWT.OPEN);
 		fileDialog.setText("Open");
 		fileDialog.setFilterPath("C:/");
-		String[] filterExt = {"*.xml"};
+		String[] filterExt = { "*.xml" };
 		fileDialog.setFilterExtensions(filterExt);
-		
+
 		String selected = fileDialog.open();
 		view.update("load_properties " + selected);
-		
-		System.out.println(Properties.properites.getViewWidth());
+	}
+
+	private void exitGame(){
+		view.update("exit");
 	}
 }

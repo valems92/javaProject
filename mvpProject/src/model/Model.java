@@ -25,4 +25,6 @@ public interface Model {
 	public void saveData(String fileName);
 	
 	public void loadGameProperties(String path);
+	
+	public void exit();
 }

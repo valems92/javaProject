@@ -52,4 +52,17 @@ public class GameMaze3dTextView extends CommonMaze3dView {
 		out.println(str);
 		out.flush();
 	}
+
+	@Override
+	public void exit() {
+		try {
+			this.in.close();
+		} catch (IOException e) {
+			println(e.getMessage());
+		}
+		System.out.println("The game closed");
+		this.out.close();
+		Thread.interrupted();	
+		return;
+	}
 }
