@@ -12,7 +12,6 @@ import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 
-import presenter.Properties;
 
 public class Maze3dGameWindow extends BasicWindow {
 	private GameMaze3dGuiView view;
@@ -39,6 +38,7 @@ public class Maze3dGameWindow extends BasicWindow {
 
 		MenuDisplay menu = new MenuDisplay(shell, SWT.BORDER);
 		menu.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, true, 1, 1));
+		menu.setGameView(this);
 
 		MazeDisplay maze = new MazeDisplay(shell, SWT.BORDER);
 		maze.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
@@ -92,7 +92,7 @@ public class Maze3dGameWindow extends BasicWindow {
 		view.update("load_properties " + selected);
 	}
 
-	private void exitGame(){
+	protected void exitGame(){
 		view.update("exit");
 	}
 }
