@@ -12,7 +12,10 @@ import presenter.CommandsManager;
 import presenter.Maze3dCommands;
 import presenter.Presenter;
 import presenter.Properties;
-import view.GameMaze3dView;
+import view.CommonMaze3dView;
+import view.GameMaze3dGuiView;
+import view.GameMaze3dTextView;
+import view.View;
 
 public class Run {
 	private final static String FILE_NAME = "properties.xml";
@@ -24,8 +27,16 @@ public class Run {
 			generateProperties();
 		}
 		
+		CommonMaze3dView view;
+		String viewType = Properties.properites.getViewType();
+		if(viewType.equals("text")) 
+			view = new GameMaze3dTextView();
+		else if(viewType.equals("gui"))
+			view = new GameMaze3dGuiView();
+		else 
+			return;
+		
 		GameMaze3dModel model = new GameMaze3dModel();
-		GameMaze3dView view = new GameMaze3dView();
 
 		CommandsManager commandManager = new Maze3dCommands();
 		commandManager.setCommands();
@@ -40,6 +51,7 @@ public class Run {
 	}
 
 	private static void generateProperties() {
+		Properties.properites.setViewType("text");
 		Properties.properites.setGenerateAlgorithm("GrowingTree");
 		Properties.properites.setSelectCellMethod("Random");
 		Properties.properites.setSolveAlgorithm("BFS");

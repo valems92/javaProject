@@ -16,5 +16,8 @@
   <void property="solveAlgorithm">
    <string>BFS</string>
   </void>
+  <void property="viewType">
+   <string>gui</string>
+  </void>
  </object>
 </java>

@@ -2,7 +2,7 @@ package presenter;
 
 public class Properties {
 	public static Properties properites = new Properties();
-	
+	private String viewType;
 	private String generateAlgorithm;
 	private String selectCellMethod;
 	private String solveAlgorithm;
@@ -47,5 +47,13 @@ public class Properties {
 
 	public void setNumberOfThreads(int numberOfThreads) {
 		this.numberOfThreads = numberOfThreads;
+	}
+
+	public String getViewType() {
+		return viewType;
+	}
+
+	public void setViewType(String viewType) {
+		this.viewType = viewType;
 	}
 }
