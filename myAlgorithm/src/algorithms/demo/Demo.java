@@ -22,6 +22,7 @@ import algorithms.search.CostStateComperator;
 import algorithms.search.DepthFirstSearch;
 import algorithms.search.Searchable;
 import algorithms.search.Searcher;
+import algorithms.search.Solution;
 import io.MyCompressorOutputStream;
 import io.MyDecompressorInputStream;
 
@@ -50,7 +51,7 @@ public class Demo {
 		Searchable<Position> mazeDomain = new Maze3dDomain(maze);
 
 		Searcher<Position> algorithm = new DepthFirstSearch<Position>();
-		ArrayList<Position> solution = algorithm.search(mazeDomain);
+		Solution<Position> solution = algorithm.search(mazeDomain);
 
 		System.out.println("DepthFirstSearch: " + solution.toString());
 		System.out.println("evaluated nodes: " + algorithm.getNumberOfNodesEvaluated() + "\n");
@@ -74,7 +75,7 @@ public class Demo {
 
 			File file = new File("1.bit");
 			FileInputStream reader = new FileInputStream(file);
-			byte b[] = new byte[(reader.read() * Byte.MAX_VALUE) + reader.read()];
+			byte b[] = new byte[(reader.read() * Byte.MAX_VALUE) + reader.read()*2];
 			reader.close();
 
 			in.read(b);

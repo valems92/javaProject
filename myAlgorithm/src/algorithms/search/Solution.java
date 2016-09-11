@@ -11,19 +11,19 @@ import java.util.ArrayList;
  */
 public class Solution<T> {
 	
-	private ArrayList<State<T>> results=new ArrayList<State<T>>();
+	protected ArrayList<T> results=new ArrayList<T>();
 
 	/**
 	 * @return the results
 	 */
-	public ArrayList<State<T>> getResults() {
+	public ArrayList<T> getResults() {
 		return results;
 	}
 
 	/**
 	 * @param results the results to set
 	 */
-	public void setResults(ArrayList<State<T>> results) {
+	public void setResults(ArrayList<T> results) {
 		this.results = results;
 	}
 
@@ -31,7 +31,7 @@ public class Solution<T> {
 	@Override
 	public String toString() {
 		StringBuilder sb=new StringBuilder();
-		for(State<T> s : results){
+		for(T s : results){
 			sb.append(s.toString()).append(" ");
 		}
 		return sb.toString();

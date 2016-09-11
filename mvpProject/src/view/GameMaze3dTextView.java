@@ -8,6 +8,7 @@ import java.util.ArrayList;
 
 import algorithms.mazeGenerators.Maze3d;
 import algorithms.mazeGenerators.Position;
+import algorithms.search.Solution;
 
 public class GameMaze3dTextView extends CommonMaze3dView {
 	private BufferedReader in;
@@ -44,8 +45,8 @@ public class GameMaze3dTextView extends CommonMaze3dView {
 	}
 
 	@Override
-	public void displaySolution(ArrayList<Position> solution) {
-		println(solution.toString());
+	public void displaySolution(Solution<Position> solution) {
+		println(solution.getResults().toString());
 	}
 	
 	@Override

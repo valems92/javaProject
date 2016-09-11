@@ -31,7 +31,7 @@ public class BestFirstSearch<T> extends CommonSearcher<T> {
 	}
 
 	@Override
-	public ArrayList<T> search(Searchable<T> s) throws Exception {	
+	public Solution<T> search(Searchable<T> s) throws Exception {	
 		if(s.getInitialState() == null || s.getGoalState() == null)
 			throw new Exception("The maze doesn't have an inital or goal position");
 		

@@ -20,7 +20,7 @@
    <int>800</int>
   </void>
   <void property="viewType">
-   <string>gui</string>
+   <string>text</string>
   </void>
   <void property="viewWidth">
    <int>1000</int>

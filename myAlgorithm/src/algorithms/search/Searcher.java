@@ -23,7 +23,7 @@ public interface Searcher<T> {
 	 *            A searchable object to look for it's solution
 	 * @return A list of the solution path
 	 */
-	public ArrayList<T> search(Searchable<T> s) throws Exception ;
+	public Solution<T> search(Searchable<T> s) throws Exception ;
 
 	/**
 	 * <h1>getNumberOfNodesEvaluated</h1> When a new node is evaluated, a

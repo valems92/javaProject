@@ -25,19 +25,20 @@ import algorithms.mazeGenerators.Maze3dGenerator;
 import algorithms.mazeGenerators.Position;
 import algorithms.search.Searchable;
 import algorithms.search.Searcher;
+import algorithms.search.Solution;
 import io.MyCompressorOutputStream;
 import presenter.Properties;
 
 public class GameMaze3dModel extends Observable implements Model {
 	public ConcurrentHashMap<String, Maze3d> generatedMazes;
-	private ConcurrentHashMap<String, ArrayList<Position>> solutions;
+	private ConcurrentHashMap<String, Solution<Position>> solutions;
 
 	private ExecutorService executorGenerate;
 	private ExecutorService executorSolve;
 
 	public GameMaze3dModel() {
 		generatedMazes = new ConcurrentHashMap<String, Maze3d>();
-		solutions = new ConcurrentHashMap<String, ArrayList<Position>>();
+		solutions = new ConcurrentHashMap<String, Solution<Position>>();
 
 		executorGenerate = Executors.newFixedThreadPool(Properties.properites.getNumberOfThreads());
 		executorSolve = Executors.newFixedThreadPool(Properties.properites.getNumberOfThreads());
@@ -84,19 +85,19 @@ public class GameMaze3dModel extends Observable implements Model {
 			return;
 		}
 
-		Future<ArrayList<Position>> generatedSolution = executorSolve.submit(new Callable<ArrayList<Position>>() {
+		Future<Solution<Position>> generatedSolution = executorSolve.submit(new Callable<Solution<Position>>() {
 			@Override
-			public ArrayList<Position> call() throws Exception {
+			public Solution<Position> call() throws Exception {
 				Maze3d maze = generatedMazes.get(name);
 				Searchable<Position> mazeDomain = new Maze3dDomain(maze);
-				ArrayList<Position> solution = searcher.search(mazeDomain);
+				Solution<Position> solution = searcher.search(mazeDomain);
 
 				return solution;
 			}
 		});
 
 		try {
-			ArrayList<Position> solution = generatedSolution.get();
+			Solution<Position> solution = generatedSolution.get();
 			solutions.put(name, solution);
 
 			setChanged();
@@ -109,7 +110,7 @@ public class GameMaze3dModel extends Observable implements Model {
 	}
 
 	@Override
-	public ArrayList<Position> getSolutionByMazeName(String name) {
+	public Solution<Position> getSolutionByMazeName(String name) {
 		return solutions.get(name);
 	}
 

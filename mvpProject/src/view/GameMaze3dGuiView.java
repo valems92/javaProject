@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import algorithms.mazeGenerators.Maze3d;
 import algorithms.mazeGenerators.Position;
+import algorithms.search.Solution;
 import presenter.Properties;
 
 public class GameMaze3dGuiView extends CommonMaze3dView {
@@ -21,7 +22,7 @@ public class GameMaze3dGuiView extends CommonMaze3dView {
 	}
 
 	@Override
-	public void displaySolution(ArrayList<Position> solution) {
+	public void displaySolution(Solution<Position> solution) {
 		
 	}
 

@@ -1,7 +1,5 @@
 package algorithms.search;
 
-import java.util.ArrayList;
-
 import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
@@ -32,9 +30,9 @@ public class BestFirstSearchTest {
 		Maze3d maze = mg.generate(BIG_MAZE, BIG_MAZE, BIG_MAZE);
 		Searchable<Position> mazeDomain = new Maze3dDomain(maze);
 		Searcher<Position> algorithm = new BestFirstSearch<Position>(new CostStateComperator<Position>());
-		ArrayList<Position> solution = algorithm.search(mazeDomain);
+		Solution<Position> solution = algorithm.search(mazeDomain);
 
-		Assert.assertNotNull("The maze should have a solution for it maximum size", solution);
+		Assert.assertNotNull("The maze should have a solution for it maximum size", solution.results);
 	}
 
 	@Test(expected = ExceptionInInitializerError.class)
@@ -52,9 +50,9 @@ public class BestFirstSearchTest {
 		Searchable<Position> mazeDomain = new Maze3dDomain(maze);
 
 		Searcher<Position> algorithm = new BestFirstSearch<Position>(new CostStateComperator<Position>());
-		ArrayList<Position> solution = algorithm.search(mazeDomain);
+		Solution<Position> solution = algorithm.search(mazeDomain);
 
-		Assert.assertNull("A solution doesn't exist so it should be null", solution);
+		Assert.assertNull("A solution doesn't exist so it should be null", solution.results);
 	}
 
 	@Test(expected = Exception.class)

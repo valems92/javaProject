@@ -6,6 +6,7 @@ import algorithms.mazeGenerators.Maze3d;
 import algorithms.mazeGenerators.Maze3dGenerator;
 import algorithms.mazeGenerators.Position;
 import algorithms.search.Searcher;
+import algorithms.search.Solution;
 
 /**
  * 
@@ -85,7 +86,7 @@ public class Maze3dCommands extends CommonCommandsManager {
 		public void doCommand(String[] args) {
 			String name = args[1];
 			
-			ArrayList<Position> solution = model.getSolutionByMazeName(name);
+			Solution<Position> solution = model.getSolutionByMazeName(name);
 			ui.displaySolution(solution);
 		}
 	}
