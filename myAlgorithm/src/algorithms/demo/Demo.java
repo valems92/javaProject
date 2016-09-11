@@ -5,9 +5,11 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.zip.GZIPOutputStream;
 
 import algorithms.mazeGenerators.GrowingTreeGenerator;
 import algorithms.mazeGenerators.Maze3d;
@@ -34,10 +36,17 @@ import io.MyDecompressorInputStream;
 public class Demo {
 	public void run() throws Exception {
 		Maze3dGenerator mg = new GrowingTreeGenerator(new RandomSelectMethod());
-		// Maze3dGenerator mg = new SimpleMaze3dGenerator();
-		Maze3d maze = mg.generate(1, 2, 2);
+		Maze3d maze = mg.generate(5, 5, 5);
 		System.out.println("Maze generated: \n" + maze);
-
+		try {
+			ObjectOutputStream out = new ObjectOutputStream(new GZIPOutputStream(new FileOutputStream("test.zip")));
+			System.out.println(maze);
+			out.writeObject(maze);
+			
+			out.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		Searchable<Position> mazeDomain = new Maze3dDomain(maze);
 
 		Searcher<Position> algorithm = new DepthFirstSearch<Position>();

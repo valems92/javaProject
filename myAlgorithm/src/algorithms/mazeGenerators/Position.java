@@ -1,5 +1,7 @@
 package algorithms.mazeGenerators;
 
+import java.io.Serializable;
+
 /**
  * <h1>Position</h1> Reprecent a cell (a location) in a 3D maze. It has z, y and
  * x coordinates.
@@ -7,7 +9,7 @@ package algorithms.mazeGenerators;
  * 
  * @author Valentina Munoz & Moris Amon
  */
-public class Position {
+public class Position implements Serializable {
 	public int z;
 	public int y;
 	public int x;
