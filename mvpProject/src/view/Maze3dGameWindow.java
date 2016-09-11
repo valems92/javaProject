@@ -11,10 +11,10 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
-
+import org.eclipse.swt.widgets.MessageBox;
 
 public class Maze3dGameWindow extends BasicWindow {
-	private GameMaze3dGuiView view;
+	protected GameMaze3dGuiView view;
 
 	public Maze3dGameWindow(int width, int height, GameMaze3dGuiView view) {
 		super(width, height);
@@ -36,11 +36,10 @@ public class Maze3dGameWindow extends BasicWindow {
 		title.setText("3D maze game!");
 		title.setLayoutData(new GridData(SWT.CENTER, SWT.FILL, false, false, 2, 1));
 
-		MenuDisplay menu = new MenuDisplay(shell, SWT.BORDER);
+		MenuDisplay menu = new MenuDisplay(shell, SWT.BORDER, this);
 		menu.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, true, 1, 1));
-		menu.setGameView(this);
 
-		MazeDisplay maze = new MazeDisplay(shell, SWT.BORDER);
+		MazeDisplay maze = new MazeDisplay(shell, SWT.BORDER, this);
 		maze.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 	}
 
@@ -92,7 +91,19 @@ public class Maze3dGameWindow extends BasicWindow {
 		view.update("load_properties " + selected);
 	}
 
-	protected void exitGame(){
+	public void displayMessage(String msg) {
+		MessageBox messageBox = new MessageBox(shell, SWT.ICON_ERROR | SWT.OK);
+		messageBox.setMessage(msg);
+
+		int buttonID = messageBox.open();
+		switch (buttonID) {
+		case SWT.YES:
+			
+			break;
+		}
+	}
+
+	protected void exitGame() {
 		view.update("exit");
 	}
 }

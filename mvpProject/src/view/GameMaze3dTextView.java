@@ -48,6 +48,11 @@ public class GameMaze3dTextView extends CommonMaze3dView {
 		println(solution.toString());
 	}
 	
+	@Override
+	public void displayMessage(String msg) {
+		println(msg);
+	}
+	
 	private void println(String str){
 		out.println(str);
 		out.flush();
