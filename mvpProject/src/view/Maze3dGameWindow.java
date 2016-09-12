@@ -3,6 +3,7 @@ package view;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Event;
@@ -13,13 +14,19 @@ import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.MessageBox;
 
+import algorithms.mazeGenerators.Maze3d;
+
 public class Maze3dGameWindow extends BasicWindow {
 	protected GameMaze3dGuiView view;
-
+	
+	private WelcomeDisplay welcome;
+	private MazeDisplay maze;
+	
 	public Maze3dGameWindow(int width, int height, GameMaze3dGuiView view) {
 		super(width, height);
 		this.view = view;
 
+		shell.setBackground(new Color(null, 116, 73, 38));
 		shell.addListener(SWT.Close, new Listener() {
 			public void handleEvent(Event event) {
 				exitGame();
@@ -32,15 +39,11 @@ public class Maze3dGameWindow extends BasicWindow {
 		shell.setLayout(new GridLayout(2, false));
 		createFileMenu();
 
-		Label title = new Label(shell, SWT.NONE);
-		title.setText("3D maze game!");
-		title.setLayoutData(new GridData(SWT.CENTER, SWT.FILL, false, false, 2, 1));
-
-		MenuDisplay menu = new MenuDisplay(shell, SWT.BORDER, this);
+		MenuDisplay menu = new MenuDisplay(shell, SWT.NONE, this);
 		menu.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, true, 1, 1));
 
-		MazeDisplay maze = new MazeDisplay(shell, SWT.BORDER, this);
-		maze.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+		welcome = new WelcomeDisplay(shell, SWT.NONE, this);
+		welcome.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 	}
 
 	private void createFileMenu() {
@@ -91,6 +94,16 @@ public class Maze3dGameWindow extends BasicWindow {
 		view.update("load_properties " + selected);
 	}
 
+	public void displayMaze(Maze3d m){
+        maze = new MazeDisplay(shell, SWT.BORDER, this, m);
+		maze.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+		
+		maze.moveAbove(welcome);
+        welcome.dispose();
+        
+        shell.layout(true);
+	}
+	
 	public void displayMessage(String msg) {
 		MessageBox messageBox = new MessageBox(shell, SWT.ICON_ERROR | SWT.OK);
 		messageBox.setMessage(msg);

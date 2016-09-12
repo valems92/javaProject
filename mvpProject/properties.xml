@@ -17,13 +17,13 @@
    <string>BFS</string>
   </void>
   <void property="viewHeight">
-   <int>800</int>
+   <int>820</int>
   </void>
   <void property="viewType">
-   <string>text</string>
+   <string>gui</string>
   </void>
   <void property="viewWidth">
-   <int>1000</int>
+   <int>1200</int>
   </void>
  </object>
 </java>

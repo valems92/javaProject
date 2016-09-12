@@ -1,52 +1,55 @@
 package view;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.Font;
+import org.eclipse.swt.graphics.FontData;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
 
-import presenter.Properties;
-
 public class MenuDisplay extends Canvas {
+	private final int FONT_SIZE = 16;
 	Maze3dGameWindow gameView;
 
 	public MenuDisplay(Composite parent, int style, Maze3dGameWindow gameView) {
 		super(parent, style);
 		this.gameView = gameView;
 
+		this.setLayout(new GridLayout(2, false));
+		this.setBackground(new Color(null, 116, 73, 38));
+		
 		initWidgets();
 	}
 
 	private void initWidgets() {
-		this.setLayout(new GridLayout(2, false));
-
 		startGame();
 
 		loadSaveGame();
 
-		Button exitButton = new Button(this, SWT.PUSH);
-		exitButton.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 2, 1));
-		exitButton.setText("Exit");
-
-		exitButton.addSelectionListener(new SelectionListener() {
+		Group group = new Group(this, SWT.NONE);
+		group.setLayout(new GridLayout(2, true));
+		group.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, true, 2, 1));
+		group.setBackground(new Color(null,212, 169, 127));
+		
+		ButtonDisplay exitBtn = new ButtonDisplay(group, "Exit Game");
+		exitBtn.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 2, 1));
+		exitBtn.addListener(SWT.MouseDown, new Listener() {
 			@Override
-			public void widgetSelected(SelectionEvent arg0) {
+			public void handleEvent(Event arg0) {
 				gameView.shell.close();
-			}
-
-			@Override
-			public void widgetDefaultSelected(SelectionEvent arg0) {
-				// TODO Auto-generated method stub
-
 			}
 		});
 	}
@@ -54,90 +57,92 @@ public class MenuDisplay extends Canvas {
 	private void startGame() {
 		Group group = new Group(this, SWT.NONE);
 		group.setLayout(new GridLayout(2, true));
-		group.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 2, 1));
-
-		group.setBackground(new Color(null, 84, 178, 93));
+		group.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, true, 2, 1));
+		group.setBackground(new Color(null,212, 169, 127));
 		
-		Label nameLabel = new Label(group, SWT.NONE);
-		nameLabel.setText("Name:");
-		nameLabel.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1));
+		createLabel(group, "Name:");
+		Text nameInput = createText(group);
 
-		Text nameInput = new Text(group, SWT.BORDER);
-		nameInput.setLayoutData(new GridData(SWT.LEFT, SWT.FILL, true, false, 1, 1));
+		createLabel(group, "Floors:");
+		Text zInput = createText(group);
 
-		Label zLabel = new Label(group, SWT.NONE);
-		zLabel.setText("Floors:");
-		zLabel.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1));
+		createLabel(group, "Rows:");
+		Text yInput = createText(group);
 
-		Text zInput = new Text(group, SWT.BORDER);
-		zInput.setLayoutData(new GridData(SWT.LEFT, SWT.FILL, true, false, 1, 1));
+		createLabel(group, "Columns:");
+		Text xInput =  createText(group);
 
-		Label yLabel = new Label(group, SWT.NONE);
-		yLabel.setText("Rows:");
-		yLabel.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1));
-
-		Text yInput = new Text(group, SWT.BORDER);
-		yInput.setLayoutData(new GridData(SWT.LEFT, SWT.FILL, true, false, 1, 1));
-
-		Label xLabel = new Label(group, SWT.NONE);
-		xLabel.setText("Columns:");
-		xLabel.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1));
-
-		Text xInput = new Text(group, SWT.BORDER);
-		xInput.setLayoutData(new GridData(SWT.LEFT, SWT.FILL, true, false, 1, 1));
-
-		Button playButton = new Button(group, SWT.PUSH);
-		playButton.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 2, 1));
-		playButton.setText("Start Game");
-		playButton.addSelectionListener(new SelectionListener() {
+		ButtonDisplay startBtn = new ButtonDisplay(group, "Start Game");
+		startBtn.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 2, 1));
+		startBtn.addListener(SWT.MouseDown | SWT.MouseUp, new Listener() {
 			@Override
-			public void widgetSelected(SelectionEvent arg0) {
-				gameView.view.update("generate_maze " + nameInput.getText() + " " + zInput.getText() + " "
-						+ yInput.getText() + " " + xInput.getText());
-			}
-
-			@Override
-			public void widgetDefaultSelected(SelectionEvent arg0) {
+			public void handleEvent(Event arg0) {
+				if(nameInput.getText().length() == 0 || zInput.getText().length() == 0 || yInput.getText().length() == 0 || xInput.getText().length() == 0) {
+					gameView.view.displayMessage("You need to enter the maze name and dimension.");
+					return;
+				}	
+				gameView.view.update("generate_maze " + nameInput.getText() + " " + zInput.getText() + " " + yInput.getText() + " " + xInput.getText());
 			}
 		});
 	}
 
 	private void loadSaveGame() {
-		Label nameLabel = new Label(this, SWT.NONE);
-		nameLabel.setText("Name:");
-		nameLabel.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1));
+		Group group = new Group(this, SWT.NONE);
+		group.setLayout(new GridLayout(2, true));
+		group.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, true, 2, 1));
+		group.setBackground(new Color(null,212, 169, 127));
+		
+		createLabel(group, "Name:");
+		Text nameInput = createText(group);
 
-		Text nameInput = new Text(this, SWT.BORDER);
-		nameInput.setLayoutData(new GridData(SWT.LEFT, SWT.FILL, true, false, 1, 1));
-
-		Button saveButton = new Button(this, SWT.PUSH);
-		saveButton.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 2, 1));
-		saveButton.setText("Save Game");
-		saveButton.addSelectionListener(new SelectionListener() {
+		ButtonDisplay saveBtn = new ButtonDisplay(group, "Save Game");
+		saveBtn.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 2, 1));
+		saveBtn.addListener(SWT.MouseDown, new Listener() {
 			@Override
-			public void widgetSelected(SelectionEvent arg0) {
+			public void handleEvent(Event arg0) {
+				if(nameInput.getText().length() == 0) {
+					gameView.view.displayMessage("You need to enter the maze name.");
+					return;
+				}	
 				gameView.view.update("save_maze " + nameInput.getText());
 			}
-
+		});
+		
+		ButtonDisplay loadBtn = new ButtonDisplay(group, "Load Game");
+		loadBtn.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 2, 1));
+		loadBtn.addListener(SWT.MouseDown, new Listener() {
 			@Override
-			public void widgetDefaultSelected(SelectionEvent arg0) {
+			public void handleEvent(Event arg0) {
+				if(nameInput.getText().length() == 0) {
+					gameView.view.displayMessage("You need to enter the maze name.");
+					return;
+				}
+				//gameView.view.update("load_maze " + nameInput.getText());
 			}
 		});
+	}
 
-		Button loadButton = new Button(this, SWT.PUSH);
-		loadButton.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 2, 1));
-		loadButton.setText("Load Game");
-		loadButton.addSelectionListener(new SelectionListener() {
-			@Override
-			public void widgetSelected(SelectionEvent arg0) {
-				// gameView.view.update("generate_maze " + nameInput.getText() +
-				// " " + zInput.getText() + " " + yInput.getText() + " " +
-				// xInput.getText());
-			}
-
-			@Override
-			public void widgetDefaultSelected(SelectionEvent arg0) {
-			}
-		});
+	private Label createLabel(Composite parent, String txt){
+		Label label = new Label(parent, SWT.NONE);
+		label.setText(txt);
+		label.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1));
+		
+		FontData[] fontData = label.getFont().getFontData();
+		fontData[0].setHeight(FONT_SIZE);
+		label.setFont(new Font(getDisplay(), fontData[0]));
+		
+		return label;
+	}
+	
+	private Text createText(Composite parent){
+		Text text = new Text(parent, SWT.BORDER);
+		text.setText("");;
+		text.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+		
+		FontData[] fontData = text.getFont().getFontData();
+		fontData[0].setHeight(FONT_SIZE);
+		text.setFont(new Font(getDisplay(), fontData[0]));
+		
+		return text;
 	}
 }

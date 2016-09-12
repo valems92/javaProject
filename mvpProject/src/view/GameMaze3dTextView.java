@@ -67,14 +67,6 @@ public class GameMaze3dTextView extends CommonMaze3dView {
 		return;
 	}
 
-	@Override
-	public void print(String string) {
-		out.print(string);
-		out.flush();
-		
-	}
-
-	@Override
 	public void println(String string) {
 		out.println(string);
 		out.flush();

@@ -1,7 +1,5 @@
 package model;
 
-import java.util.ArrayList;
-
 import algorithms.mazeGenerators.Maze3d;
 import algorithms.mazeGenerators.Maze3dGenerator;
 import algorithms.mazeGenerators.Position;

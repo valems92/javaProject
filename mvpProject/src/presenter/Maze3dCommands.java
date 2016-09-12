@@ -1,6 +1,5 @@
 package presenter;
 
-import java.io.File;
 import algorithms.mazeGenerators.Maze3d;
 import algorithms.mazeGenerators.Maze3dGenerator;
 import algorithms.mazeGenerators.Position;
@@ -26,18 +25,18 @@ public class Maze3dCommands extends CommonCommandsManager {
 
 	@Override
 	public void setCommands() {
-		// Model commands
-		commands.put("display_cross_section", new display_cross_sectionCommand());
-		commands.put("MessageCommand", new messageCommand());
+		// Model commands	
 		commands.put("generate_maze", new GenerateMazeCommand());
 		commands.put("solve", new SolveMazeCommand());
 		commands.put("save_maze", new SaveDataCommand());
+		commands.put("display_cross_section", new DisplayCrossSectionCommand());
 		
 		commands.put("load_properties", new LoadPropertiesCommand());
 		
 		// Ui commands
 		commands.put("display_maze", new DisplayMazeCommand());
 		commands.put("display_solution", new DisplaySolutionCommand());
+		commands.put("display_message", new DisplayMessageCommand());
 		
 		commands.put("exit", new ExitCommand());
 	}
@@ -52,39 +51,19 @@ public class Maze3dCommands extends CommonCommandsManager {
 				int y = Integer.parseInt(args[3]);
 				int x = Integer.parseInt(args[4]);
 
+				if(z > 30 || y > 30 || x > 30) {
+					ui.displayMessage("The maze dimension is too big. All parameters should be smaller than 30.");
+					return;
+				}
+				
 				Maze3dGenerator mg = algorithms.createGenerateAlgorithm(Properties.properites.getGenerateAlgorithm(),
 						Properties.properites.getSelectCellMethod());
 				model.generateMaze(name, z, y, x, mg);
 
 			} catch (NumberFormatException e) {
-				e.printStackTrace();
+				ui.displayMessage("The maze dimension should be on number format.");
 			}
 		}
-	}
-	
-	class display_cross_sectionCommand implements Command{
-
-		@Override
-		public void doCommand(String[] args) {
-			if (args.length >= 4) {
-				String name = args[1];
-				int index = Integer.parseInt(args[2]);
-				String section = args[3];
-				model.displayCrossSection(name, index, section);
-			} else
-				ui.println("Missing parameters. Maze name, Index value and Section name are needed");
-		}
-		
-	}
-	
-	class messageCommand implements Command{
-
-		@Override
-		public void doCommand(String[] args) {
-			ui.println(args[1]);
-			
-		}
-		
 	}
 
 	class DisplayMazeCommand implements Command {
@@ -102,8 +81,7 @@ public class Maze3dCommands extends CommonCommandsManager {
 		public void doCommand(String[] args) {
 			String mazeName = args[1];
 
-			Searcher<Position> searcher = algorithms.createSeacherAlgorithm(Properties.properites.getSolveAlgorithm(),
-					Properties.properites.getComparator());
+			Searcher<Position> searcher = algorithms.createSeacherAlgorithm(Properties.properites.getSolveAlgorithm(), Properties.properites.getComparator());
 			model.solveMaze(mazeName, searcher);
 		}
 	}
@@ -135,8 +113,31 @@ public class Maze3dCommands extends CommonCommandsManager {
 		}
 	}
 	
+	class DisplayCrossSectionCommand implements Command{
+		@Override
+		public void doCommand(String[] args) {
+			if (args.length >= 4) {
+				String name = args[1];
+				int index = Integer.parseInt(args[2]);
+				String section = args[3];
+				
+				model.displayCrossSection(name, index, section);
+			} else
+				ui.displayMessage("Missing parameters. Maze name, Index value and Section name are needed");
+		}	
+	}
 	
-	
+	class DisplayMessageCommand implements Command{
+		@Override
+		public void doCommand(String[] args) {
+			String msg = "";
+			for(int i = 1; i < args.length; i++) 
+				msg += args[i] + " ";
+			
+			ui.displayMessage(msg);	
+		}	
+	}	
+
 	class ExitCommand implements Command {
 		@Override
 		public void doCommand(String[] args) {
