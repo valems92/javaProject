@@ -12,4 +12,6 @@ public interface View  {
 	public void displaySolution(Solution<Position> solution);
 	public void displayMessage(String msg);
 	public void exit();
+	public void print(String string);
+	public void println(String string);
 }

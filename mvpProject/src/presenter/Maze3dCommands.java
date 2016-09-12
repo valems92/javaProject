@@ -1,7 +1,6 @@
 package presenter;
 
-import java.util.ArrayList;
-
+import java.io.File;
 import algorithms.mazeGenerators.Maze3d;
 import algorithms.mazeGenerators.Maze3dGenerator;
 import algorithms.mazeGenerators.Position;
@@ -28,9 +27,12 @@ public class Maze3dCommands extends CommonCommandsManager {
 	@Override
 	public void setCommands() {
 		// Model commands
+		commands.put("display_cross_section", new display_cross_sectionCommand());
+		commands.put("MessageCommand", new messageCommand());
 		commands.put("generate_maze", new GenerateMazeCommand());
 		commands.put("solve", new SolveMazeCommand());
 		commands.put("save_maze", new SaveDataCommand());
+		
 		commands.put("load_properties", new LoadPropertiesCommand());
 		
 		// Ui commands
@@ -58,6 +60,31 @@ public class Maze3dCommands extends CommonCommandsManager {
 				e.printStackTrace();
 			}
 		}
+	}
+	
+	class display_cross_sectionCommand implements Command{
+
+		@Override
+		public void doCommand(String[] args) {
+			if (args.length >= 4) {
+				String name = args[1];
+				int index = Integer.parseInt(args[2]);
+				String section = args[3];
+				model.displayCrossSection(name, index, section);
+			} else
+				ui.println("Missing parameters. Maze name, Index value and Section name are needed");
+		}
+		
+	}
+	
+	class messageCommand implements Command{
+
+		@Override
+		public void doCommand(String[] args) {
+			ui.println(args[1]);
+			
+		}
+		
 	}
 
 	class DisplayMazeCommand implements Command {
@@ -107,6 +134,8 @@ public class Maze3dCommands extends CommonCommandsManager {
 			model.loadGameProperties(path);
 		}
 	}
+	
+	
 	
 	class ExitCommand implements Command {
 		@Override

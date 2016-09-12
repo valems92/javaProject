@@ -53,11 +53,6 @@ public class GameMaze3dTextView extends CommonMaze3dView {
 	public void displayMessage(String msg) {
 		println(msg);
 	}
-	
-	private void println(String str){
-		out.println(str);
-		out.flush();
-	}
 
 	@Override
 	public void exit() {
@@ -71,4 +66,19 @@ public class GameMaze3dTextView extends CommonMaze3dView {
 		Thread.interrupted();	
 		return;
 	}
+
+	@Override
+	public void print(String string) {
+		out.print(string);
+		out.flush();
+		
+	}
+
+	@Override
+	public void println(String string) {
+		out.println(string);
+		out.flush();
+		
+	}
+
 }

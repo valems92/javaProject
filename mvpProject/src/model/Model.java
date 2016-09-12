@@ -28,4 +28,6 @@ public interface Model {
 	public void loadGameProperties(String path);
 	
 	public void exit();
+
+	public void displayCrossSection(String name, int index, String section);
 }

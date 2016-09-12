@@ -154,4 +154,72 @@ public class GameMaze3dModel extends Observable implements Model {
 			e.printStackTrace();
 		}
 	}
+
+	@Override
+	public void displayCrossSection(String name, int index, String section) {
+		StringBuilder crossBuilder = new StringBuilder();
+		if (index < 0){
+			crossBuilder.append("MessageCommand " + "Invalid Index!");
+			setChanged();
+			notifyObservers(crossBuilder.toString());
+		}
+		else if (generatedMazes.containsKey(name)) {
+			Maze3d maze = generatedMazes.get(name);
+
+			switch (section) {
+			case "x":
+			case "X":
+				crossBuilder.append("MessageCommand " + (PrintMaze2d(maze.getCrossSectionByX(index), maze.getZ(), maze.getY())));
+				setChanged();
+				notifyObservers(crossBuilder.toString());
+				break;
+
+			case "y":
+			case "Y":
+				crossBuilder.append("MessageCommand " + (PrintMaze2d(maze.getCrossSectionByY(index), maze.getZ(), maze.getX())));
+				setChanged();
+				notifyObservers(crossBuilder.toString());
+				break;
+
+			case "z":
+			case "Z":
+				crossBuilder.append("MessageCommand " + (PrintMaze2d(maze.getCrossSectionByZ(index), maze.getY(), maze.getX())));
+				setChanged();
+				notifyObservers(crossBuilder.toString());
+				break;
+
+			default:
+				crossBuilder.append("MessageCommand "+ "Invalid Section!");
+				setChanged();
+				notifyObservers(crossBuilder.toString());
+				break;
+			}
+		} else
+			crossBuilder.append(("MessageCommand "+ "Maze with name " + name + " doesn't exist"));
+		
+	}
+	
+	/**
+	 * <h1>PrintMaze2d</h1> Help to print the 2d maze from cross by section
+	 * methods
+	 * 
+	 * @param maze
+	 *            - 2d maze that create by cross by section method
+	 * @param end1
+	 *            - Total size of argument1 of 2d maze
+	 * @param end2
+	 *            - Total size of argument2 of 2d maze
+	 * @return String of a 2d maze that created by "cross by section" method
+	 */
+	public static String PrintMaze2d(int[][] maze, int end1, int end2) {
+		StringBuilder sb = new StringBuilder();
+		for (int start1 = 0; start1 < end1; start1++) {
+			for (int start2 = 0; start2 < end2; start2++) {
+				sb.append(maze[start1][start2]);
+				//sb.append(" ");
+			}
+			sb.append("\n");
+		}
+		return sb.toString();
+	}
 }

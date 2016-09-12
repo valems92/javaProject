@@ -40,4 +40,16 @@ public class GameMaze3dGuiView extends CommonMaze3dView {
 		setChanged();
 		notifyObservers(command);
 	}
+
+	@Override
+	public void print(String string) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void println(String string) {
+		// TODO Auto-generated method stub
+		
+	}
 }
