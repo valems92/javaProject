@@ -78,12 +78,18 @@ public class Properties {
 		this.viewWidth = viewWidth;
 	}
 
+	/**
+	 * @return the mySQL
+	 */
 	public Boolean getMySQL() {
 		return MySQL;
 	}
 
+	/**
+	 * @param mySQL the mySQL to set
+	 */
 	public void setMySQL(Boolean mySQL) {
-		this.MySQL = mySQL;
+		MySQL = mySQL;
 	}
 	
 }

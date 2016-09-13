@@ -18,8 +18,9 @@ import view.GameMaze3dTextView;
 
 public class Run {
 	private final static String FILE_NAME = "properties.xml";
-
+	
 	public static void main(String[] args) {
+		
 		try {
 			readProperties();
 		} catch (Exception e) {
