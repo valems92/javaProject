@@ -5,19 +5,19 @@ public class TestRun {
 	MyClass mc=new MyClass();
 	mc.setSName("This is setting object");
 
-	SaveObject so=new SaveObject();
+	DBOperational so=new DBOperational();
 
 	so.setJavaObject(mc);
 	try {
-		so.saveObject();
+	//	so.saveObject();
 	} catch (Exception e) {
 		// TODO Auto-generated catch block
 		e.printStackTrace();
 	}
 
-	    SaveObject so2=new SaveObject();
+		DBOperational so2=new DBOperational();
 	    try {
-			so2.getObject();
+			so2.getObject(1);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
