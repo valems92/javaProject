@@ -9,5 +9,6 @@ public interface View  {
 	public void displayMaze(Maze3d maze);
 	public void displaySolution(Solution<Position> solution);
 	public void displayMessage(String msg);
+	public void displayCrossSection(int[][] crossSection);
 	public void exit();
 }

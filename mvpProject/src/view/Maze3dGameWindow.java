@@ -8,7 +8,6 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.FileDialog;
-import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
@@ -107,13 +106,12 @@ public class Maze3dGameWindow extends BasicWindow {
 	public void displayMessage(String msg) {
 		MessageBox messageBox = new MessageBox(shell, SWT.ICON_ERROR | SWT.OK);
 		messageBox.setMessage(msg);
-
-		int buttonID = messageBox.open();
-		switch (buttonID) {
-		case SWT.YES:
-			
-			break;
-		}
+		
+		messageBox.open();	
+	}
+	
+	public void displayCrossSection(int[][] crossSection) {
+		maze.setCrossSection(crossSection);
 	}
 
 	protected void exitGame() {

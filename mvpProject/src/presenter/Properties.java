@@ -10,8 +10,9 @@ public class Properties {
 	private String selectCellMethod;
 	private String solveAlgorithm;
 	private String comparator;
+	
 	private int numberOfThreads;
-	private String MySQL;
+	private Boolean MySQL;
 	
 	public String getGenerateAlgorithm() {
 		return generateAlgorithm;
@@ -77,18 +78,12 @@ public class Properties {
 		this.viewWidth = viewWidth;
 	}
 
-	/**
-	 * @return the mySQL
-	 */
-	public String getMySQL() {
+	public Boolean getMySQL() {
 		return MySQL;
 	}
 
-	/**
-	 * @param mySQL the mySQL to set
-	 */
-	public void setMySQL(String mySQL) {
-		MySQL = mySQL;
+	public void setMySQL(Boolean mySQL) {
+		this.MySQL = mySQL;
 	}
 	
 }

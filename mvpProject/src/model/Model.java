@@ -30,4 +30,6 @@ public interface Model {
 	public void displayCrossSection(String name, int index, String section);
 	
 	public void loadData() throws Exception;
+
+	public int[][] getCrossSectionByNameBySection(String name, int section);
 }

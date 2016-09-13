@@ -34,14 +34,15 @@ public class GameMaze3dModel extends Observable implements Model {
 	public ConcurrentHashMap<String, Maze3d> generatedMazes;
 	private ConcurrentHashMap<String, Solution<Position>> solutions;
 	private ConcurrentHashMap<Maze3d, Solution<Position>> generateAndSolve;
-	
+	private ConcurrentHashMap<String, int[][][]> crossSections;
+
 	private ExecutorService executorGenerate;
 	private ExecutorService executorSolve;
-	
 
 	public GameMaze3dModel() {
 		generatedMazes = new ConcurrentHashMap<String, Maze3d>();
 		solutions = new ConcurrentHashMap<String, Solution<Position>>();
+		crossSections = new ConcurrentHashMap<String, int[][][]>();
 
 		executorGenerate = Executors.newFixedThreadPool(Properties.properites.getNumberOfThreads());
 		executorSolve = Executors.newFixedThreadPool(Properties.properites.getNumberOfThreads());
@@ -124,9 +125,9 @@ public class GameMaze3dModel extends Observable implements Model {
 			MyCompressorOutputStream file = new MyCompressorOutputStream(new FileOutputStream(fileName));
 			GZIPOutputStream out = new GZIPOutputStream(file, 100000);
 
-			for (Maze3d maze : generatedMazes.values()) 
+			for (Maze3d maze : generatedMazes.values())
 				out.write(maze.toByteArray());
-			
+
 			out.finish();
 		} catch (IOException e) {
 			setChanged();
@@ -159,12 +160,12 @@ public class GameMaze3dModel extends Observable implements Model {
 			e.printStackTrace();
 		}
 
-		if (Properties.properites.getMySQL().equals("Yes")) {
-			//new HashMap with maze and solution (the hash map is Object)
-			SaveObject so=new SaveObject();
-			so.setJavaObject(null); //send the hashMap
-			
-			//save the hashMap to DB
+		if (Properties.properites.getMySQL()) {
+			// new HashMap with maze and solution (the hash map is Object)
+			SaveObject so = new SaveObject();
+			so.setJavaObject(null); // send the hashMap
+
+			// save the hashMap to DB
 			try {
 				so.saveObject();
 			} catch (Exception e) {
@@ -172,12 +173,13 @@ public class GameMaze3dModel extends Observable implements Model {
 				e.printStackTrace();
 			}
 
-		} else if (Properties.properites.getMySQL().equals("No")) {
+		} else {
 
 			ObjectOutputStream out;
 			try {
 				out = new ObjectOutputStream(new GZIPOutputStream(new FileOutputStream("mazeAndsolution.zip")));
-				out.writeObject(null); //need to link the maze to solution in other HashMap
+				out.writeObject(null); // need to link the maze to solution in
+										// other HashMap
 
 			} catch (FileNotFoundException e) {
 				e.printStackTrace();
@@ -190,52 +192,72 @@ public class GameMaze3dModel extends Observable implements Model {
 
 	@Override
 	public void displayCrossSection(String name, int index, String section) {
-		StringBuilder crossBuilder = new StringBuilder();
-		if (index < 0){
-			crossBuilder.append("display_message " + "Invalid Index!");
+		if (index < 0) {
 			setChanged();
-			notifyObservers(crossBuilder.toString());
+			notifyObservers("display_message " + "Invalid Index!");
+			return;
 		}
-		else if (generatedMazes.containsKey(name)) {
-			Maze3d maze = generatedMazes.get(name);
 
-			switch (section) {
-			case "x":
-			case "X":
-				crossBuilder.append("display_message " + (PrintMaze2d(maze.getCrossSectionByX(index), maze.getZ(), maze.getY())));
-				setChanged();
-				notifyObservers(crossBuilder.toString());
-				break;
+		if (!generatedMazes.containsKey(name)) {
+			setChanged();
+			notifyObservers("display_message " + "Maze with name " + name + " doesn't exist");
+			return;
+		}
 
-			case "y":
-			case "Y":
-				crossBuilder.append("display_message " + (PrintMaze2d(maze.getCrossSectionByY(index), maze.getZ(), maze.getX())));
-				setChanged();
-				notifyObservers(crossBuilder.toString());
-				break;
-
-			case "z":
-			case "Z":
-				crossBuilder.append("display_message " + (PrintMaze2d(maze.getCrossSectionByZ(index), maze.getY(), maze.getX())));
-				setChanged();
-				notifyObservers(crossBuilder.toString());
-				break;
-
-			default:
-				crossBuilder.append("display_message "+ "Invalid Section!");
-				setChanged();
-				notifyObservers(crossBuilder.toString());
-				break;
-			}
-		} else
-			crossBuilder.append(("display_message "+ "Maze with name " + name + " doesn't exist"));
+		int wantedSection;
+		if(section == "z" || section == "Z")
+			wantedSection = 0;
+		else if(section == "y" || section == "Y")
+			wantedSection = 1;
+		else if (section == "x" || section == "X")
+			wantedSection = 2;
+		else {
+			setChanged();
+			notifyObservers("display_message " + "Invalid Section!");
+			return;
+		}
 		
+		
+		if (crossSections.containsKey(name)) {
+			int[][][] mazeSections = crossSections.get(name);
+			if (mazeSections[wantedSection] != null) {
+				setChanged();
+				notifyObservers("display_cross_section " + name + " " + wantedSection);
+				return;
+			} else
+				createCrossSection(name, index, section);
+		}
+
+		crossSections.put(name, new int[3][][]);
+		createCrossSection(name, index, section);
+		
+		setChanged();
+		notifyObservers("display_cross_section " + name + " " + wantedSection);
+	}
+
+	private void createCrossSection(String name, int index, String section) {
+		Maze3d maze = generatedMazes.get(name);
+		int[][][] value = crossSections.get(name);
+		
+		if(section == "z" || section == "Z")
+			value[0] = maze.getCrossSectionByZ(index);
+		
+		else if(section == "y" || section == "Y")
+			value[1] = maze.getCrossSectionByY(index);
+		else 
+			value[2] = maze.getCrossSectionByX(index);
+		crossSections.put(name, value);
+	}
+
+	public int[][] getCrossSectionByNameBySection(String name, int section) {
+		int [][][] value = crossSections.get(name);
+		return value[section];
 	}
 	
 	@Override
 	public void loadData() throws Exception {
 
-		String mySQL = Properties.properites.getMySQL();
+		Boolean mySQL = Properties.properites.getMySQL();
 		if (mySQL.equals("Yes")) {
 			System.out.println("Data loded from DB");
 			SaveObject so = new SaveObject();
@@ -264,18 +286,5 @@ public class GameMaze3dModel extends Observable implements Model {
 			throw new ExceptionInInitializerError("mySQL field's value invalid!");
 
 	}
-	
-	public static String PrintMaze2d(int[][] maze, int end1, int end2) {
-		StringBuilder sb = new StringBuilder();
-		for (int start1 = 0; start1 < end1; start1++) {
-			for (int start2 = 0; start2 < end2; start2++)
-				sb.append(maze[start1][start2]);
-			sb.append("\n");
-		}
-		return sb.toString();
-	}
 
-
-	
-	
 }

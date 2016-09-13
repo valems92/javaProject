@@ -15,29 +15,27 @@ import presenter.Properties;
 import view.CommonMaze3dView;
 import view.GameMaze3dGuiView;
 import view.GameMaze3dTextView;
-import view.View;
 
 public class Run {
 	private final static String FILE_NAME = "properties.xml";
 
 	public static void main(String[] args) {
-		
 		try {
 			readProperties();
-		} catch (Exception e) {	
-			//generateProperties();
+		} catch (Exception e) {
+			// generateProperties();
 			return;
 		}
-		
+
 		CommonMaze3dView view;
 		String viewType = Properties.properites.getViewType();
-		if(viewType.equals("text")) 
+		if (viewType.equals("text"))
 			view = new GameMaze3dTextView();
-		else if(viewType.equals("gui"))
+		else if (viewType.equals("gui"))
 			view = new GameMaze3dGuiView();
-		else 
+		else
 			return;
-		
+
 		GameMaze3dModel model = new GameMaze3dModel();
 
 		CommandsManager commandManager = new Maze3dCommands();
@@ -54,28 +52,29 @@ public class Run {
 
 	public static void readProperties() throws Exception {
 		XMLDecoder decoder = new XMLDecoder(new BufferedInputStream(new FileInputStream(FILE_NAME)));
-		Properties.properites = (Properties)decoder.readObject();
+		Properties.properites = (Properties) decoder.readObject();
 		decoder.close();
 	}
-	
+
 	public static void writeProperties() throws Exception {
 		XMLEncoder encoder = new XMLEncoder(new BufferedOutputStream(new FileOutputStream(FILE_NAME)));
 		encoder.writeObject(Properties.properites);
 		encoder.close();
 	}
-	
+
 	private static void generateProperties() {
 		Properties.properites.setViewType("text");
+		Properties.properites.setViewHeight(820);
+		Properties.properites.setViewWidth(1200);
 		Properties.properites.setGenerateAlgorithm("GrowingTree");
 		Properties.properites.setSelectCellMethod("Random");
 		Properties.properites.setSolveAlgorithm("BFS");
 		Properties.properites.setComparator("Cost");
 		Properties.properites.setNumberOfThreads(5);
-		Properties.properites.setMySQL("No");
-		
+		Properties.properites.setMySQL(false);
+
 		try {
 			writeProperties();
-			System.out.println("properties.xml is missing so default properties file was crated");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

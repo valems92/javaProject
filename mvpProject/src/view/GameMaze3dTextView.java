@@ -4,7 +4,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.util.ArrayList;
 
 import algorithms.mazeGenerators.Maze3d;
 import algorithms.mazeGenerators.Position;
@@ -28,7 +27,7 @@ public class GameMaze3dTextView extends CommonMaze3dView {
 					String input = null;
 					while (input != "exit") {
 						input = in.readLine();
-						
+
 						setChanged();
 						notifyObservers(input);
 					}
@@ -48,7 +47,16 @@ public class GameMaze3dTextView extends CommonMaze3dView {
 	public void displaySolution(Solution<Position> solution) {
 		displayMessage(solution.getResults().toString());
 	}
-	
+
+	@Override
+	public void displayCrossSection(int[][] crossSection) {
+		for (int i = 0; i < crossSection.length; i++) {
+			for (int j = 0; j < crossSection[0].length; j++)
+				System.out.print(crossSection[i][j]);
+			System.out.println("\n");
+		}
+	}
+
 	@Override
 	public void displayMessage(String msg) {
 		out.println(msg);
@@ -64,7 +72,7 @@ public class GameMaze3dTextView extends CommonMaze3dView {
 		}
 		System.out.println("The game closed");
 		this.out.close();
-		Thread.interrupted();	
+		Thread.interrupted();
 		return;
 	}
 

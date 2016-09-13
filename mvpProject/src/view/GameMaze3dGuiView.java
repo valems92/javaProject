@@ -1,8 +1,5 @@
 package view;
 
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.widgets.MessageBox;
-
 import algorithms.mazeGenerators.Maze3d;
 import algorithms.mazeGenerators.Position;
 import algorithms.search.Solution;
@@ -20,7 +17,6 @@ public class GameMaze3dGuiView extends CommonMaze3dView {
 	@Override
 	public void displayMaze(Maze3d maze) {	
 		window.displayMaze(maze);
-		System.out.println(maze.toString());
 	}
 
 	@Override
@@ -31,6 +27,10 @@ public class GameMaze3dGuiView extends CommonMaze3dView {
 	@Override
 	public void displayMessage(String msg) {
 		window.displayMessage(msg);
+	}
+	
+	public void displayCrossSection(int[][] crossSection) {
+		window.displayCrossSection(crossSection);
 	}
 	
 	@Override

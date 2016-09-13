@@ -27,27 +27,10 @@ public class Presenter implements Observer {
 	@Override
 	public void update(Observable o, Object commandLine) {
 		String cmd = (String) commandLine;
-		
-		if (o == ui) 
-			updateUi(cmd);
-		
-		else if (o == model) 
-			updateModel(cmd);
-	}
-
-	private void updateUi(String commandLine) {
 		try {
-			commandsManager.executeCommand(commandLine);
+			commandsManager.executeCommand(cmd);
 		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-
-	private void updateModel(String commandLine) {
-		try {
-			commandsManager.executeCommand(commandLine);
-		} catch (IOException e) {
-			e.printStackTrace();
+			ui.displayMessage(e.getMessage());
 		}
 	}
 }
