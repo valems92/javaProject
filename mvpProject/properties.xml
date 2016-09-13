@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<java version="1.8.0_102" class="java.beans.XMLDecoder">
+<java version="1.8.0_101" class="java.beans.XMLDecoder">
  <object class="presenter.Properties">
   <void property="comparator">
    <string>Cost</string>
   </void>
   <void property="generateAlgorithm">
    <string>GrowingTree</string>
+  </void>
+  <void property="mySQL">
+   <string>No</string>
   </void>
   <void property="numberOfThreads">
    <int>5</int>
@@ -16,14 +19,8 @@
   <void property="solveAlgorithm">
    <string>BFS</string>
   </void>
-  <void property="viewHeight">
-   <int>820</int>
-  </void>
   <void property="viewType">
-   <string>gui</string>
-  </void>
-  <void property="viewWidth">
-   <int>1200</int>
+   <string>text</string>
   </void>
  </object>
 </java>

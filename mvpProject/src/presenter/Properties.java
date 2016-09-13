@@ -11,6 +11,7 @@ public class Properties {
 	private String solveAlgorithm;
 	private String comparator;
 	private int numberOfThreads;
+	private String MySQL;
 	
 	public String getGenerateAlgorithm() {
 		return generateAlgorithm;
@@ -75,4 +76,19 @@ public class Properties {
 	public void setViewWidth(int viewWidth) {
 		this.viewWidth = viewWidth;
 	}
+
+	/**
+	 * @return the mySQL
+	 */
+	public String getMySQL() {
+		return MySQL;
+	}
+
+	/**
+	 * @param mySQL the mySQL to set
+	 */
+	public void setMySQL(String mySQL) {
+		MySQL = mySQL;
+	}
+	
 }

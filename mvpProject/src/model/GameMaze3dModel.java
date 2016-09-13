@@ -6,6 +6,9 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.Observable;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
@@ -14,8 +17,9 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
+import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
-
+import DB.SaveObject;
 import algorithms.demo.Maze3dDomain;
 import algorithms.mazeGenerators.Maze3d;
 import algorithms.mazeGenerators.Maze3dGenerator;
@@ -29,9 +33,11 @@ import presenter.Properties;
 public class GameMaze3dModel extends Observable implements Model {
 	public ConcurrentHashMap<String, Maze3d> generatedMazes;
 	private ConcurrentHashMap<String, Solution<Position>> solutions;
-
+	private ConcurrentHashMap<Maze3d, Solution<Position>> generateAndSolve;
+	
 	private ExecutorService executorGenerate;
 	private ExecutorService executorSolve;
+	
 
 	public GameMaze3dModel() {
 		generatedMazes = new ConcurrentHashMap<String, Maze3d>();
@@ -152,6 +158,34 @@ public class GameMaze3dModel extends Observable implements Model {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
+
+		if (Properties.properites.getMySQL().equals("Yes")) {
+			//new HashMap with maze and solution (the hash map is Object)
+			SaveObject so=new SaveObject();
+			so.setJavaObject(null); //send the hashMap
+			
+			//save the hashMap to DB
+			try {
+				so.saveObject();
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+		} else if (Properties.properites.getMySQL().equals("No")) {
+
+			ObjectOutputStream out;
+			try {
+				out = new ObjectOutputStream(new GZIPOutputStream(new FileOutputStream("mazeAndsolution.zip")));
+				out.writeObject(null); //need to link the maze to solution in other HashMap
+
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+
+		}
 	}
 
 	@Override
@@ -198,6 +232,39 @@ public class GameMaze3dModel extends Observable implements Model {
 		
 	}
 	
+	@Override
+	public void loadData() throws Exception {
+
+		String mySQL = Properties.properites.getMySQL();
+		if (mySQL.equals("Yes")) {
+			System.out.println("Data loded from DB");
+			SaveObject so = new SaveObject();
+			try {
+				so.getObject();
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		} else if (mySQL.equals("No")) {
+			System.out.println("zip loaded");
+
+			// ObjectInputStream in;
+			// try {
+			// in = new ObjectInputStream(new GZIPInputStream(new
+			// FileInputStream("mazeAndsolution.zip")));
+			// in.readObject(); //need to get the Object to new HashMap
+			// //The model should updated the data member
+			//
+			// } catch (FileNotFoundException e) {
+			// e.printStackTrace();
+			// } catch (IOException e) {
+			// e.printStackTrace();
+			// }
+		} else
+			throw new ExceptionInInitializerError("mySQL field's value invalid!");
+
+	}
+	
 	public static String PrintMaze2d(int[][] maze, int end1, int end2) {
 		StringBuilder sb = new StringBuilder();
 		for (int start1 = 0; start1 < end1; start1++) {
@@ -207,4 +274,8 @@ public class GameMaze3dModel extends Observable implements Model {
 		}
 		return sb.toString();
 	}
+
+
+	
+	
 }

@@ -21,6 +21,7 @@ public class Run {
 	private final static String FILE_NAME = "properties.xml";
 
 	public static void main(String[] args) {
+		
 		try {
 			readProperties();
 		} catch (Exception e) {	
@@ -70,6 +71,7 @@ public class Run {
 		Properties.properites.setSolveAlgorithm("BFS");
 		Properties.properites.setComparator("Cost");
 		Properties.properites.setNumberOfThreads(5);
+		Properties.properites.setMySQL("No");
 		
 		try {
 			writeProperties();

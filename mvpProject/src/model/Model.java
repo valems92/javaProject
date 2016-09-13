@@ -28,4 +28,6 @@ public interface Model {
 	public void exit();
 
 	public void displayCrossSection(String name, int index, String section);
+	
+	public void loadData() throws Exception;
 }

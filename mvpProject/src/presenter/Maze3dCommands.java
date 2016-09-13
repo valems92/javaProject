@@ -1,5 +1,7 @@
 package presenter;
 
+import java.io.File;
+
 import algorithms.mazeGenerators.Maze3d;
 import algorithms.mazeGenerators.Maze3dGenerator;
 import algorithms.mazeGenerators.Position;
@@ -25,11 +27,13 @@ public class Maze3dCommands extends CommonCommandsManager {
 
 	@Override
 	public void setCommands() {
-		// Model commands	
+		// Model commands
+		commands.put("dir", new dirCommand());
 		commands.put("generate_maze", new GenerateMazeCommand());
 		commands.put("solve", new SolveMazeCommand());
 		commands.put("save_maze", new SaveDataCommand());
 		commands.put("display_cross_section", new DisplayCrossSectionCommand());
+		
 		
 		commands.put("load_properties", new LoadPropertiesCommand());
 		
@@ -39,6 +43,47 @@ public class Maze3dCommands extends CommonCommandsManager {
 		commands.put("display_message", new DisplayMessageCommand());
 		
 		commands.put("exit", new ExitCommand());
+	}
+	
+	/**
+	 * 
+	 * <h1>dirCommand</h1> Command for write the dir path list for specific file
+	 * to Out Source.
+	 * <p>
+	 * 
+	 * @author Valentina Munoz & Moris Amon
+	 * 
+	 */
+	
+	class dirCommand implements Command {
+		@Override
+		public void doCommand(String[] args) {
+			StringBuilder dirResult=new StringBuilder();
+			if (args.length > 1) {
+				try {
+					File path = new File(args[1]);
+					File[] files = path.listFiles();
+					PrintDIRhelp(files, 0,dirResult);
+					ui.displayMessage(dirResult.toString());
+				} catch (NullPointerException e) {
+					ui.displayMessage("Path does not exist");
+				}
+			} else
+				ui.displayMessage("No path was received");
+		}
+
+		private void PrintDIRhelp(File[] files, int tabs, StringBuilder dirResult) {
+			for (File file : files) {
+				for (int i = 0; i < tabs; i++)
+					//ui.print("\t");
+					dirResult.append("\t");
+				//ui.println(file.getName());
+				dirResult.append(file.getName()+"\n");
+
+				if (!file.isFile())
+					PrintDIRhelp(file.listFiles(), tabs + 1,dirResult);
+			}
+		}
 	}
 
 	class GenerateMazeCommand implements Command {

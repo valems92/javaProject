@@ -21,7 +21,7 @@ public class GameMaze3dTextView extends CommonMaze3dView {
 
 	@Override
 	public void start() {
-		println("Please enter commands:");
+		displayMessage("Please enter commands:");
 		new Thread(new Runnable() {
 			public void run() {
 				try {
@@ -33,7 +33,7 @@ public class GameMaze3dTextView extends CommonMaze3dView {
 						notifyObservers(input);
 					}
 				} catch (IOException e) {
-					println(e.getMessage());
+					displayMessage(e.getMessage());
 				}
 			}
 		}).start();
@@ -41,17 +41,18 @@ public class GameMaze3dTextView extends CommonMaze3dView {
 
 	@Override
 	public void displayMaze(Maze3d maze) {
-		println(maze.toString());
+		displayMessage(maze.toString());
 	}
 
 	@Override
 	public void displaySolution(Solution<Position> solution) {
-		println(solution.getResults().toString());
+		displayMessage(solution.getResults().toString());
 	}
 	
 	@Override
 	public void displayMessage(String msg) {
-		println(msg);
+		out.println(msg);
+		out.flush();
 	}
 
 	@Override
@@ -59,18 +60,12 @@ public class GameMaze3dTextView extends CommonMaze3dView {
 		try {
 			this.in.close();
 		} catch (IOException e) {
-			println(e.getMessage());
+			displayMessage(e.getMessage());
 		}
 		System.out.println("The game closed");
 		this.out.close();
 		Thread.interrupted();	
 		return;
-	}
-
-	public void println(String string) {
-		out.println(string);
-		out.flush();
-		
 	}
 
 }

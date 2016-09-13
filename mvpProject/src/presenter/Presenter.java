@@ -16,6 +16,12 @@ public class Presenter implements Observer {
 		this.ui = ui;
 		this.model = model;
 		this.commandsManager = commandsManager;
+		
+		try {
+			model.loadData();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override
