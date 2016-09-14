@@ -17,10 +17,12 @@ import algorithms.mazeGenerators.Maze3d;
 
 public class Maze3dGameWindow extends BasicWindow {
 	protected GameMaze3dGuiView view;
-	
+	protected String mazeName;
+
+	private MenuDisplay menu;
 	private WelcomeDisplay welcome;
 	private MazeDisplay maze;
-	
+
 	public Maze3dGameWindow(int width, int height, GameMaze3dGuiView view) {
 		super(width, height);
 		this.view = view;
@@ -38,7 +40,7 @@ public class Maze3dGameWindow extends BasicWindow {
 		shell.setLayout(new GridLayout(2, false));
 		createFileMenu();
 
-		MenuDisplay menu = new MenuDisplay(shell, SWT.NONE, this);
+		menu = new MenuDisplay(shell, SWT.NONE, this);
 		menu.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, true, 1, 1));
 
 		welcome = new WelcomeDisplay(shell, SWT.NONE, this);
@@ -93,25 +95,30 @@ public class Maze3dGameWindow extends BasicWindow {
 		view.update("load_properties " + selected);
 	}
 
-	public void displayMaze(Maze3d m){
-        maze = new MazeDisplay(shell, SWT.BORDER, this, m);
+	public void displayMaze(Maze3d m, String name) {
+		maze = new Maze3dDisplay(shell, SWT.BORDER, this);
 		maze.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+
+		maze.initMaze(m, name, "images/fly.png");
 		
 		maze.moveAbove(welcome);
-        welcome.dispose();
-        
-        shell.layout(true);
-	}
+		welcome.dispose();
+
+		shell.layout(true);
 	
+		menu.displayGoalGuide();
+		menu.setGoalFloorText(m.getGoalPosition().z);
+	}
+
 	public void displayMessage(String msg) {
 		MessageBox messageBox = new MessageBox(shell, SWT.ICON_ERROR | SWT.OK);
 		messageBox.setMessage(msg);
-		
-		messageBox.open();	
+
+		messageBox.open();
 	}
-	
+
 	public void displayCrossSection(int[][] crossSection) {
-		maze.setCrossSection(crossSection);
+		maze.displayCrossSection(crossSection);
 	}
 
 	protected void exitGame() {

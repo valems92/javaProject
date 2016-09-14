@@ -31,7 +31,8 @@ public class Maze3dCommands extends CommonCommandsManager {
 		commands.put("dir", new dirCommand());
 		commands.put("generate_maze", new GenerateMazeCommand());
 		commands.put("solve", new SolveMazeCommand());
-		commands.put("save_maze", new SaveDataCommand());
+		commands.put("save_maze", new SaveMazeCommand());
+		commands.put("load_maze", new LoadMazeCommand());
 		commands.put("generate_cross_section", new GenerateCrossSectionCommand());
 
 		commands.put("load_properties", new LoadPropertiesCommand());
@@ -106,7 +107,7 @@ public class Maze3dCommands extends CommonCommandsManager {
 			String name = args[1];
 
 			Maze3d maze = model.getMazeByName(name);
-			ui.displayMaze(maze);
+			ui.displayMaze(maze, name);
 		}
 	}
 
@@ -131,12 +132,23 @@ public class Maze3dCommands extends CommonCommandsManager {
 		}
 	}
 
-	class SaveDataCommand implements Command {
+	class SaveMazeCommand implements Command {
+		@Override
+		public void doCommand(String[] args) {
+			String name = args[1];
+			String fileName = args[2];
+
+			model.saveMaze(name, fileName);
+		}
+	}
+	
+	class LoadMazeCommand implements Command {
 		@Override
 		public void doCommand(String[] args) {
 			String fileName = args[1];
+			String name = args[2];
 
-			model.saveData(fileName);
+			model.loadMaze(fileName, name);
 		}
 	}
 
@@ -165,10 +177,7 @@ public class Maze3dCommands extends CommonCommandsManager {
 	class DisplayCrossSectionCommand implements Command {
 		@Override
 		public void doCommand(String[] args) {
-			String name = args[1];
-			int section = Integer.parseInt(args[2]);
-			
-			int[][] crossSection = model.getCrossSectionByNameBySection(name, section);
+			int[][] crossSection = model.getLastCrossSection();
 			ui.displayCrossSection(crossSection);
 		}	
 	}

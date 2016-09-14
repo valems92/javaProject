@@ -6,7 +6,7 @@ import algorithms.search.Solution;
 
 public interface View  {
 	public void start();
-	public void displayMaze(Maze3d maze);
+	public void displayMaze(Maze3d maze, String name);
 	public void displaySolution(Solution<Position> solution);
 	public void displayMessage(String msg);
 	public void displayCrossSection(int[][] crossSection);

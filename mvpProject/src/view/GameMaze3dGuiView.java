@@ -15,8 +15,8 @@ public class GameMaze3dGuiView extends CommonMaze3dView {
 	}
 
 	@Override
-	public void displayMaze(Maze3d maze) {	
-		window.displayMaze(maze);
+	public void displayMaze(Maze3d maze, String name) {	
+		window.displayMaze(maze, name);
 	}
 
 	@Override

@@ -21,7 +21,9 @@ public interface Model {
 
 	public Solution<Position> getSolutionByMazeName(String name);
 	
-	public void saveData(String fileName);
+	public void saveMaze(String name, String fileName);
+	
+	public void loadMaze(String fileName, String name);
 	
 	public void loadGameProperties(String path);
 	
@@ -31,5 +33,5 @@ public interface Model {
 	
 	public void loadData() throws Exception;
 
-	public int[][] getCrossSectionByNameBySection(String name, int section);
+	public int[][] getLastCrossSection();
 }

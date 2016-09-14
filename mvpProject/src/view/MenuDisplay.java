@@ -16,8 +16,14 @@ import org.eclipse.swt.widgets.Text;
 
 public class MenuDisplay extends Canvas {
 	private final int FONT_SIZE = 16;
-	Maze3dGameWindow gameView;
-
+	private Maze3dGameWindow gameView;
+	
+	private Group startGameGroup;
+	
+	private Group goalGroup;
+	private Label currentFloor;
+	private Label goalFloor;
+	
 	public MenuDisplay(Composite parent, int style, Maze3dGameWindow gameView) {
 		super(parent, style);
 		this.gameView = gameView;
@@ -32,7 +38,8 @@ public class MenuDisplay extends Canvas {
 		startGame();
 
 		loadSaveGame();
-
+		goalGuide();
+		
 		Group group = new Group(this, SWT.NONE);
 		group.setLayout(new GridLayout(2, true));
 		group.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, true, 2, 1));
@@ -55,24 +62,24 @@ public class MenuDisplay extends Canvas {
 	}
 
 	private void startGame() {
-		Group group = new Group(this, SWT.NONE);
-		group.setLayout(new GridLayout(2, true));
-		group.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, true, 2, 1));
-		group.setBackground(new Color(null, 212, 169, 127));
+		startGameGroup = new Group(this, SWT.NONE);
+		startGameGroup.setLayout(new GridLayout(2, true));
+		startGameGroup.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, true, 2, 1));
+		startGameGroup.setBackground(new Color(null, 212, 169, 127));
 
-		createLabel(group, "Name:");
-		Text nameInput = createText(group);
+		createLabel(startGameGroup, "Name:");
+		Text nameInput = createText(startGameGroup);
 
-		createLabel(group, "Floors:");
-		Text zInput = createText(group);
+		createLabel(startGameGroup, "Floors:");
+		Text zInput = createText(startGameGroup);
 
-		createLabel(group, "Rows:");
-		Text yInput = createText(group);
+		createLabel(startGameGroup, "Rows:");
+		Text yInput = createText(startGameGroup);
 
-		createLabel(group, "Columns:");
-		Text xInput = createText(group);
+		createLabel(startGameGroup, "Columns:");
+		Text xInput = createText(startGameGroup);
 
-		ButtonDisplay startBtn = new ButtonDisplay(group, "Start Game");
+		ButtonDisplay startBtn = new ButtonDisplay(startGameGroup, "Start Game");
 		startBtn.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, true, true, 2, 1));
 		startBtn.setMouseListener(new MouseListener() {
 			@Override
@@ -142,6 +149,56 @@ public class MenuDisplay extends Canvas {
 		});
 	}
 
+	private void goalGuide(){
+		goalGroup = new Group(this, SWT.NONE);
+		goalGroup.setLayout(new GridLayout(2, true));
+		goalGroup.setBackground(new Color(null, 212, 169, 127));
+		
+		createLabel(goalGroup, "Current Floor:");
+		currentFloor = createLabel(goalGroup, "");
+		
+		createLabel(goalGroup, "Goal Floor:");
+		goalFloor = createLabel(goalGroup, "");
+		
+		ButtonDisplay showGoalBtn = new ButtonDisplay(goalGroup, "Show Goal");
+		showGoalBtn.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, true, true, 2, 1));
+		showGoalBtn.setMouseListener(new MouseListener() {
+			@Override
+			public void mouseUp(MouseEvent arg0) {
+			}
+			
+			@Override
+			public void mouseDown(MouseEvent arg0) {}
+			
+			@Override
+			public void mouseDoubleClick(MouseEvent arg0) {}
+		});
+	}
+	
+	public void setCurrentFloorText(String txt) {
+		currentFloor.setText(txt);
+	}
+	
+	public void setGoalFloorText(int z) {
+		String txt = "" + (z + 1);
+		goalFloor.setText(txt);
+		goalFloor.getParent().layout();
+	}
+	
+	public void displayGoalGuide() {
+		goalGroup.moveAbove(startGameGroup);
+		startGameGroup.dispose();
+
+		this.layout(true);
+	}
+	
+	public void displayStartGame(){
+		startGameGroup.moveAbove(goalGroup);
+		goalGroup.dispose();
+
+		this.layout(true);
+	}
+	
 	private Label createLabel(Composite parent, String txt) {
 		Label label = new Label(parent, SWT.NONE);
 		label.setText(txt);

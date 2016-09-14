@@ -2,13 +2,16 @@ package model;
 
 import java.beans.XMLDecoder;
 import java.io.BufferedInputStream;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.ObjectInput;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.OutputStream;
 import java.sql.SQLException;
 import java.util.Observable;
 import java.util.concurrent.Callable;
@@ -21,7 +24,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
-import DB.DBOperational;
+//import DBOperational.DBOperational;
 import algorithms.demo.Maze3dDomain;
 import algorithms.mazeGenerators.Maze3d;
 import algorithms.mazeGenerators.Maze3dGenerator;
@@ -30,12 +33,13 @@ import algorithms.search.Searchable;
 import algorithms.search.Searcher;
 import algorithms.search.Solution;
 import io.MyCompressorOutputStream;
+import io.MyDecompressorInputStream;
 import presenter.Properties;
 
 public class GameMaze3dModel extends Observable implements Model {
 	public ConcurrentHashMap<String, Maze3d> generatedMazes;
 	private ConcurrentHashMap<String, Solution<Position>> solutions;
-	private ConcurrentHashMap<String, int[][][]> crossSections;
+	private int[][] crossSection;
 	private final String path = "mazeAndsolution.zip";
 
 	private ExecutorService executorGenerate;
@@ -44,7 +48,6 @@ public class GameMaze3dModel extends Observable implements Model {
 	public GameMaze3dModel() {
 		generatedMazes = new ConcurrentHashMap<String, Maze3d>();
 		solutions = new ConcurrentHashMap<String, Solution<Position>>();
-		crossSections = new ConcurrentHashMap<String, int[][][]>();
 
 		executorGenerate = Executors.newFixedThreadPool(Properties.properites.getNumberOfThreads());
 		executorSolve = Executors.newFixedThreadPool(Properties.properites.getNumberOfThreads());
@@ -122,19 +125,61 @@ public class GameMaze3dModel extends Observable implements Model {
 	}
 
 	@Override
-	public void saveData(String fileName) {
-		try {
-			MyCompressorOutputStream file = new MyCompressorOutputStream(new FileOutputStream(fileName));
-			GZIPOutputStream out = new GZIPOutputStream(file, 100000);
-
-			for (Maze3d maze : generatedMazes.values())
+	public void saveMaze(String name, String fileName) {
+		Maze3d maze = generatedMazes.get(name);
+		if (maze != null) {
+			try {
+				OutputStream out = new MyCompressorOutputStream(new FileOutputStream(fileName));
 				out.write(maze.toByteArray());
-
-			out.finish();
-		} catch (IOException e) {
+				
+				out.flush();
+				out.close();
+				
+				setChanged();
+				notifyObservers("display_message " + "Maze saved");
+			} catch (FileNotFoundException e) {
+				setChanged();
+				notifyObservers("display_message " + "Error occured while creating file");
+			} catch (IOException e) {
+				setChanged();
+				notifyObservers("display_message " + "Error occured while writing to file");
+			}
+		} else {
 			setChanged();
-			notifyObservers("display_message " + "There was an error saving the data");
-			e.printStackTrace();
+			notifyObservers("display_message " + "Maze with name " + name + " doesn't exist");
+		}
+	}
+	
+	@Override
+	public void loadMaze(String fileName, String name) {
+		if (!generatedMazes.containsKey(name)) {
+			try {
+				InputStream in = new MyDecompressorInputStream(new FileInputStream(fileName));
+
+				File file = new File(fileName);
+				FileInputStream reader = new FileInputStream(file);
+				byte b[] = new byte[(reader.read() * Byte.MAX_VALUE) + reader.read()];
+				reader.close();
+
+				in.read(b);
+				in.close();
+				
+				Maze3d mazeLoaded = new Maze3d(b);
+				generatedMazes.put(name, mazeLoaded);
+
+				setChanged();
+				notifyObservers("display_maze " + name);
+				
+			} catch (FileNotFoundException e) {
+				setChanged();
+				notifyObservers("display_message " + "Error occured while finding file");
+			} catch (IOException e) {
+				setChanged();
+				notifyObservers("display_message " + "Error occured while reading to file");
+			}
+		} else {
+			setChanged();
+			notifyObservers("display_message " + "A maze called " + name + " exist already");
 		}
 	}
 
@@ -161,47 +206,35 @@ public class GameMaze3dModel extends Observable implements Model {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-
-		if (Properties.properites.getMySQL().booleanValue()) {
-			// new HashMap with maze and solution (the hash map is Object)
-			DBOperational myOperational = new DBOperational();
-			try {
-				myOperational.clearDB();
-			} catch (SQLException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-			myOperational.setJavaObject(this.generatedMazes);
-
-			// save the hashMap to DB
-			try {
-				myOperational.saveObject(this.generatedMazes);
-				myOperational.setJavaObject(this.solutions);
-				myOperational.saveObject(this.solutions);
-				myOperational.conn.close();
-
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-
-		} else {
-
-			ObjectOutputStream out;
-			try {
-
-				out = new ObjectOutputStream(new GZIPOutputStream(new FileOutputStream(path)));
-				out.writeObject(this.generatedMazes);
-				out.writeObject(this.solutions);
-				out.close();
-
-			} catch (FileNotFoundException e) {
-				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-
-		}
+		/*
+		 * if (Properties.properites.getMySQL().booleanValue()) { // new HashMap
+		 * with maze and solution (the hash map is Object) DBOperational
+		 * myOperational = new DBOperational(); try { myOperational.clearDB(); }
+		 * catch (SQLException e1) { // TODO Auto-generated catch block
+		 * e1.printStackTrace(); }
+		 * myOperational.setJavaObject(this.generatedMazes);
+		 * 
+		 * // save the hashMap to DB try {
+		 * myOperational.saveObject(this.generatedMazes);
+		 * myOperational.setJavaObject(this.solutions);
+		 * myOperational.saveObject(this.solutions); myOperational.conn.close();
+		 * 
+		 * } catch (Exception e) { // TODO Auto-generated catch block
+		 * e.printStackTrace(); }
+		 * 
+		 * } else {
+		 * 
+		 * ObjectOutputStream out; try {
+		 * 
+		 * out = new ObjectOutputStream(new GZIPOutputStream(new
+		 * FileOutputStream(path))); out.writeObject(this.generatedMazes);
+		 * out.writeObject(this.solutions); out.close();
+		 * 
+		 * } catch (FileNotFoundException e) { e.printStackTrace(); } catch
+		 * (IOException e) { e.printStackTrace(); }
+		 * 
+		 * }
+		 */
 	}
 
 	@Override
@@ -218,102 +251,61 @@ public class GameMaze3dModel extends Observable implements Model {
 			return;
 		}
 
-		int wantedSection;
-		if (section == "z" || section == "Z")
-			wantedSection = 0;
-		else if (section == "y" || section == "Y")
-			wantedSection = 1;
-		else if (section == "x" || section == "X")
-			wantedSection = 2;
+		Maze3d maze = generatedMazes.get(name);
+		if (section.equals("z") || section.equals("Z"))
+			crossSection = maze.getCrossSectionByZ(index);
+
+		else if (section.equals("y") || section.equals("Y"))
+			crossSection = maze.getCrossSectionByY(index);
+		
+		else if (section.equals("x") || section.equals("X"))
+			crossSection = maze.getCrossSectionByX(index);
+		
 		else {
 			setChanged();
 			notifyObservers("display_message " + "Invalid Section!");
 			return;
 		}
 
-		if (crossSections.containsKey(name)) {
-			int[][][] mazeSections = crossSections.get(name);
-			if (mazeSections[wantedSection] != null) {
-				setChanged();
-				notifyObservers("display_cross_section " + name + " " + wantedSection);
-				return;
-			} else
-				createCrossSection(name, index, section);
-		}
-
-		crossSections.put(name, new int[3][][]);
-		createCrossSection(name, index, section);
-
 		setChanged();
-		notifyObservers("display_cross_section " + name + " " + wantedSection);
+		notifyObservers("display_cross_section");
 	}
 
-	private void createCrossSection(String name, int index, String section) {
-		Maze3d maze = generatedMazes.get(name);
-		int[][][] value = crossSections.get(name);
-
-		if (section == "z" || section == "Z")
-			value[0] = maze.getCrossSectionByZ(index);
-
-		else if (section == "y" || section == "Y")
-			value[1] = maze.getCrossSectionByY(index);
-		else
-			value[2] = maze.getCrossSectionByX(index);
-		crossSections.put(name, value);
-	}
-
-	public int[][] getCrossSectionByNameBySection(String name, int section) {
-		int[][][] value = crossSections.get(name);
-		return value[section];
+	public int[][] getLastCrossSection() {
+		return crossSection;
 	}
 
 	@Override
 	public void loadData() throws Exception {
-		Boolean mySQL = Properties.properites.getMySQL();
-		if (mySQL.booleanValue()) {
-			System.out.println("Data loded from DB");
-			DBOperational myOperational = new DBOperational();
-			try {
-				ConcurrentHashMap<String, Maze3d> generatedMazes_loaded = (ConcurrentHashMap<String, Maze3d>) myOperational
-						.getObject(1);
-				ConcurrentHashMap<String, Solution<Position>> solutions_loaded = (ConcurrentHashMap<String, Solution<Position>>) myOperational
-						.getObject(2);
-				if (generatedMazes_loaded != null && solutions_loaded != null) {
-					this.generatedMazes = generatedMazes_loaded;
-					this.solutions = solutions_loaded;
-				}
-
-				myOperational.conn.close();
-
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		} else if (!mySQL.booleanValue()) {
-			System.out.println("zip loaded");
-
-			ObjectInputStream in;
-			try {
-				in = new ObjectInputStream(new GZIPInputStream(new FileInputStream(path)));
-				this.generatedMazes = (ConcurrentHashMap<String, Maze3d>) in.readObject(); // need
-																							// to
-																							// get
-																							// the
-																							// Object
-																							// to
-																							// new
-																							// HashMap
-				this.solutions = (ConcurrentHashMap<String, Solution<Position>>) in.readObject();
-				// The model should updated the data member
-
-			} catch (FileNotFoundException e) {
-				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		} else
-			throw new ExceptionInInitializerError("mySQL field's value invalid!");
-
+		/*
+		 * Boolean mySQL = Properties.properites.getMySQL(); if
+		 * (mySQL.booleanValue()) { System.out.println("Data loded from DB");
+		 * DBOperational myOperational = new DBOperational(); try {
+		 * ConcurrentHashMap<String, Maze3d> generatedMazes_loaded =
+		 * (ConcurrentHashMap<String, Maze3d>) myOperational .getObject(1);
+		 * ConcurrentHashMap<String, Solution<Position>> solutions_loaded =
+		 * (ConcurrentHashMap<String, Solution<Position>>) myOperational
+		 * .getObject(2); if (generatedMazes_loaded != null && solutions_loaded
+		 * != null) { this.generatedMazes = generatedMazes_loaded;
+		 * this.solutions = solutions_loaded; }
+		 * 
+		 * myOperational.conn.close();
+		 * 
+		 * } catch (Exception e) { // TODO Auto-generated catch block
+		 * e.printStackTrace(); } } else if (!mySQL.booleanValue()) {
+		 * System.out.println("zip loaded");
+		 * 
+		 * ObjectInputStream in; try { in = new ObjectInputStream(new
+		 * GZIPInputStream(new FileInputStream(path))); this.generatedMazes =
+		 * (ConcurrentHashMap<String, Maze3d>) in.readObject(); // need // to //
+		 * get // the // Object // to // new // HashMap this.solutions =
+		 * (ConcurrentHashMap<String, Solution<Position>>) in.readObject(); //
+		 * The model should updated the data member
+		 * 
+		 * } catch (FileNotFoundException e) { e.printStackTrace(); } catch
+		 * (IOException e) { e.printStackTrace(); } } else throw new
+		 * ExceptionInInitializerError("mySQL field's value invalid!");
+		 */
 	}
 
 }

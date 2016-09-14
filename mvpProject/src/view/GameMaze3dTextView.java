@@ -39,8 +39,8 @@ public class GameMaze3dTextView extends CommonMaze3dView {
 	}
 
 	@Override
-	public void displayMaze(Maze3d maze) {
-		displayMessage(maze.toString());
+	public void displayMaze(Maze3d maze, String name) {
+		displayMessage(name + " :\n" + maze.toString());
 	}
 
 	@Override
@@ -52,8 +52,8 @@ public class GameMaze3dTextView extends CommonMaze3dView {
 	public void displayCrossSection(int[][] crossSection) {
 		for (int i = 0; i < crossSection.length; i++) {
 			for (int j = 0; j < crossSection[0].length; j++)
-				System.out.print(crossSection[i][j]);
-			System.out.println("\n");
+				System.out.print(crossSection[i][j] + " ");
+			System.out.print("\n");
 		}
 	}
 
