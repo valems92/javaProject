@@ -30,6 +30,7 @@ public class MenuDisplay extends Canvas {
 
 		this.setLayout(new GridLayout(2, false));
 		this.setBackground(new Color(null, 116, 73, 38));
+		this.setBackgroundMode(SWT.INHERIT_DEFAULT);
 
 		initWidgets();
 	}
