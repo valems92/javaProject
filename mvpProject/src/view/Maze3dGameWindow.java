@@ -115,6 +115,15 @@ public class Maze3dGameWindow extends BasicWindow {
 
 		shell.layout(true);
 	}
+	
+	public void displayWelcome() {
+		
+		welcome = new WelcomeDisplay(shell, SWT.NONE, this);
+		welcome.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+		menu.displayStartGame();
+		shell.layout(true);
+		
+	}
 
 	public void displayMessage(String msg) {
 		MessageBox messageBox = new MessageBox(shell, SWT.ICON_INFORMATION | SWT.OK);

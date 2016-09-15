@@ -65,7 +65,7 @@ public class MenuDisplay extends Canvas {
 		});
 	}
 
-	private void startGame() {
+	protected void startGame() {
 		startGameGroup = new Group(this, SWT.NONE);
 		startGameGroup.setLayout(new GridLayout(2, true));
 		startGameGroup.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, true, 2, 1));
@@ -88,8 +88,8 @@ public class MenuDisplay extends Canvas {
 		startBtn.setMouseListener(new MouseListener() {
 			@Override
 			public void mouseUp(MouseEvent arg0) {
-				if (nameInput.getText().length() == 0 || zInput.getText().length() == 0
-						|| yInput.getText().length() < 0 || xInput.getText().length() < 0) {
+				if (nameInput.getText().length() == 0 || Integer.parseInt(zInput.getText()) == 0
+						|| Integer.parseInt(yInput.getText()) < 4 || Integer.parseInt(xInput.getText()) < 4) {
 					gameView.view.displayMessage("You need to enter the maze name and dimension.");
 					return;
 				}
@@ -197,6 +197,27 @@ public class MenuDisplay extends Canvas {
 			@Override
 			public void mouseUp(MouseEvent arg0) {
 				gameView.view.update("solve " + gameView.maze.mazeName);
+			}
+			
+
+			@Override
+			public void mouseDown(MouseEvent arg0) {
+			}
+
+			@Override
+			public void mouseDoubleClick(MouseEvent arg0) {
+			}
+		});
+		
+		ButtonDisplay endBtn = new ButtonDisplay(goalGroup, "End Game");
+		endBtn.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, true, true, 2, 1));
+		endBtn.setMouseListener(new MouseListener() {
+			@Override
+			public void mouseUp(MouseEvent arg0) {
+				
+				gameView.maze.dispose();
+				gameView.displayWelcome();
+				
 			}
 			
 
