@@ -35,6 +35,10 @@ public class Maze3dGameWindow extends BasicWindow {
 		});
 	}
 
+	public MenuDisplay getMenu(){
+		return menu;
+	}
+	
 	@Override
 	public void initWidgets() {
 		shell.setLayout(new GridLayout(2, false));
@@ -99,15 +103,15 @@ public class Maze3dGameWindow extends BasicWindow {
 		maze = new Maze3dDisplay(shell, SWT.BORDER, this);
 		maze.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 
+		menu.displayGoalGuide();
+		menu.setGoalFloorText(m.getGoalPosition().z);
+		
 		maze.initMaze(m, name, "images/fly.png");
 		
 		maze.moveAbove(welcome);
 		welcome.dispose();
 
 		shell.layout(true);
-	
-		menu.displayGoalGuide();
-		menu.setGoalFloorText(m.getGoalPosition().z);
 	}
 
 	public void displayMessage(String msg) {
