@@ -109,8 +109,10 @@ public class Maze3dDisplay extends MazeDisplay {
 			double len = solve.size() * presenter.Properties.properites.getHintLen();
 			if (len >= 2) {
 				for (int i = 1; i < (int) len; i++) {
-					if (solve.get(i).z != currentPosition.z)
+					if (solve.get(i).z != currentPosition.z){
 						gameView.view.update("generate_cross_section " + mazeName + " " + solve.get(i).z + " z");
+						gameView.menu.setCurrentFloorText(solve.get(i).z);
+					}
 
 					this.currentPosition = solve.get(i);
 					redraw();
@@ -123,8 +125,10 @@ public class Maze3dDisplay extends MazeDisplay {
 		} else {
 
 			for (int i = 1; i < solve.size(); i++) {
-				if (solve.get(i).z != currentPosition.z)
+				if (solve.get(i).z != currentPosition.z){
 					gameView.view.update("generate_cross_section " + mazeName + " " + solve.get(i).z + " z");
+					gameView.menu.setCurrentFloorText(solve.get(i).z);
+				}
 
 				this.currentPosition = solve.get(i);
 				redraw();
