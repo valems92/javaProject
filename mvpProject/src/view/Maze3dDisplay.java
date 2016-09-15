@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.events.PaintListener;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.widgets.Composite;
@@ -17,6 +18,7 @@ public class Maze3dDisplay extends MazeDisplay {
 
 	public Maze3dDisplay(Composite parent, int style, Maze3dGameWindow gameView) {
 		super(parent, style);
+		this.setBackground(new Color(null, 233, 232, 233));
 		this.gameView = gameView;
 	}
 
