@@ -136,7 +136,7 @@ public class Maze3dDisplay extends MazeDisplay {
 					ArrayList<String> possibleMoves;
 					for (int i = 0; i < cross.length; i++) {
 						for (int j = 0; j < cross[0].length; j++) {
-							possibleMoves = maze.getPossibleMoves(new Position(currentPosition.z, j, i));
+							possibleMoves = maze.getPossibleMoves(new Position(currentPosition.z, i, j));
 
 							int x = j * possitionWidth;
 							int y = i * possitionHeight;
@@ -152,7 +152,8 @@ public class Maze3dDisplay extends MazeDisplay {
 									e.gc.drawImage(downUp, 0, 0, downUpImgData.width, downUpImgData.height, x, y, width,
 											possitionHeight / 2);
 								} else if (possibleMoves.contains("Up")) {
-									int width = (int) (upImgData.width * ((double) (possitionHeight / 2) / upImgData.height));
+									int width = (int) (upImgData.width
+											* ((double) (possitionHeight / 2) / upImgData.height));
 									e.gc.drawImage(up, 0, 0, upImgData.width, upImgData.height, x, y, width,
 											possitionHeight / 2);
 								} else if (possibleMoves.contains("Down")) {
