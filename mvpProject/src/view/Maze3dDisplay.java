@@ -10,6 +10,7 @@ import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.widgets.Composite;
 
 import algorithms.mazeGenerators.Maze3d;
+import algorithms.mazeGenerators.Position;
 
 public class Maze3dDisplay extends MazeDisplay {
 	private Maze3dGameWindow gameView;
@@ -40,7 +41,7 @@ public class Maze3dDisplay extends MazeDisplay {
 
 	@Override
 	protected void displayCrossSection(int[][] displayed) {
-		gameView.getMenu().setCurrentFloorText(currentPosition.z + 1);
+		gameView.getMenu().setCurrentFloorText(currentPosition.z);
 		this.displayed = displayed;
 		redraw();
 	}
@@ -107,6 +108,15 @@ public class Maze3dDisplay extends MazeDisplay {
 		Image goal = new Image(this.getDisplay(), "images/honey.png");
 		ImageData goalImgData = goal.getImageData();
 
+		Image up = new Image(this.getDisplay(), "images/up.png");
+		ImageData upImgData = up.getImageData();
+
+		Image down = new Image(this.getDisplay(), "images/down.png");
+		ImageData downImgData = down.getImageData();
+
+		Image downUp = new Image(this.getDisplay(), "images/upDown.png");
+		ImageData downUpImgData = downUp.getImageData();
+
 		this.addPaintListener(new PaintListener() {
 			@Override
 			public void paintControl(PaintEvent e) {
@@ -123,24 +133,47 @@ public class Maze3dDisplay extends MazeDisplay {
 						minDimension = possitionWidth;
 						heightDimensionDiff = (possitionHeight - possitionWidth) / 2;
 					}
-
+					ArrayList<String> possibleMoves;
 					for (int i = 0; i < cross.length; i++) {
 						for (int j = 0; j < cross[0].length; j++) {
+							possibleMoves = maze.getPossibleMoves(new Position(currentPosition.z, j, i));
+
 							int x = j * possitionWidth;
 							int y = i * possitionHeight;
+
 							// Walls
-							if (cross[i][j] == maze.WALL)
+							if (cross[i][j] == maze.WALL) {
 								e.gc.drawImage(wall, 0, 0, wallImgData.width, wallImgData.height, x, y, possitionWidth,
 										possitionHeight);
-							// Character
-							else if (currentPosition.y == i && currentPosition.x == j)
-								character.paint(e, x + widthDimensionDiff, y + heightDimensionDiff, minDimension,
-										minDimension);
+							} else {
+								if (possibleMoves.contains("Down") && possibleMoves.contains("Up")) {
+									int width = (int) (downUpImgData.width
+											* ((double) (possitionHeight / 2) / downUpImgData.height));
+									e.gc.drawImage(downUp, 0, 0, downUpImgData.width, downUpImgData.height, x, y, width,
+											possitionHeight / 2);
+								} else if (possibleMoves.contains("Up")) {
+									int width = (int) (upImgData.width * ((double) (possitionHeight / 2) / upImgData.height));
+									e.gc.drawImage(up, 0, 0, upImgData.width, upImgData.height, x, y, width,
+											possitionHeight / 2);
+								} else if (possibleMoves.contains("Down")) {
+									int width = (int) (downImgData.width
+											* ((double) (possitionHeight / 2) / downImgData.height));
+									e.gc.drawImage(down, 0, 0, downImgData.width, downImgData.height, x, y, width,
+											possitionHeight / 2);
+								}
 
-							// Goal
-							else if (goalPosition.y == i && goalPosition.x == j)
-								e.gc.drawImage(goal, 0, 0, goalImgData.width, goalImgData.height,
-										x + widthDimensionDiff, y + heightDimensionDiff, minDimension, minDimension);
+								// Character
+								if (currentPosition.y == i && currentPosition.x == j)
+									character.paint(e, x + (widthDimensionDiff / 2), y + (heightDimensionDiff / 2),
+											minDimension, minDimension);
+								// Goal
+								else if (currentPosition.z == goalPosition.z && goalPosition.y == i
+										&& goalPosition.x == j)
+									e.gc.drawImage(goal, 0, 0, goalImgData.width, goalImgData.height,
+											x + (widthDimensionDiff / 2), y + (heightDimensionDiff / 2), minDimension,
+											minDimension);
+							}
+
 						}
 					}
 				}
