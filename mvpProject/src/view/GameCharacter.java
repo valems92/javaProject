@@ -12,6 +12,7 @@ public class GameCharacter {
 	private ImageData characterImgData;
 	private int lastXPoisition;
 	private String lastImg;
+	private String lastState;
 
 	public GameCharacter(Display display, String imgPath) {
 		character = new Image(display, imgPath);

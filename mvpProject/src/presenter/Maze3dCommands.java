@@ -7,6 +7,7 @@ import algorithms.mazeGenerators.Maze3dGenerator;
 import algorithms.mazeGenerators.Position;
 import algorithms.search.Searcher;
 import algorithms.search.Solution;
+import algorithms.search.State;
 
 /**
  * 
@@ -54,7 +55,7 @@ public class Maze3dCommands extends CommonCommandsManager {
 				try {
 					File path = new File(args[1]);
 					File[] files = path.listFiles();
-					
+
 					PrintDIRhelp(files, 0, dirResult);
 					ui.displayMessage(dirResult.toString());
 				} catch (NullPointerException e) {
@@ -118,7 +119,18 @@ public class Maze3dCommands extends CommonCommandsManager {
 
 			Searcher<Position> searcher = algorithms.createSeacherAlgorithm(Properties.properites.getSolveAlgorithm(),
 					Properties.properites.getComparator());
-			model.solveMaze(mazeName, searcher);
+
+			if (args.length > 2) {
+				String z = args[2];
+				String y = args[3];
+				String x = args[4];
+				int iz = Integer.parseInt(z);
+				int iy = Integer.parseInt(y);
+				int ix = Integer.parseInt(x);
+				model.solveMaze(mazeName, searcher, new State<Position>(new Position(iz, iy, ix)));
+			} else
+				model.solveMaze(mazeName, searcher, null);
+
 		}
 	}
 
@@ -126,9 +138,10 @@ public class Maze3dCommands extends CommonCommandsManager {
 		@Override
 		public void doCommand(String[] args) {
 			String name = args[1];
+			String type = args[2];
 
 			Solution<Position> solution = model.getSolutionByMazeName(name);
-			ui.displaySolution(solution);
+			ui.displaySolution(solution,type);
 		}
 	}
 
@@ -141,7 +154,7 @@ public class Maze3dCommands extends CommonCommandsManager {
 			model.saveMaze(name, fileName);
 		}
 	}
-	
+
 	class LoadMazeCommand implements Command {
 		@Override
 		public void doCommand(String[] args) {
@@ -179,9 +192,9 @@ public class Maze3dCommands extends CommonCommandsManager {
 		public void doCommand(String[] args) {
 			int[][] crossSection = model.getLastCrossSection();
 			ui.displayCrossSection(crossSection);
-		}	
+		}
 	}
-	
+
 	class DisplayMessageCommand implements Command {
 		@Override
 		public void doCommand(String[] args) {

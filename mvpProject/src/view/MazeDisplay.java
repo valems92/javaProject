@@ -8,6 +8,7 @@ import org.eclipse.swt.widgets.Composite;
 
 import algorithms.mazeGenerators.Maze3d;
 import algorithms.mazeGenerators.Position;
+import algorithms.search.Solution;
 
 public abstract class MazeDisplay extends Canvas {
 	protected String mazeName;
@@ -41,6 +42,8 @@ public abstract class MazeDisplay extends Canvas {
 	protected abstract void moveForward();
 
 	protected abstract void moveBackward();
+	
+	public abstract void displaySolution(Solution<Position> solution, String type);
 
 	private void initKeyEvents() {	
 		this.addKeyListener(new KeyAdapter() {
@@ -48,7 +51,13 @@ public abstract class MazeDisplay extends Canvas {
 				if(e.keyCode == SWT.SHIFT)
 					moveUp();
 				
+				else if (e.keyCode == SWT.PAGE_UP)
+					moveUp();
+				
 				else if (e.keyCode == SWT.CONTROL)
+					moveDown();
+				
+				else if (e.keyCode == SWT.PAGE_DOWN)
 					moveDown();
 					
 				else if(e.keyCode == SWT.ARROW_UP)
@@ -65,4 +74,6 @@ public abstract class MazeDisplay extends Canvas {
 			}
 		});
 	}
+
+
 }

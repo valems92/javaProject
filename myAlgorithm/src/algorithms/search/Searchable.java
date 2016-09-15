@@ -2,6 +2,8 @@ package algorithms.search;
 
 import java.util.ArrayList;
 
+import algorithms.mazeGenerators.Position;
+
 /**
  * <h1>Searchable</h1> An interface that reprecent a searchable object (for
  * example, a maze). contains all must mathods to be able to search on that
@@ -43,4 +45,6 @@ public interface Searchable<T> {
 	 * @return The list of all possible moves
 	 */
 	public ArrayList<State<T>> getAllPossibleStates(State<T> s);
+
+	void setInitialState(State<Position> state);
 }

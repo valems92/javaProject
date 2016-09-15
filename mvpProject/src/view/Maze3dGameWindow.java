@@ -14,14 +14,16 @@ import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.MessageBox;
 
 import algorithms.mazeGenerators.Maze3d;
+import algorithms.mazeGenerators.Position;
+import algorithms.search.Solution;
 
 public class Maze3dGameWindow extends BasicWindow {
 	protected GameMaze3dGuiView view;
 	protected String mazeName;
 
-	private MenuDisplay menu;
-	private WelcomeDisplay welcome;
-	private MazeDisplay maze;
+	protected MenuDisplay menu;
+	protected WelcomeDisplay welcome;
+	protected MazeDisplay maze;
 
 	public Maze3dGameWindow(int width, int height, GameMaze3dGuiView view) {
 		super(width, height);
@@ -115,9 +117,9 @@ public class Maze3dGameWindow extends BasicWindow {
 	}
 
 	public void displayMessage(String msg) {
-		MessageBox messageBox = new MessageBox(shell, SWT.ICON_ERROR | SWT.OK);
+		MessageBox messageBox = new MessageBox(shell, SWT.ICON_INFORMATION | SWT.OK);
 		messageBox.setMessage(msg);
-
+		
 		messageBox.open();
 	}
 
@@ -127,5 +129,10 @@ public class Maze3dGameWindow extends BasicWindow {
 
 	protected void exitGame() {
 		view.update("exit");
+	}
+
+	public void displaySolution(Solution<Position> solution, String type) {
+		maze.displaySolution(solution,type);
+		
 	}
 }

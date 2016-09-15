@@ -5,6 +5,7 @@ import algorithms.mazeGenerators.Maze3dGenerator;
 import algorithms.mazeGenerators.Position;
 import algorithms.search.Searcher;
 import algorithms.search.Solution;
+import algorithms.search.State;
 
 /**
  * <h1>Model</h1> Responsible for the maze3d algorithms.
@@ -17,7 +18,7 @@ public interface Model {
 
 	public Maze3d getMazeByName(String name);
 	
-	public void solveMaze(String name, Searcher<Position> searcher);
+	public void solveMaze(String name, Searcher<Position> searcher, State<Position> state);
 
 	public Solution<Position> getSolutionByMazeName(String name);
 	

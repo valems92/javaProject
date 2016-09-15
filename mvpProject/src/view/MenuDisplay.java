@@ -14,6 +14,8 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
+import algorithms.mazeGenerators.Position;
+
 public class MenuDisplay extends Canvas {
 	private final int FONT_SIZE = 16;
 	private Maze3dGameWindow gameView;
@@ -87,7 +89,7 @@ public class MenuDisplay extends Canvas {
 			@Override
 			public void mouseUp(MouseEvent arg0) {
 				if (nameInput.getText().length() == 0 || zInput.getText().length() == 0
-						|| yInput.getText().length() == 0 || xInput.getText().length() == 0) {
+						|| yInput.getText().length() < 0 || xInput.getText().length() < 0) {
 					gameView.view.displayMessage("You need to enter the maze name and dimension.");
 					return;
 				}
@@ -144,7 +146,7 @@ public class MenuDisplay extends Canvas {
 					gameView.view.displayMessage("You need to enter the maze name.");
 					return;
 				}
-				// gameView.view.update("load_maze " + nameInput.getText());
+				gameView.view.update("load_maze " + nameInput.getText());
 			}
 
 			@Override
@@ -169,12 +171,34 @@ public class MenuDisplay extends Canvas {
 		createLabel(goalGroup, "Goal Floor:");
 		goalFloor = createLabel(goalGroup, "");
 
-		ButtonDisplay showGoalBtn = new ButtonDisplay(goalGroup, "Show Goal");
-		showGoalBtn.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, true, true, 2, 1));
-		showGoalBtn.setMouseListener(new MouseListener() {
+		ButtonDisplay hintBtn = new ButtonDisplay(goalGroup, "HINT!");
+		hintBtn.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, true, true, 2, 1));
+		hintBtn.setMouseListener(new MouseListener() {
 			@Override
 			public void mouseUp(MouseEvent arg0) {
+				Position position=gameView.maze.currentPosition;
+				gameView.view.update("solve " + gameView.maze.mazeName + " " + position.z + " " +
+						position.y + " " + position.x);
 			}
+			
+
+			@Override
+			public void mouseDown(MouseEvent arg0) {
+			}
+
+			@Override
+			public void mouseDoubleClick(MouseEvent arg0) {
+			}
+		});
+		
+		ButtonDisplay solveBtn = new ButtonDisplay(goalGroup, "Solve For Me");
+		solveBtn.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, true, true, 2, 1));
+		solveBtn.setMouseListener(new MouseListener() {
+			@Override
+			public void mouseUp(MouseEvent arg0) {
+				gameView.view.update("solve " + gameView.maze.mazeName);
+			}
+			
 
 			@Override
 			public void mouseDown(MouseEvent arg0) {

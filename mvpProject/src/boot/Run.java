@@ -20,7 +20,7 @@ public class Run {
 	private final static String FILE_NAME = "properties.xml";
 	
 	public static void main(String[] args) {
-		
+
 		try {
 			readProperties();
 		} catch (Exception e) {
@@ -64,7 +64,7 @@ public class Run {
 	}
 
 	private static void generateProperties() {
-		Properties.properites.setViewType("text");
+		Properties.properites.setViewType("gui");
 		Properties.properites.setViewHeight(820);
 		Properties.properites.setViewWidth(1200);
 		Properties.properites.setGenerateAlgorithm("GrowingTree");
@@ -73,6 +73,7 @@ public class Run {
 		Properties.properites.setComparator("Cost");
 		Properties.properites.setNumberOfThreads(5);
 		Properties.properites.setMySQL(false);
+		Properties.properites.setHintLen(0.5);
 
 		try {
 			writeProperties();

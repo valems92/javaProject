@@ -20,8 +20,8 @@ public class GameMaze3dGuiView extends CommonMaze3dView {
 	}
 
 	@Override
-	public void displaySolution(Solution<Position> solution) {
-		
+	public void displaySolution(Solution<Position> solution, String type) {
+		window.displaySolution(solution,type);
 	}
 
 	@Override

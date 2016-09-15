@@ -11,11 +11,13 @@ import org.eclipse.swt.widgets.Composite;
 
 import algorithms.mazeGenerators.Maze3d;
 import algorithms.mazeGenerators.Position;
+import algorithms.search.Solution;
 
 public class Maze3dDisplay extends MazeDisplay {
 	private Maze3dGameWindow gameView;
 
 	private Maze3d maze;
+	private boolean win = false;
 
 	public Maze3dDisplay(Composite parent, int style, Maze3dGameWindow gameView) {
 		super(parent, style);
@@ -101,6 +103,45 @@ public class Maze3dDisplay extends MazeDisplay {
 	}
 
 	@Override
+	public void displaySolution(Solution<Position> solution, String type) {
+		ArrayList<Position> solve = solution.getResults();
+		if (type.equals("Hint")) {
+			double len = solve.size() * presenter.Properties.properites.getHintLen();
+			if (len >= 2) {
+				for (int i = 1; i < (int) len; i++) {
+					if (solve.get(i).z != currentPosition.z)
+						gameView.view.update("generate_cross_section " + mazeName + " " + solve.get(i).z + " z");
+
+					this.currentPosition = solve.get(i);
+					redraw();
+				}
+			}
+
+			else
+				gameView.view.update("display_message " + "You are so closed!");
+
+		} else {
+
+			for (int i = 1; i < solve.size(); i++) {
+				if (solve.get(i).z != currentPosition.z)
+					gameView.view.update("generate_cross_section " + mazeName + " " + solve.get(i).z + " z");
+
+				this.currentPosition = solve.get(i);
+				redraw();
+
+			}
+		}
+
+	}
+
+	private void ShowWinWindows() {
+
+		WinWindow winWindow = new WinWindow();
+		winWindow.start(gameView.display);
+
+	}
+
+	@Override
 	protected void drawMaze() {
 		Image wall = new Image(this.getDisplay(), "images/wall.jpg");
 		ImageData wallImgData = wall.getImageData();
@@ -141,6 +182,14 @@ public class Maze3dDisplay extends MazeDisplay {
 							int x = j * possitionWidth;
 							int y = i * possitionHeight;
 
+							// Win
+							if (!win) {
+								if (currentPosition.z == goalPosition.z && currentPosition.y == goalPosition.y
+										&& currentPosition.x == goalPosition.x) {
+									ShowWinWindows();
+									win = true;
+								}
+							}
 							// Walls
 							if (cross[i][j] == maze.WALL) {
 								e.gc.drawImage(wall, 0, 0, wallImgData.width, wallImgData.height, x, y, possitionWidth,
@@ -179,6 +228,8 @@ public class Maze3dDisplay extends MazeDisplay {
 					}
 				}
 			}
+
 		});
 	}
+
 }

@@ -8,11 +8,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.ObjectInput;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.io.OutputStream;
-import java.sql.SQLException;
 import java.util.Observable;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
@@ -21,8 +17,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
-import java.util.zip.GZIPInputStream;
-import java.util.zip.GZIPOutputStream;
 
 //import DBOperational.DBOperational;
 import algorithms.demo.Maze3dDomain;
@@ -32,6 +26,7 @@ import algorithms.mazeGenerators.Position;
 import algorithms.search.Searchable;
 import algorithms.search.Searcher;
 import algorithms.search.Solution;
+import algorithms.search.State;
 import io.MyCompressorOutputStream;
 import io.MyDecompressorInputStream;
 import presenter.Properties;
@@ -88,8 +83,8 @@ public class GameMaze3dModel extends Observable implements Model {
 	}
 
 	@Override
-	public void solveMaze(String name, Searcher<Position> searcher) {
-		if (solutions.containsKey(name)) {
+	public void solveMaze(String name, Searcher<Position> searcher, State<Position> state) {
+		if (solutions.containsKey(name) && state==null) {
 			setChanged();
 			notifyObservers("display_solution " + name);
 			return;
@@ -100,6 +95,8 @@ public class GameMaze3dModel extends Observable implements Model {
 			public Solution<Position> call() throws Exception {
 				Maze3d maze = generatedMazes.get(name);
 				Searchable<Position> mazeDomain = new Maze3dDomain(maze);
+				if(state!=null)
+					mazeDomain.setInitialState(state);
 				Solution<Position> solution = searcher.search(mazeDomain);
 
 				return solution;
@@ -109,9 +106,14 @@ public class GameMaze3dModel extends Observable implements Model {
 		try {
 			Solution<Position> solution = generatedSolution.get();
 			solutions.put(name, solution);
-
-			setChanged();
-			notifyObservers("display_solution " + name);
+			if(state!=null){
+				setChanged();
+				notifyObservers("display_solution " + name + " " + "Hint");
+			}
+			else{
+				setChanged();
+				notifyObservers("display_solution " + name + " " + "Solution");
+			}
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		} catch (ExecutionException e) {

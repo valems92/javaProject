@@ -27,6 +27,11 @@ public class Maze3dDomain implements Searchable<Position> {
 	public State<Position> getInitialState() {
 		return new State<Position>(maze.getStartPosition());
 	}
+	
+	@Override
+	public void setInitialState(State<Position> state) {
+		maze.setStartPosition(state.getState());
+	}
 
 	@Override
 	public State<Position> getGoalState() {

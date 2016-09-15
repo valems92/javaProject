@@ -5,6 +5,7 @@ public class Properties {
 	private String viewType;
 	private int viewWidth;
 	private int viewHeight;
+	private double hintLen;
 	
 	private String generateAlgorithm;
 	private String selectCellMethod;
@@ -91,5 +92,21 @@ public class Properties {
 	public void setMySQL(Boolean mySQL) {
 		MySQL = mySQL;
 	}
+
+	/**
+	 * @return the hintLen
+	 */
+	public double getHintLen() {
+		return hintLen;
+	}
+
+	/**
+	 * @param hintLen the hintLen to set
+	 */
+	public void setHintLen(double hintLen) {
+		this.hintLen = hintLen;
+	}
+	
+	
 	
 }

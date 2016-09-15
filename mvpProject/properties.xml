@@ -7,6 +7,9 @@
   <void property="generateAlgorithm">
    <string>GrowingTree</string>
   </void>
+  <void property="hintLen">
+   <double>0.5</double>
+  </void>
   <void property="mySQL">
    <boolean>false</boolean>
   </void>
@@ -20,13 +23,13 @@
    <string>BFS</string>
   </void>
   <void property="viewHeight">
-   <int>763</int>
+   <int>820</int>
   </void>
   <void property="viewType">
    <string>gui</string>
   </void>
   <void property="viewWidth">
-   <int>1125</int>
+   <int>1200</int>
   </void>
  </object>
 </java>

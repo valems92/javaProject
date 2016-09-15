@@ -44,7 +44,7 @@ public class GameMaze3dTextView extends CommonMaze3dView {
 	}
 
 	@Override
-	public void displaySolution(Solution<Position> solution) {
+	public void displaySolution(Solution<Position> solution, String type) {
 		displayMessage(solution.getResults().toString());
 	}
 
