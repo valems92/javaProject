@@ -66,7 +66,7 @@ public class MenuDisplay extends Canvas {
 	}
 
 	protected void startGame() {
-		startGameGroup = new Group(this, SWT.BORDER);
+		startGameGroup = new Group(this, SWT.NONE);
 		startGameGroup.setLayout(new GridLayout(2, true));
 		startGameGroup.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, true, 2, 1));
 		startGameGroup.setBackground(new Color(null, 212, 169, 127));
