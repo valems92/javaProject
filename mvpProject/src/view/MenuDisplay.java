@@ -191,7 +191,7 @@ public class MenuDisplay extends Canvas {
 			}
 		});
 		
-		ButtonDisplay solveBtn = new ButtonDisplay(goalGroup, "Solve For Me");
+		ButtonDisplay solveBtn = new ButtonDisplay(goalGroup, "Solve");
 		solveBtn.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, true, true, 2, 1));
 		solveBtn.setMouseListener(new MouseListener() {
 			@Override
