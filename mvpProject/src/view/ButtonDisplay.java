@@ -26,9 +26,13 @@ public class ButtonDisplay extends Canvas {
 		this.setCursor(new Cursor(getDisplay(), SWT.CURSOR_HAND));
 		this.setBackgroundMode(SWT.INHERIT_NONE);
 		this.setLayout(null);
-		
+
 		Image bg = new Image(this.getDisplay(), "images/button.png");
-		
+		Image bgOpacity = new Image(this.getDisplay(), "images/buttonOpacity.png");
+
+		Color enable = new Color(null, 139, 207, 130);
+		Color disable = new Color(null, 170, 185, 129);
+
 		Rectangle rect = bg.getBounds();
 		int width = rect.width;
 		int height = rect.height;
@@ -44,16 +48,27 @@ public class ButtonDisplay extends Canvas {
 		gc.dispose();
 
 		text.setSize(size.x, size.y);
-		text.setBackground(new Color(null, 139, 207, 130));
 		text.setBounds(size.x, size.y, size.x, size.y);
-		
+
 		int shadow = 5;
-		
 		this.addPaintListener(new PaintListener() {
 			@Override
 			public void paintControl(PaintEvent e) {
-				bgLabel.setLocation(getSize().x / 2 - width / 2 + shadow, getSize().y / 2 - height / 2);		
+				bgLabel.setLocation(getSize().x / 2 - width / 2 + shadow, getSize().y / 2 - height / 2);
 				text.setLocation(getSize().x / 2 - size.x / 2, getSize().y / 2 - size.y / 2 - shadow);
+				
+				if (!isEnabled()) {
+					if (bgLabel.getImage() != bgOpacity)
+						bgLabel.setImage(bgOpacity);
+					if (text.getBackground() != disable)
+						text.setBackground(disable);
+				} else {
+					if (bgLabel.getImage() != bg)
+						bgLabel.setImage(bg);
+					if(text.getBackground() != enable)
+						text.setBackground(enable);
+				}
+
 			}
 		});
 	}

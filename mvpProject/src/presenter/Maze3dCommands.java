@@ -82,23 +82,22 @@ public class Maze3dCommands extends CommonCommandsManager {
 		public void doCommand(String[] args) {
 			String name = args[1];
 
-			try {
-				int z = Integer.parseInt(args[2]);
-				int y = Integer.parseInt(args[3]);
-				int x = Integer.parseInt(args[4]);
-
-				if (z > 30 || y > 30 || x > 30 || y < 4 || x < 4) {
-					ui.displayMessage("The maze dimension is too big or too small. All parameters should be 4-30.");
-					return;
+			int z = 0, y = 0, x = 0;
+			if (args.length > 2) {
+				try {
+					z = Integer.parseInt(args[2]);
+					y = Integer.parseInt(args[3]);
+					x = Integer.parseInt(args[4]);
+					
+					Maze3dGenerator mg = algorithms.createGenerateAlgorithm(Properties.properites.getGenerateAlgorithm(),
+							Properties.properites.getSelectCellMethod());
+					model.generateMaze(name, z, y, x, mg);
+					
+				} catch (NumberFormatException e) {
+					ui.displayMessage("The maze dimension should be in number format.");
 				}
-
-				Maze3dGenerator mg = algorithms.createGenerateAlgorithm(Properties.properites.getGenerateAlgorithm(),
-						Properties.properites.getSelectCellMethod());
-				model.generateMaze(name, z, y, x, mg);
-
-			} catch (NumberFormatException e) {
-				ui.displayMessage("The maze dimension should be on number format.");
-			}
+			} else 
+				ui.displayMessage("Missing parameters.");
 		}
 	}
 
@@ -108,29 +107,42 @@ public class Maze3dCommands extends CommonCommandsManager {
 			String name = args[1];
 
 			Maze3d maze = model.getMazeByName(name);
-			ui.displayMaze(maze, name);
+			if (args.length > 2) {
+				String msg = "";
+				for (int i = 2; i < args.length; i++)
+					msg += args[i] + " ";
+				ui.displayExistingMaze(maze, name, msg);
+			} else {
+				ui.displayMaze(maze, name);
+			}
 		}
 	}
 
 	class SolveMazeCommand implements Command {
 		@Override
 		public void doCommand(String[] args) {
-			String mazeName = args[1];
-
 			Searcher<Position> searcher = algorithms.createSeacherAlgorithm(Properties.properites.getSolveAlgorithm(),
 					Properties.properites.getComparator());
 
+			String mazeName = args[1];
+
+			String type = null;
+			State<Position> state = null;
+
 			if (args.length > 2) {
-				String z = args[2];
-				String y = args[3];
-				String x = args[4];
+				type = args[2];
+				String z = args[3];
+				String y = args[4];
+				String x = args[5];
+
 				int iz = Integer.parseInt(z);
 				int iy = Integer.parseInt(y);
 				int ix = Integer.parseInt(x);
-				model.solveMaze(mazeName, searcher, new State<Position>(new Position(iz, iy, ix)));
-			} else
-				model.solveMaze(mazeName, searcher, null);
 
+				state = new State<Position>(new Position(iz, iy, ix));
+			}
+
+			model.solveMaze(searcher, mazeName, type, state);
 		}
 	}
 
@@ -140,8 +152,8 @@ public class Maze3dCommands extends CommonCommandsManager {
 			String name = args[1];
 			String type = args[2];
 
-			Solution<Position> solution = model.getSolutionByMazeName(name);
-			ui.displaySolution(solution,type);
+			Solution<Position> solution = model.getLastSolution(name);
+			ui.displaySolution(solution, type);
 		}
 	}
 

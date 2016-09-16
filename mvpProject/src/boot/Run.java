@@ -73,7 +73,8 @@ public class Run {
 		Properties.properites.setComparator("Cost");
 		Properties.properites.setNumberOfThreads(5);
 		Properties.properites.setMySQL(false);
-		Properties.properites.setHintLen(0.5);
+		Properties.properites.setHintLength(0.5);
+		Properties.properites.setAnimationSpeed(200);
 
 		try {
 			writeProperties();

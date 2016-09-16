@@ -5,7 +5,6 @@ public class Properties {
 	private String viewType;
 	private int viewWidth;
 	private int viewHeight;
-	private double hintLen;
 	
 	private String generateAlgorithm;
 	private String selectCellMethod;
@@ -15,6 +14,17 @@ public class Properties {
 	private int numberOfThreads;
 	private Boolean MySQL;
 	
+	private double hintLength;
+	private int animationSpeed;
+	
+	public int getAnimationSpeed() {
+		return animationSpeed;
+	}
+
+	public void setAnimationSpeed(int animationSpeed) {
+		this.animationSpeed = animationSpeed;
+	}
+
 	public String getGenerateAlgorithm() {
 		return generateAlgorithm;
 	}
@@ -96,15 +106,15 @@ public class Properties {
 	/**
 	 * @return the hintLen
 	 */
-	public double getHintLen() {
-		return hintLen;
+	public double getHintLength() {
+		return hintLength;
 	}
 
 	/**
 	 * @param hintLen the hintLen to set
 	 */
-	public void setHintLen(double hintLen) {
-		this.hintLen = hintLen;
+	public void setHintLength(double hintLength) {
+		this.hintLength = hintLength;
 	}
 	
 	

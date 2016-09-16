@@ -1,13 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<java version="1.8.0_101" class="java.beans.XMLDecoder">
+<java version="1.8.0_102" class="java.beans.XMLDecoder">
  <object class="presenter.Properties">
+  <void property="animationSpeed">
+   <int>200</int>
+  </void>
   <void property="comparator">
    <string>Cost</string>
   </void>
   <void property="generateAlgorithm">
    <string>GrowingTree</string>
   </void>
-  <void property="hintLen">
+  <void property="hintLength">
    <double>0.5</double>
   </void>
   <void property="mySQL">

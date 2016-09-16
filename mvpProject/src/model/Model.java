@@ -18,9 +18,9 @@ public interface Model {
 
 	public Maze3d getMazeByName(String name);
 	
-	public void solveMaze(String name, Searcher<Position> searcher, State<Position> state);
+	public void solveMaze(Searcher<Position> searcher, String name, String type, State<Position> state);
 
-	public Solution<Position> getSolutionByMazeName(String name);
+	public Solution<Position> getLastSolution(String name);
 	
 	public void saveMaze(String name, String fileName);
 	

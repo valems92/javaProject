@@ -76,4 +76,10 @@ public class GameMaze3dTextView extends CommonMaze3dView {
 		return;
 	}
 
+	@Override
+	public void displayExistingMaze(Maze3d maze, String name, String msg) {
+		System.out.println(msg);
+		displayMaze(maze, name);
+	}
+
 }

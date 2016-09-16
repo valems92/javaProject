@@ -1,6 +1,8 @@
 package view;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.KeyAdapter;
+import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.graphics.Color;
@@ -10,6 +12,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
@@ -21,10 +24,14 @@ public class MenuDisplay extends Canvas {
 	private Maze3dGameWindow gameView;
 
 	private Group startGameGroup;
-
 	private Group goalGroup;
+
 	private Label currentFloor;
 	private Label goalFloor;
+
+	private ButtonDisplay loadBtn;
+	private ButtonDisplay endBtn;
+	private ButtonDisplay saveBtn;
 
 	public MenuDisplay(Composite parent, int style, Maze3dGameWindow gameView) {
 		super(parent, style);
@@ -41,28 +48,7 @@ public class MenuDisplay extends Canvas {
 		displayStartGame();
 
 		loadSaveGame();
-
-		Group group = new Group(this, SWT.NONE);
-		group.setLayout(new GridLayout(2, true));
-		group.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, true, 2, 1));
-		group.setBackground(new Color(null, 212, 169, 127));
-
-		ButtonDisplay exitBtn = new ButtonDisplay(group, "Exit Game");
-		exitBtn.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, true, true, 2, 1));
-		exitBtn.setMouseListener(new MouseListener() {
-			@Override
-			public void mouseUp(MouseEvent arg0) {
-				gameView.shell.close();
-			}
-
-			@Override
-			public void mouseDown(MouseEvent arg0) {
-			}
-
-			@Override
-			public void mouseDoubleClick(MouseEvent arg0) {
-			}
-		});
+		endExitGame();
 	}
 
 	protected void startGame() {
@@ -88,13 +74,18 @@ public class MenuDisplay extends Canvas {
 		startBtn.setMouseListener(new MouseListener() {
 			@Override
 			public void mouseUp(MouseEvent arg0) {
-				if (nameInput.getText().length() == 0 || zInput.getText().length() == 0 ||
-						yInput.getText().length() == 0 || xInput.getText().length() == 0) {
-					gameView.view.displayMessage("You need to enter the maze name and dimension.");
+				String name = nameInput.getText();
+				if (name.length() == 0) {
+					gameView.view.displayMessage("You have to enter the maze name.");
 					return;
 				}
-				gameView.view.update("generate_maze " + nameInput.getText() + " " + zInput.getText() + " "
-						+ yInput.getText() + " " + xInput.getText());
+				
+				String z = (zInput.getText().length() == 0) ? "0" :zInput.getText();
+				String y = (yInput.getText().length() == 0) ? "0" :yInput.getText();
+				String x = (xInput.getText().length() == 0) ? "0" :xInput.getText();
+				
+				gameView.view.update("generate_maze " + name + " " + z + " "
+						+ y + " " + x);
 			}
 
 			@Override
@@ -108,24 +99,27 @@ public class MenuDisplay extends Canvas {
 	}
 
 	private void loadSaveGame() {
+		String[] filterExt = { "*.bit" };
+
 		Group group = new Group(this, SWT.NONE);
 		group.setLayout(new GridLayout(2, true));
 		group.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, true, 2, 1));
 		group.setBackground(new Color(null, 212, 169, 127));
 
-		createLabel(group, "Name:");
-		Text nameInput = createText(group);
+		FileDialog dialogSave = new FileDialog(getShell(), SWT.SAVE);
+		dialogSave.setText("Save your game!");
+		dialogSave.setFilterPath("C:/");
+		dialogSave.setFilterExtensions(filterExt);
 
-		ButtonDisplay saveBtn = new ButtonDisplay(group, "Save Game");
+		saveBtn = new ButtonDisplay(group, "Save Game");
 		saveBtn.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, true, true, 2, 1));
+		setButtonEnabled(saveBtn, false);
 		saveBtn.setMouseListener(new MouseListener() {
 			@Override
 			public void mouseUp(MouseEvent arg0) {
-				if (nameInput.getText().length() == 0) {
-					gameView.view.displayMessage("You need to enter the maze name.");
-					return;
-				}
-				gameView.view.update("save_maze " + nameInput.getText());
+				String savePath = dialogSave.open();
+				if (savePath != null)
+					gameView.view.update("save_maze " + gameView.maze.mazeName + " " + savePath);
 			}
 
 			@Override
@@ -137,16 +131,23 @@ public class MenuDisplay extends Canvas {
 			}
 		});
 
-		ButtonDisplay loadBtn = new ButtonDisplay(group, "Load Game");
+		FileDialog dialogOpen = new FileDialog(getShell(), SWT.OPEN);
+		dialogOpen.setText("Load your game!");
+		dialogOpen.setFilterPath("C:/");
+		dialogOpen.setFilterExtensions(filterExt);
+
+		loadBtn = new ButtonDisplay(group, "Load Game");
 		loadBtn.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, true, true, 2, 1));
 		loadBtn.setMouseListener(new MouseListener() {
 			@Override
 			public void mouseUp(MouseEvent arg0) {
-				if (nameInput.getText().length() == 0) {
-					gameView.view.displayMessage("You need to enter the maze name.");
-					return;
+				String path = dialogOpen.open();
+				if (path != null) {
+					String name = dialogOpen.getFileNames()[0];
+					name = name.substring(0, name.length() - 4);
+
+					gameView.view.update("load_maze " + path + " " + name);
 				}
-				gameView.view.update("load_maze " + nameInput.getText());
 			}
 
 			@Override
@@ -176,11 +177,10 @@ public class MenuDisplay extends Canvas {
 		hintBtn.setMouseListener(new MouseListener() {
 			@Override
 			public void mouseUp(MouseEvent arg0) {
-				Position position=gameView.maze.currentPosition;
-				gameView.view.update("solve " + gameView.maze.mazeName + " " + position.z + " " +
-						position.y + " " + position.x);
+				Position position = gameView.maze.currentPosition;
+				gameView.view.update("solve " + gameView.maze.mazeName + " Hint " + position.z + " " + position.y + " "
+						+ position.x);
 			}
-			
 
 			@Override
 			public void mouseDown(MouseEvent arg0) {
@@ -190,15 +190,16 @@ public class MenuDisplay extends Canvas {
 			public void mouseDoubleClick(MouseEvent arg0) {
 			}
 		});
-		
-		ButtonDisplay solveBtn = new ButtonDisplay(goalGroup, "Solve");
+
+		ButtonDisplay solveBtn = new ButtonDisplay(goalGroup, "Solve ");
 		solveBtn.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, true, true, 2, 1));
 		solveBtn.setMouseListener(new MouseListener() {
 			@Override
 			public void mouseUp(MouseEvent arg0) {
-				gameView.view.update("solve " + gameView.maze.mazeName);
+				Position position = gameView.maze.currentPosition;
+				gameView.view.update("solve " + gameView.maze.mazeName + " Solve " + position.z + " " + position.y + " "
+						+ position.x);
 			}
-			
 
 			@Override
 			public void mouseDown(MouseEvent arg0) {
@@ -208,18 +209,40 @@ public class MenuDisplay extends Canvas {
 			public void mouseDoubleClick(MouseEvent arg0) {
 			}
 		});
-		
-		ButtonDisplay endBtn = new ButtonDisplay(goalGroup, "End Game");
+	}
+
+	private void endExitGame() {
+		Group group = new Group(this, SWT.NONE);
+		group.setLayout(new GridLayout(2, true));
+		group.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, true, 2, 1));
+		group.setBackground(new Color(null, 212, 169, 127));
+
+		endBtn = new ButtonDisplay(group, "End Game");
 		endBtn.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, true, true, 2, 1));
+		setButtonEnabled(endBtn, false);
 		endBtn.setMouseListener(new MouseListener() {
 			@Override
 			public void mouseUp(MouseEvent arg0) {
-				
 				gameView.maze.dispose();
 				gameView.displayWelcome();
-				
 			}
-			
+
+			@Override
+			public void mouseDown(MouseEvent arg0) {
+			}
+
+			@Override
+			public void mouseDoubleClick(MouseEvent arg0) {
+			}
+		});
+
+		ButtonDisplay exitBtn = new ButtonDisplay(group, "Exit Game");
+		exitBtn.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, true, true, 2, 1));
+		exitBtn.setMouseListener(new MouseListener() {
+			@Override
+			public void mouseUp(MouseEvent arg0) {
+				gameView.shell.close();
+			}
 
 			@Override
 			public void mouseDown(MouseEvent arg0) {
@@ -250,6 +273,9 @@ public class MenuDisplay extends Canvas {
 			startGameGroup.dispose();
 		}
 
+		setButtonEnabled(loadBtn, false);
+		setButtonEnabled(endBtn, true);
+		setButtonEnabled(saveBtn, true);
 		this.layout(true);
 	}
 
@@ -260,7 +286,17 @@ public class MenuDisplay extends Canvas {
 			goalGroup.dispose();
 		}
 
+		setButtonEnabled(loadBtn, true);
+		setButtonEnabled(endBtn, false);
+		setButtonEnabled(saveBtn, false);
 		this.layout(true);
+	}
+
+	private void setButtonEnabled(ButtonDisplay btn, boolean enable) {
+		if (btn != null) {
+			btn.setEnabled(enable);
+			btn.redraw();
+		}
 	}
 
 	private Label createLabel(Composite parent, String txt) {

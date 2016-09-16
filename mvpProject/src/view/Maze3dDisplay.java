@@ -1,6 +1,10 @@
 package view;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.events.PaintListener;
@@ -12,6 +16,7 @@ import org.eclipse.swt.widgets.Composite;
 import algorithms.mazeGenerators.Maze3d;
 import algorithms.mazeGenerators.Position;
 import algorithms.search.Solution;
+import presenter.Properties;
 
 public class Maze3dDisplay extends MazeDisplay {
 	private Maze3dGameWindow gameView;
@@ -106,44 +111,65 @@ public class Maze3dDisplay extends MazeDisplay {
 	public void displaySolution(Solution<Position> solution, String type) {
 		ArrayList<Position> solve = solution.getResults();
 		if (type.equals("Hint")) {
-			double len = solve.size() * presenter.Properties.properites.getHintLen();
-			if (len >= 2) {
-				for (int i = 1; i < (int) len; i++) {
-					if (solve.get(i).z != currentPosition.z){
-						gameView.view.update("generate_cross_section " + mazeName + " " + solve.get(i).z + " z");
-						gameView.menu.setCurrentFloorText(solve.get(i).z);
-					}
+			int length = (int) (solve.size() * Properties.properites.getHintLength());
+			ArrayList<Position> hintSolve = new ArrayList<Position>();
 
-					this.currentPosition = solve.get(i);
-					redraw();
-				}
-			}
+			for (int i = 0; i < length; i++)
+				hintSolve.add(solve.get(i));
 
-			else
+			if (length >= 2) {
+				initCharacterAnimation(hintSolve, type);
+			} else
 				gameView.view.update("display_message " + "You are so closed!");
 
-		} else {
+		} else
+			initCharacterAnimation(solve, type);
+	}
 
-			for (int i = 1; i < solve.size(); i++) {
-				if (solve.get(i).z != currentPosition.z){
-					gameView.view.update("generate_cross_section " + mazeName + " " + solve.get(i).z + " z");
-					gameView.menu.setCurrentFloorText(solve.get(i).z);
-				}
-
-				this.currentPosition = solve.get(i);
-				redraw();
-
-			}
+	public void animationEnded(ArrayList<Position> solve, String type){
+		if(type.equals("Hint")) {
+			Collections.reverse(solve);
+			initCharacterAnimation(solve, "");
 		}
-
 	}
 	
+	private void initCharacterAnimation(ArrayList<Position> solve, String type) {
+		AtomicInteger index = new AtomicInteger(1);
+
+		Timer timer = new Timer();
+		TimerTask task;
+
+		task = new TimerTask() {
+			@Override
+			public void run() {
+				getDisplay().syncExec(new Runnable() {
+					@Override
+					public void run() {
+						if (solve.size() <= index.get()) {
+							timer.cancel();
+							timer.purge();
+							animationEnded(solve, type);
+						} else {
+							Position nextPos = solve.get(index.getAndIncrement());
+							if (nextPos.z != currentPosition.z) {
+								gameView.view.update("generate_cross_section " + mazeName + " " + nextPos.z + " z");
+								gameView.menu.setCurrentFloorText(nextPos.z);
+							}
+							currentPosition = nextPos;
+
+							redraw();
+						}
+					}
+				});
+			}
+		};
+
+		timer.scheduleAtFixedRate(task, 0, Properties.properites.getAnimationSpeed());
+	}
 
 	private void ShowWinWindows() {
-
 		WinWindow winWindow = new WinWindow();
 		winWindow.start(gameView.display);
-
 	}
 
 	@Override

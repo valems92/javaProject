@@ -40,6 +40,7 @@ import presenter.Properties;
 public class GameMaze3dModel extends Observable implements Model {
 	public ConcurrentHashMap<String, Maze3d> generatedMazes;
 	private ConcurrentHashMap<String, Solution<Position>> solutions;
+	private Solution<Position> lastSolution;
 	private int[][] crossSection;
 	private final String path = "mazeAndsolution.zip";
 
@@ -58,7 +59,19 @@ public class GameMaze3dModel extends Observable implements Model {
 	public void generateMaze(String name, int z, int y, int x, Maze3dGenerator mg) {
 		if (generatedMazes.containsKey(name)) {
 			setChanged();
-			notifyObservers("display_message " + "Maze called " + name + " already exist.");
+			notifyObservers("display_maze " + name + " Maze called " + name + " already exist.");
+			return;
+		}
+		
+		if(z == 0 || y == 0 || x == 0) {
+			setChanged();
+			notifyObservers("display_message Maze dimension is missing.");
+			return;
+		}
+		
+		if (z > 30 || y > 30 || x > 30 || y < 4 || x < 4) {
+			setChanged();
+			notifyObservers("display_message Maze dimensions have to be smaller than 30. Also, rows and Columns should be bugger than 4.");
 			return;
 		}
 
@@ -89,36 +102,42 @@ public class GameMaze3dModel extends Observable implements Model {
 	}
 
 	@Override
-	public void solveMaze(String name, Searcher<Position> searcher, State<Position> state) {
-		if (solutions.containsKey(name) && state == null) {
+	public void solveMaze(Searcher<Position> searcher, String name, String type, State<Position> state) {
+		Maze3d maze = generatedMazes.get(name);
+		
+		if (solutions.containsKey(name) && state.getState().equals(maze.getStartPosition())) {
 			setChanged();
-			notifyObservers("display_solution " + name);
+			notifyObservers("display_solution " + name + " " + type);
 			return;
 		}
+	
+		Searchable<Position> mazeDomain = new Maze3dDomain(maze);
+		 State<Position> prevInitial = mazeDomain.getInitialState();
 
 		Future<Solution<Position>> generatedSolution = executorSolve.submit(new Callable<Solution<Position>>() {
 			@Override
 			public Solution<Position> call() throws Exception {
-				Maze3d maze = generatedMazes.get(name);
-				Searchable<Position> mazeDomain = new Maze3dDomain(maze);
-				if (state != null)
+				if (state != null) 
 					mazeDomain.setInitialState(state);
-				Solution<Position> solution = searcher.search(mazeDomain);
+				
 
+				Solution<Position> solution = searcher.search(mazeDomain);
 				return solution;
 			}
 		});
 
 		try {
 			Solution<Position> solution = generatedSolution.get();
-			solutions.put(name, solution);
-			if (state != null) {
-				setChanged();
-				notifyObservers("display_solution " + name + " " + "Hint");
-			} else {
-				setChanged();
-				notifyObservers("display_solution " + name + " " + "Solution");
-			}
+
+			if (state.getState().equals(maze.getStartPosition()))
+				solutions.put(name, solution);
+
+			lastSolution = solution;
+			mazeDomain.setInitialState(prevInitial);
+			
+			setChanged();
+			notifyObservers("display_solution " + name + " " + type);
+
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		} catch (ExecutionException e) {
@@ -127,8 +146,8 @@ public class GameMaze3dModel extends Observable implements Model {
 	}
 
 	@Override
-	public Solution<Position> getSolutionByMazeName(String name) {
-		return solutions.get(name);
+	public Solution<Position> getLastSolution(String name) {
+		return lastSolution;
 	}
 
 	@Override
@@ -143,17 +162,17 @@ public class GameMaze3dModel extends Observable implements Model {
 				out.close();
 
 				setChanged();
-				notifyObservers("display_message " + "Maze saved");
+				notifyObservers("display_message Maze saved");
 			} catch (FileNotFoundException e) {
 				setChanged();
-				notifyObservers("display_message " + "Error occured while creating file");
+				notifyObservers("display_message Error occured while creating file");
 			} catch (IOException e) {
 				setChanged();
-				notifyObservers("display_message " + "Error occured while writing to file");
+				notifyObservers("display_message Error occured while writing to file");
 			}
 		} else {
 			setChanged();
-			notifyObservers("display_message " + "Maze with name " + name + " doesn't exist");
+			notifyObservers("display_message Maze with name " + name + " doesn't exist");
 		}
 	}
 
@@ -179,14 +198,14 @@ public class GameMaze3dModel extends Observable implements Model {
 
 			} catch (FileNotFoundException e) {
 				setChanged();
-				notifyObservers("display_message " + "Error occured while finding file");
+				notifyObservers("display_message Error occured while finding file");
 			} catch (IOException e) {
 				setChanged();
-				notifyObservers("display_message " + "Error occured while reading to file");
+				notifyObservers("display_message Error occured while reading to file");
 			}
 		} else {
 			setChanged();
-			notifyObservers("display_message " + "A maze called " + name + " exist already");
+			notifyObservers("display_maze " + name);
 		}
 	}
 
@@ -198,7 +217,7 @@ public class GameMaze3dModel extends Observable implements Model {
 			decoder.close();
 		} catch (FileNotFoundException e) {
 			setChanged();
-			notifyObservers("display_message " + "There was an error loading the properties file");
+			notifyObservers("display_message There was an error loading the properties file");
 			e.printStackTrace();
 		}
 	}
@@ -210,64 +229,61 @@ public class GameMaze3dModel extends Observable implements Model {
 		try {
 			executorGenerate.awaitTermination(Integer.MAX_VALUE, TimeUnit.SECONDS);
 			executorSolve.awaitTermination(Integer.MAX_VALUE, TimeUnit.SECONDS);
+
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-		
-			if (Properties.properites.getMySQL().booleanValue()) {
-				// new HashMap with maze and solution (the hash map is Object)
-				DBOperational myOperational = new DBOperational();
-				try {
-					myOperational.clearDB();
-				} catch (SQLException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
+
+		if (Properties.properites.getMySQL().booleanValue()) {
+			// new HashMap with maze and solution (the hash map is Object)
+			DBOperational myOperational = new DBOperational();
+
+			try {
+				myOperational.clearDB();
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
+
+			// save the hashMap to DB
+			try {
 				myOperational.setJavaObject(this.generatedMazes);
+				myOperational.saveObject(this.generatedMazes);
 
-				// save the hashMap to DB
-				try {
-					myOperational.saveObject(this.generatedMazes);
-					myOperational.setJavaObject(this.solutions);
-					myOperational.saveObject(this.solutions);
-					myOperational.conn.close();
+				myOperational.setJavaObject(this.solutions);
+				myOperational.saveObject(this.solutions);
 
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+				myOperational.conn.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		} else {
+			ObjectOutputStream out;
+			try {
+				out = new ObjectOutputStream(new GZIPOutputStream(new FileOutputStream(path)));
 
-			} else {
+				out.writeObject(this.generatedMazes);
+				out.writeObject(this.solutions);
 
-				ObjectOutputStream out;
-				try {
-
-					out = new ObjectOutputStream(new GZIPOutputStream(new FileOutputStream(path)));
-					out.writeObject(this.generatedMazes);
-					out.writeObject(this.solutions);
-					out.close();
-
-				} catch (FileNotFoundException e) {
-					e.printStackTrace();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-
+				out.close();
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
 			}
 		}
-	
+	}
 
 	@Override
 	public void displayCrossSection(String name, int index, String section) {
 		if (index < 0) {
 			setChanged();
-			notifyObservers("display_message " + "Invalid Index!");
+			notifyObservers("display_message Invalid Index!");
 			return;
 		}
 
 		if (!generatedMazes.containsKey(name)) {
 			setChanged();
-			notifyObservers("display_message " + "Maze with name " + name + " doesn't exist");
+			notifyObservers("display_message Maze with name " + name + " doesn't exist");
 			return;
 		}
 
@@ -283,7 +299,7 @@ public class GameMaze3dModel extends Observable implements Model {
 
 		else {
 			setChanged();
-			notifyObservers("display_message " + "Invalid Section!");
+			notifyObservers("display_message Invalid Section!");
 			return;
 		}
 
@@ -306,6 +322,7 @@ public class GameMaze3dModel extends Observable implements Model {
 						.getObject(1);
 				ConcurrentHashMap<String, Solution<Position>> solutions_loaded = (ConcurrentHashMap<String, Solution<Position>>) myOperational
 						.getObject(2);
+
 				if (generatedMazes_loaded != null && solutions_loaded != null) {
 					this.generatedMazes = generatedMazes_loaded;
 					this.solutions = solutions_loaded;
@@ -314,27 +331,21 @@ public class GameMaze3dModel extends Observable implements Model {
 				myOperational.conn.close();
 
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		} else if (!mySQL.booleanValue()) {
-			System.out.println("zip loaded");
-
 			ObjectInputStream in;
 			try {
 				in = new ObjectInputStream(new GZIPInputStream(new FileInputStream(path)));
-				this.generatedMazes = (ConcurrentHashMap<String, Maze3d>) in.readObject(); 
-				this.solutions = (ConcurrentHashMap<String, Solution<Position>>) in.readObject();
-				// The model should updated the data member
 
+				this.generatedMazes = (ConcurrentHashMap<String, Maze3d>) in.readObject();
+				this.solutions = (ConcurrentHashMap<String, Solution<Position>>) in.readObject();
 			} catch (FileNotFoundException e) {
-				e.printStackTrace();
+				// File doesn't exist. On exit game, it will be crated.
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 		} else
 			throw new ExceptionInInitializerError("mySQL field's value invalid!");
-
 	}
-
 }

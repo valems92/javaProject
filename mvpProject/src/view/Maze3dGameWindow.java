@@ -37,10 +37,10 @@ public class Maze3dGameWindow extends BasicWindow {
 		});
 	}
 
-	public MenuDisplay getMenu(){
+	public MenuDisplay getMenu() {
 		return menu;
 	}
-	
+
 	@Override
 	public void initWidgets() {
 		shell.setLayout(new GridLayout(2, false));
@@ -107,29 +107,30 @@ public class Maze3dGameWindow extends BasicWindow {
 
 		menu.displayGoalGuide();
 		menu.setGoalFloorText(m.getGoalPosition().z);
-		
+
 		maze.initMaze(m, name, "images/fly.png");
-		
+
 		maze.moveAbove(welcome);
 		welcome.dispose();
 
+		maze.setFocus();
 		shell.layout(true);
 	}
-	
+
 	public void displayWelcome() {
-		
 		welcome = new WelcomeDisplay(shell, SWT.NONE, this);
 		welcome.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 		menu.displayStartGame();
 		shell.layout(true);
-		
 	}
 
-	public void displayMessage(String msg) {
-		MessageBox messageBox = new MessageBox(shell, SWT.ICON_INFORMATION | SWT.OK);
+	public void displayMessage(String msg, int style, Maze3d maze, String name) {
+		MessageBox messageBox = new MessageBox(shell, style);
 		messageBox.setMessage(msg);
-		
-		messageBox.open();
+
+		int response = messageBox.open();
+        if (response == SWT.YES)
+          displayMaze(maze, name);
 	}
 
 	public void displayCrossSection(int[][] crossSection) {
@@ -141,7 +142,6 @@ public class Maze3dGameWindow extends BasicWindow {
 	}
 
 	public void displaySolution(Solution<Position> solution, String type) {
-		maze.displaySolution(solution,type);
-		
+		maze.displaySolution(solution, type);
 	}
 }
