@@ -66,7 +66,7 @@ public class MenuDisplay extends Canvas {
 	}
 
 	protected void startGame() {
-		startGameGroup = new Group(this, SWT.NONE);
+		startGameGroup = new Group(this, SWT.BORDER);
 		startGameGroup.setLayout(new GridLayout(2, true));
 		startGameGroup.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, true, 2, 1));
 		startGameGroup.setBackground(new Color(null, 212, 169, 127));
@@ -88,8 +88,8 @@ public class MenuDisplay extends Canvas {
 		startBtn.setMouseListener(new MouseListener() {
 			@Override
 			public void mouseUp(MouseEvent arg0) {
-				if (nameInput.getText().length() == 0 || Integer.parseInt(zInput.getText()) == 0
-						|| Integer.parseInt(yInput.getText()) < 4 || Integer.parseInt(xInput.getText()) < 4) {
+				if (nameInput.getText().length() == 0 || zInput.getText().length() == 0 ||
+						yInput.getText().length() == 0 || xInput.getText().length() == 0) {
 					gameView.view.displayMessage("You need to enter the maze name and dimension.");
 					return;
 				}

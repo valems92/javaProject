@@ -8,7 +8,10 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.OutputStream;
+import java.sql.SQLException;
 import java.util.Observable;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
@@ -17,7 +20,10 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
+import java.util.zip.GZIPInputStream;
+import java.util.zip.GZIPOutputStream;
 
+import DB.DBOperational;
 //import DBOperational.DBOperational;
 import algorithms.demo.Maze3dDomain;
 import algorithms.mazeGenerators.Maze3d;
@@ -84,7 +90,7 @@ public class GameMaze3dModel extends Observable implements Model {
 
 	@Override
 	public void solveMaze(String name, Searcher<Position> searcher, State<Position> state) {
-		if (solutions.containsKey(name) && state==null) {
+		if (solutions.containsKey(name) && state == null) {
 			setChanged();
 			notifyObservers("display_solution " + name);
 			return;
@@ -95,7 +101,7 @@ public class GameMaze3dModel extends Observable implements Model {
 			public Solution<Position> call() throws Exception {
 				Maze3d maze = generatedMazes.get(name);
 				Searchable<Position> mazeDomain = new Maze3dDomain(maze);
-				if(state!=null)
+				if (state != null)
 					mazeDomain.setInitialState(state);
 				Solution<Position> solution = searcher.search(mazeDomain);
 
@@ -106,11 +112,10 @@ public class GameMaze3dModel extends Observable implements Model {
 		try {
 			Solution<Position> solution = generatedSolution.get();
 			solutions.put(name, solution);
-			if(state!=null){
+			if (state != null) {
 				setChanged();
 				notifyObservers("display_solution " + name + " " + "Hint");
-			}
-			else{
+			} else {
 				setChanged();
 				notifyObservers("display_solution " + name + " " + "Solution");
 			}
@@ -133,10 +138,10 @@ public class GameMaze3dModel extends Observable implements Model {
 			try {
 				OutputStream out = new MyCompressorOutputStream(new FileOutputStream(fileName));
 				out.write(maze.toByteArray());
-				
+
 				out.flush();
 				out.close();
-				
+
 				setChanged();
 				notifyObservers("display_message " + "Maze saved");
 			} catch (FileNotFoundException e) {
@@ -151,7 +156,7 @@ public class GameMaze3dModel extends Observable implements Model {
 			notifyObservers("display_message " + "Maze with name " + name + " doesn't exist");
 		}
 	}
-	
+
 	@Override
 	public void loadMaze(String fileName, String name) {
 		if (!generatedMazes.containsKey(name)) {
@@ -165,13 +170,13 @@ public class GameMaze3dModel extends Observable implements Model {
 
 				in.read(b);
 				in.close();
-				
+
 				Maze3d mazeLoaded = new Maze3d(b);
 				generatedMazes.put(name, mazeLoaded);
 
 				setChanged();
 				notifyObservers("display_maze " + name);
-				
+
 			} catch (FileNotFoundException e) {
 				setChanged();
 				notifyObservers("display_message " + "Error occured while finding file");
@@ -208,36 +213,49 @@ public class GameMaze3dModel extends Observable implements Model {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-		/*
-		 * if (Properties.properites.getMySQL().booleanValue()) { // new HashMap
-		 * with maze and solution (the hash map is Object) DBOperational
-		 * myOperational = new DBOperational(); try { myOperational.clearDB(); }
-		 * catch (SQLException e1) { // TODO Auto-generated catch block
-		 * e1.printStackTrace(); }
-		 * myOperational.setJavaObject(this.generatedMazes);
-		 * 
-		 * // save the hashMap to DB try {
-		 * myOperational.saveObject(this.generatedMazes);
-		 * myOperational.setJavaObject(this.solutions);
-		 * myOperational.saveObject(this.solutions); myOperational.conn.close();
-		 * 
-		 * } catch (Exception e) { // TODO Auto-generated catch block
-		 * e.printStackTrace(); }
-		 * 
-		 * } else {
-		 * 
-		 * ObjectOutputStream out; try {
-		 * 
-		 * out = new ObjectOutputStream(new GZIPOutputStream(new
-		 * FileOutputStream(path))); out.writeObject(this.generatedMazes);
-		 * out.writeObject(this.solutions); out.close();
-		 * 
-		 * } catch (FileNotFoundException e) { e.printStackTrace(); } catch
-		 * (IOException e) { e.printStackTrace(); }
-		 * 
-		 * }
-		 */
-	}
+		
+			if (Properties.properites.getMySQL().booleanValue()) {
+				// new HashMap with maze and solution (the hash map is Object)
+				DBOperational myOperational = new DBOperational();
+				try {
+					myOperational.clearDB();
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				myOperational.setJavaObject(this.generatedMazes);
+
+				// save the hashMap to DB
+				try {
+					myOperational.saveObject(this.generatedMazes);
+					myOperational.setJavaObject(this.solutions);
+					myOperational.saveObject(this.solutions);
+					myOperational.conn.close();
+
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
+			} else {
+
+				ObjectOutputStream out;
+				try {
+
+					out = new ObjectOutputStream(new GZIPOutputStream(new FileOutputStream(path)));
+					out.writeObject(this.generatedMazes);
+					out.writeObject(this.solutions);
+					out.close();
+
+				} catch (FileNotFoundException e) {
+					e.printStackTrace();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+
+			}
+		}
+	
 
 	@Override
 	public void displayCrossSection(String name, int index, String section) {
@@ -259,10 +277,10 @@ public class GameMaze3dModel extends Observable implements Model {
 
 		else if (section.equals("y") || section.equals("Y"))
 			crossSection = maze.getCrossSectionByY(index);
-		
+
 		else if (section.equals("x") || section.equals("X"))
 			crossSection = maze.getCrossSectionByX(index);
-		
+
 		else {
 			setChanged();
 			notifyObservers("display_message " + "Invalid Section!");
@@ -279,35 +297,44 @@ public class GameMaze3dModel extends Observable implements Model {
 
 	@Override
 	public void loadData() throws Exception {
-		/*
-		 * Boolean mySQL = Properties.properites.getMySQL(); if
-		 * (mySQL.booleanValue()) { System.out.println("Data loded from DB");
-		 * DBOperational myOperational = new DBOperational(); try {
-		 * ConcurrentHashMap<String, Maze3d> generatedMazes_loaded =
-		 * (ConcurrentHashMap<String, Maze3d>) myOperational .getObject(1);
-		 * ConcurrentHashMap<String, Solution<Position>> solutions_loaded =
-		 * (ConcurrentHashMap<String, Solution<Position>>) myOperational
-		 * .getObject(2); if (generatedMazes_loaded != null && solutions_loaded
-		 * != null) { this.generatedMazes = generatedMazes_loaded;
-		 * this.solutions = solutions_loaded; }
-		 * 
-		 * myOperational.conn.close();
-		 * 
-		 * } catch (Exception e) { // TODO Auto-generated catch block
-		 * e.printStackTrace(); } } else if (!mySQL.booleanValue()) {
-		 * System.out.println("zip loaded");
-		 * 
-		 * ObjectInputStream in; try { in = new ObjectInputStream(new
-		 * GZIPInputStream(new FileInputStream(path))); this.generatedMazes =
-		 * (ConcurrentHashMap<String, Maze3d>) in.readObject(); // need // to //
-		 * get // the // Object // to // new // HashMap this.solutions =
-		 * (ConcurrentHashMap<String, Solution<Position>>) in.readObject(); //
-		 * The model should updated the data member
-		 * 
-		 * } catch (FileNotFoundException e) { e.printStackTrace(); } catch
-		 * (IOException e) { e.printStackTrace(); } } else throw new
-		 * ExceptionInInitializerError("mySQL field's value invalid!");
-		 */
+		Boolean mySQL = Properties.properites.getMySQL();
+		if (mySQL.booleanValue()) {
+			System.out.println("Data loded from DB");
+			DBOperational myOperational = new DBOperational();
+			try {
+				ConcurrentHashMap<String, Maze3d> generatedMazes_loaded = (ConcurrentHashMap<String, Maze3d>) myOperational
+						.getObject(1);
+				ConcurrentHashMap<String, Solution<Position>> solutions_loaded = (ConcurrentHashMap<String, Solution<Position>>) myOperational
+						.getObject(2);
+				if (generatedMazes_loaded != null && solutions_loaded != null) {
+					this.generatedMazes = generatedMazes_loaded;
+					this.solutions = solutions_loaded;
+				}
+
+				myOperational.conn.close();
+
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		} else if (!mySQL.booleanValue()) {
+			System.out.println("zip loaded");
+
+			ObjectInputStream in;
+			try {
+				in = new ObjectInputStream(new GZIPInputStream(new FileInputStream(path)));
+				this.generatedMazes = (ConcurrentHashMap<String, Maze3d>) in.readObject(); 
+				this.solutions = (ConcurrentHashMap<String, Solution<Position>>) in.readObject();
+				// The model should updated the data member
+
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		} else
+			throw new ExceptionInInitializerError("mySQL field's value invalid!");
+
 	}
 
 }

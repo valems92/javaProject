@@ -87,8 +87,8 @@ public class Maze3dCommands extends CommonCommandsManager {
 				int y = Integer.parseInt(args[3]);
 				int x = Integer.parseInt(args[4]);
 
-				if (z > 30 || y > 30 || x > 30) {
-					ui.displayMessage("The maze dimension is too big. All parameters should be smaller than 30.");
+				if (z > 30 || y > 30 || x > 30 || y < 4 || x < 4) {
+					ui.displayMessage("The maze dimension is too big or too small. All parameters should be 4-30.");
 					return;
 				}
 

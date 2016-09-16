@@ -137,6 +137,7 @@ public class Maze3dDisplay extends MazeDisplay {
 		}
 
 	}
+	
 
 	private void ShowWinWindows() {
 

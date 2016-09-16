@@ -25,12 +25,15 @@ public class ButtonDisplay extends Canvas {
 		super(parent, SWT.NONE);
 		this.setCursor(new Cursor(getDisplay(), SWT.CURSOR_HAND));
 		this.setBackgroundMode(SWT.INHERIT_NONE);
-
+		this.setLayout(null);
+		
 		Image bg = new Image(this.getDisplay(), "images/button.png");
+		
 		Rectangle rect = bg.getBounds();
-		int width = rect.width, height = rect.height;
+		int width = rect.width;
+		int height = rect.height;
 
-		setLabel(txt, width, height);
+		setLabel(txt);
 
 		bgLabel = new Label(this, SWT.NONE);
 		bgLabel.setImage(bg);
@@ -42,22 +45,22 @@ public class ButtonDisplay extends Canvas {
 
 		text.setSize(size.x, size.y);
 		text.setBackground(new Color(null, 139, 207, 130));
-
+		text.setBounds(size.x, size.y, size.x, size.y);
+		
+		int shadow = 5;
+		
 		this.addPaintListener(new PaintListener() {
 			@Override
 			public void paintControl(PaintEvent e) {
-				// add int to x position because of the image shadow
-				int shadow = 5;
-				bgLabel.setLocation(getSize().x / 2 - width / 2 + shadow, getSize().y / 2 - height / 2);
-				text.setLocation(getSize().x / 2 - width / 4 - shadow, getSize().y / 2 - height / 4);
+				bgLabel.setLocation(getSize().x / 2 - width / 2 + shadow, getSize().y / 2 - height / 2);		
+				text.setLocation(getSize().x / 2 - size.x / 2, getSize().y / 2 - size.y / 2 - shadow);
 			}
 		});
 	}
 
-	private void setLabel(String txt, int width, int height) {
+	private void setLabel(String txt) {
 		text = new Label(this, SWT.NONE);
 		text.setText(txt);
-		text.setEnabled(true);
 
 		FontData[] fontData = text.getFont().getFontData();
 		fontData[0].setHeight(FONT_SIZE);
