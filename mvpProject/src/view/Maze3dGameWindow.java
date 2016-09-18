@@ -110,7 +110,7 @@ public class Maze3dGameWindow extends BasicWindow {
 	}
 
 	public void displayMaze(Maze3d m, String name) {
-		maze = new Maze2dDisplay(shell, SWT.BORDER, this);
+		maze = new Maze3dDisplay(shell, SWT.BORDER, this);
 		maze.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 
 		menu.displayGoalGuide();

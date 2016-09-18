@@ -50,8 +50,8 @@ public class Maze3dDisplay extends MazeDisplay {
 
 				int mx = width / 2;
 
-				double w = (double) width / cross[0].length;
-				double h = (double) height / cross.length;
+				double w = (width / cross[0].length) * scale;
+				double h = (height / cross.length) * scale;
 
 				for (int i = 0; i < cross.length; i++) {
 					double w0 = 0.7 * w + 0.3 * w * i / cross.length;
