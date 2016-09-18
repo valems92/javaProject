@@ -110,13 +110,13 @@ public class Maze3dGameWindow extends BasicWindow {
 	}
 
 	public void displayMaze(Maze3d m, String name) {
-		maze = new Maze3dDisplay(shell, SWT.BORDER, this);
+		maze = new Maze2dDisplay(shell, SWT.BORDER, this);
 		maze.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 
 		menu.displayGoalGuide();
 		menu.setGoalFloorText(m.getGoalPosition().z);
 
-		maze.initMaze(m, name, "images/fly.png");
+		maze.initMaze(m, name, "images/fly.png", "images/flyFlip.png");
 
 		maze.moveAbove(welcome);
 		welcome.dispose();
@@ -156,6 +156,7 @@ public class Maze3dGameWindow extends BasicWindow {
 	}
 
 	public void displaySolution(Solution<Position> solution, String type) {
+		maze.scale = 1;
 		maze.displaySolution(solution, type);
 	}
 }

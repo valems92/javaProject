@@ -3,6 +3,7 @@ package view;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.events.KeyEvent;
+import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.graphics.Color;
@@ -12,9 +13,13 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Listener;
+import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Text;
 
 import algorithms.mazeGenerators.Position;
@@ -56,7 +61,7 @@ public class MenuDisplay extends Canvas {
 		startGameGroup.setLayout(new GridLayout(2, true));
 		startGameGroup.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, true, 2, 1));
 		startGameGroup.setBackground(new Color(null, 212, 169, 127));
-
+		
 		createLabel(startGameGroup, "Name:");
 		Text nameInput = createText(startGameGroup);
 
@@ -69,23 +74,24 @@ public class MenuDisplay extends Canvas {
 		createLabel(startGameGroup, "Columns:");
 		Text xInput = createText(startGameGroup);
 
+		KeyAdapter ketAdapter = new KeyAdapter() {
+			public void keyPressed(KeyEvent e) {
+				if(e.keyCode == SWT.CR)
+					startBtnPressed(nameInput, zInput, yInput, xInput);
+			}
+		};
+		
+		nameInput.addKeyListener(ketAdapter);
+		zInput.addKeyListener(ketAdapter);
+		yInput.addKeyListener(ketAdapter);
+		xInput.addKeyListener(ketAdapter);
+
 		ButtonDisplay startBtn = new ButtonDisplay(startGameGroup, "Start Game");
 		startBtn.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, true, true, 2, 1));
 		startBtn.setMouseListener(new MouseListener() {
 			@Override
 			public void mouseUp(MouseEvent arg0) {
-				String name = nameInput.getText();
-				if (name.length() == 0) {
-					gameView.view.displayMessage("You have to enter the maze name.");
-					return;
-				}
-				
-				String z = (zInput.getText().length() == 0) ? "0" :zInput.getText();
-				String y = (yInput.getText().length() == 0) ? "0" :yInput.getText();
-				String x = (xInput.getText().length() == 0) ? "0" :xInput.getText();
-				
-				gameView.view.update("generate_maze " + name + " " + z + " "
-						+ y + " " + x);
+				startBtnPressed(nameInput, zInput, yInput, xInput);
 			}
 
 			@Override
@@ -98,6 +104,20 @@ public class MenuDisplay extends Canvas {
 		});
 	}
 
+	private void startBtnPressed(Text nameInput, Text zInput, Text yInput, Text xInput){
+		String name = nameInput.getText();
+		if (name.length() == 0) {
+			gameView.view.displayMessage("You have to enter the maze name.");
+			return;
+		}
+
+		String z = (zInput.getText().length() == 0) ? "0" : zInput.getText();
+		String y = (yInput.getText().length() == 0) ? "0" : yInput.getText();
+		String x = (xInput.getText().length() == 0) ? "0" : xInput.getText();
+
+		gameView.view.update("generate_maze " + name + " " + z + " " + y + " " + x);
+	}
+	
 	private void loadSaveGame() {
 		String[] filterExt = { "*.bit" };
 
@@ -223,7 +243,12 @@ public class MenuDisplay extends Canvas {
 		endBtn.setMouseListener(new MouseListener() {
 			@Override
 			public void mouseUp(MouseEvent arg0) {
-				gameView.displayWelcome();
+				MessageBox messageBox = new MessageBox(getShell(), SWT.ICON_QUESTION | SWT.YES | SWT.NO);
+				messageBox.setMessage("Are you sure?");
+
+				int response = messageBox.open();
+				if (response == SWT.YES)
+					gameView.displayWelcome();
 			}
 
 			@Override
@@ -319,7 +344,7 @@ public class MenuDisplay extends Canvas {
 		FontData[] fontData = text.getFont().getFontData();
 		fontData[0].setHeight(FONT_SIZE);
 		text.setFont(new Font(getDisplay(), fontData[0]));
-
+		
 		return text;
 	}
 }

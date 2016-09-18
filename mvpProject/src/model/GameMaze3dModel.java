@@ -119,7 +119,6 @@ public class GameMaze3dModel extends Observable implements Model {
 			public Solution<Position> call() throws Exception {
 				if (state != null) 
 					mazeDomain.setInitialState(state);
-				
 
 				Solution<Position> solution = searcher.search(mazeDomain);
 				return solution;

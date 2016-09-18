@@ -1,6 +1,7 @@
 package view;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.events.PaintListener;
@@ -26,7 +27,7 @@ public class ButtonDisplay extends Canvas {
 		this.setCursor(new Cursor(getDisplay(), SWT.CURSOR_HAND));
 		this.setBackgroundMode(SWT.INHERIT_NONE);
 		this.setLayout(null);
-
+		
 		Image bg = new Image(this.getDisplay(), "images/button.png");
 		Image bgOpacity = new Image(this.getDisplay(), "images/buttonOpacity.png");
 
@@ -85,5 +86,9 @@ public class ButtonDisplay extends Canvas {
 	public void setMouseListener(MouseListener mouseListener) {
 		bgLabel.addMouseListener(mouseListener);
 		text.addMouseListener(mouseListener);
+	}
+	
+	public void setKeyListener(KeyAdapter keyEvent) {
+		bgLabel.addKeyListener(keyEvent);
 	}
 }
