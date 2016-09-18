@@ -223,7 +223,6 @@ public class MenuDisplay extends Canvas {
 		endBtn.setMouseListener(new MouseListener() {
 			@Override
 			public void mouseUp(MouseEvent arg0) {
-				gameView.maze.dispose();
 				gameView.displayWelcome();
 			}
 

@@ -163,12 +163,11 @@ public class Maze3dDisplay extends MazeDisplay {
 				});
 			}
 		};
-
 		timer.scheduleAtFixedRate(task, 0, Properties.properites.getAnimationSpeed());
 	}
 
 	private void ShowWinWindows() {
-		WinWindow winWindow = new WinWindow();
+		WinWindow winWindow = new WinWindow(gameView);
 		winWindow.start(gameView.display);
 	}
 
@@ -206,6 +205,7 @@ public class Maze3dDisplay extends MazeDisplay {
 						heightDimensionDiff = (possitionHeight - possitionWidth) / 2;
 					}
 					ArrayList<String> possibleMoves;
+					
 					for (int i = 0; i < cross.length; i++) {
 						for (int j = 0; j < cross[0].length; j++) {
 							possibleMoves = maze.getPossibleMoves(new Position(currentPosition.z, i, j));

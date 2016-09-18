@@ -4,6 +4,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Event;
@@ -12,6 +13,7 @@ import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.MessageBox;
+import org.eclipse.swt.widgets.Monitor;
 
 import algorithms.mazeGenerators.Maze3d;
 import algorithms.mazeGenerators.Position;
@@ -35,6 +37,13 @@ public class Maze3dGameWindow extends BasicWindow {
 				exitGame();
 			}
 		});
+
+		Monitor primary = display.getPrimaryMonitor();
+		Rectangle bounds = primary.getBounds();
+		Rectangle rect = shell.getBounds();
+		int x = bounds.x + (bounds.width - rect.width) / 2;
+		int y = bounds.y + (bounds.height - rect.height) / 2;
+		shell.setLocation(x, y);
 	}
 
 	public MenuDisplay getMenu() {
@@ -49,8 +58,7 @@ public class Maze3dGameWindow extends BasicWindow {
 		menu = new MenuDisplay(shell, SWT.NONE, this);
 		menu.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, true, 1, 1));
 
-		welcome = new WelcomeDisplay(shell, SWT.NONE, this);
-		welcome.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+		displayWelcome();
 	}
 
 	private void createFileMenu() {
@@ -120,7 +128,13 @@ public class Maze3dGameWindow extends BasicWindow {
 	public void displayWelcome() {
 		welcome = new WelcomeDisplay(shell, SWT.NONE, this);
 		welcome.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
-		menu.displayStartGame();
+		
+		if (maze != null) {
+			welcome.moveAbove(maze);
+			maze.dispose();
+			menu.displayStartGame();
+		}
+
 		shell.layout(true);
 	}
 
@@ -129,8 +143,8 @@ public class Maze3dGameWindow extends BasicWindow {
 		messageBox.setMessage(msg);
 
 		int response = messageBox.open();
-        if (response == SWT.YES)
-          displayMaze(maze, name);
+		if (response == SWT.YES)
+			displayMaze(maze, name);
 	}
 
 	public void displayCrossSection(int[][] crossSection) {
