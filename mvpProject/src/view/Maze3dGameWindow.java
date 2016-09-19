@@ -18,6 +18,7 @@ import org.eclipse.swt.widgets.Monitor;
 import algorithms.mazeGenerators.Maze3d;
 import algorithms.mazeGenerators.Position;
 import algorithms.search.Solution;
+import presenter.Properties;
 
 public class Maze3dGameWindow extends BasicWindow {
 	protected GameMaze3dGuiView view;
@@ -110,8 +111,8 @@ public class Maze3dGameWindow extends BasicWindow {
 	}
 
 	public void displayMaze(Maze3d m, String name) {
-		maze = new Maze3dDisplay(shell, SWT.BORDER, this);
-		maze.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+		maze = (Properties.properites.getMazeDisplay().equals("3d")) ? new Maze3dDisplay(shell, SWT.BORDER, this)
+				: new Maze2dDisplay(shell, SWT.BORDER, this);
 
 		menu.displayGoalGuide();
 		menu.setGoalFloorText(m.getGoalPosition().z);
@@ -128,7 +129,7 @@ public class Maze3dGameWindow extends BasicWindow {
 	public void displayWelcome() {
 		welcome = new WelcomeDisplay(shell, SWT.NONE, this);
 		welcome.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
-		
+
 		if (maze != null) {
 			welcome.moveAbove(maze);
 			maze.dispose();

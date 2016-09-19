@@ -10,6 +10,7 @@ public class Properties {
 	private String selectCellMethod;
 	private String solveAlgorithm;
 	private String comparator;
+	private String mazeDisplay;
 	
 	private int numberOfThreads;
 	private Boolean MySQL;
@@ -115,6 +116,14 @@ public class Properties {
 	 */
 	public void setHintLength(double hintLength) {
 		this.hintLength = hintLength;
+	}
+
+	public String getMazeDisplay() {
+		return mazeDisplay;
+	}
+
+	public void setMazeDisplay(String mazeDisplay) {
+		this.mazeDisplay = mazeDisplay;
 	}
 	
 	

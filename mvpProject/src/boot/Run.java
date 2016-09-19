@@ -18,13 +18,13 @@ import view.GameMaze3dTextView;
 
 public class Run {
 	private final static String FILE_NAME = "properties.xml";
-	
+
 	public static void main(String[] args) {
 
 		try {
 			readProperties();
 		} catch (Exception e) {
-			// generateProperties();
+			generateProperties();
 			return;
 		}
 
@@ -75,6 +75,7 @@ public class Run {
 		Properties.properites.setMySQL(false);
 		Properties.properites.setHintLength(0.5);
 		Properties.properites.setAnimationSpeed(200);
+		Properties.properites.setMazeDisplay("3d");
 
 		try {
 			writeProperties();

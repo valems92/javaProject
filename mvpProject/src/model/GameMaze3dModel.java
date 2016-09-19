@@ -105,7 +105,7 @@ public class GameMaze3dModel extends Observable implements Model {
 	public void solveMaze(Searcher<Position> searcher, String name, String type, State<Position> state) {
 		Maze3d maze = generatedMazes.get(name);
 		
-		if (solutions.containsKey(name) && state.getState().equals(maze.getStartPosition())) {
+		if (solutions.containsKey(name) && state != null && state.getState().equals(maze.getStartPosition())) {
 			setChanged();
 			notifyObservers("display_solution " + name + " " + type);
 			return;
@@ -128,7 +128,7 @@ public class GameMaze3dModel extends Observable implements Model {
 		try {
 			Solution<Position> solution = generatedSolution.get();
 
-			if (state.getState().equals(maze.getStartPosition()))
+			if (state == null || state.getState().equals(maze.getStartPosition()))
 				solutions.put(name, solution);
 
 			lastSolution = solution;

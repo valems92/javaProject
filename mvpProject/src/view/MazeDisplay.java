@@ -12,6 +12,7 @@ import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseWheelListener;
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
 
@@ -30,13 +31,15 @@ public abstract class MazeDisplay extends Canvas {
 	protected Maze3d maze;
 	protected boolean win = false;
 	protected float scale = 1;
-
+	
 	public MazeDisplay(Composite parent, int style) {
 		super(parent, style);
 		this.setBackground(new Color(null, 233, 232, 233));
+		this.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+	
 		initKeyEvents();
 	}
-
+	
 	public void initMaze(Maze3d maze, String mazeName, String charcterImgPath, String charcterFlipImgPath) {
 		this.maze = maze;
 		this.mazeName = mazeName;
@@ -170,7 +173,7 @@ public abstract class MazeDisplay extends Canvas {
 		WinWindow winWindow = new WinWindow(gameView);
 		winWindow.start(gameView.display);
 	}
-
+	
 	private void initKeyEvents() {
 		this.addMouseWheelListener(new MouseWheelListener() {
 			@Override
@@ -179,15 +182,11 @@ public abstract class MazeDisplay extends Canvas {
 				if ((e.stateMask & SWT.CONTROL) == SWT.CONTROL) {
 					if (wheelCount > 0) {
 						scale += .2;	
-						Canvas canvas = (Canvas) e.widget;
-						canvas.redraw();
-					} else if(wheelCount < 0) {
-						if(scale >= 1.2)
-							scale -= .2;	
-						Canvas canvas = (Canvas) e.widget;
-						canvas.redraw();
+						redraw();
+					} else if(wheelCount < 0 && scale >= 1.2) {
+						scale -= .2;	
+						redraw();
 					}
-
 				}
 			}
 		});

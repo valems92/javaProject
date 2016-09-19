@@ -24,14 +24,11 @@ public class Maze2dDisplay extends MazeDisplay {
 		Image goal = new Image(this.getDisplay(), "images/honey.png");
 		ImageData goalImgData = goal.getImageData();
 
-		Image up = new Image(this.getDisplay(), "images/up.png");
+		Image up = new Image(this.getDisplay(), "images/stairs.png");
 		ImageData upImgData = up.getImageData();
 
-		Image down = new Image(this.getDisplay(), "images/down.png");
+		Image down = new Image(this.getDisplay(), "images/snake.png");
 		ImageData downImgData = down.getImageData();
-
-		Image downUp = new Image(this.getDisplay(), "images/upDown.png");
-		ImageData downUpImgData = downUp.getImageData();
 
 		this.addPaintListener(new PaintListener() {
 			@Override
@@ -41,9 +38,9 @@ public class Maze2dDisplay extends MazeDisplay {
 					int mazeX = cross[0].length;
 					int mazeY = cross.length;
 
-					int possitionWidth = (int) ((getSize().x / mazeX) * scale);
-					int possitionHeight = (int) ((getSize().y / mazeY) * scale);
-					
+					int possitionWidth = (int) ((e.width / mazeX) * scale);
+					int possitionHeight = (int) ((e.height / mazeY) * scale);
+
 					int minDimension, widthDimensionDiff = 0, heightDimensionDiff = 0;
 					if (possitionHeight < possitionWidth) {
 						minDimension = possitionHeight;
@@ -54,8 +51,6 @@ public class Maze2dDisplay extends MazeDisplay {
 					}
 					ArrayList<String> possibleMoves;
 
-					
-	
 					for (int i = 0; i < mazeY; i++) {
 						for (int j = 0; j < mazeX; j++) {
 							possibleMoves = maze.getPossibleMoves(new Position(currentPosition.z, i, j));
@@ -76,21 +71,18 @@ public class Maze2dDisplay extends MazeDisplay {
 								e.gc.drawImage(wall, 0, 0, wallImgData.width, wallImgData.height, x, y, possitionWidth,
 										possitionHeight);
 							} else {
-								if (possibleMoves.contains("Down") && possibleMoves.contains("Up")) {
-									int width = (int) (downUpImgData.width
-											* ((double) (possitionHeight / 2) / downUpImgData.height));
-									e.gc.drawImage(downUp, 0, 0, downUpImgData.width, downUpImgData.height, x, y, width,
-											possitionHeight / 2);
-								} else if (possibleMoves.contains("Up")) {
-									int width = (int) (upImgData.width
-											* ((double) (possitionHeight / 2) / upImgData.height));
-									e.gc.drawImage(up, 0, 0, upImgData.width, upImgData.height, x, y, width,
-											possitionHeight / 2);
-								} else if (possibleMoves.contains("Down")) {
+								if (possibleMoves.contains("Up")) {
+									int width = (int) (upImgData.width * ((possitionHeight / 1.5) / upImgData.height));
+									e.gc.drawImage(up, 0, 0, upImgData.width, upImgData.height,
+											x + possitionWidth - width, y - (possitionHeight / 10), width,
+											(int) (possitionHeight / 1.5));
+								}
+								if (possibleMoves.contains("Down")) {
 									int width = (int) (downImgData.width
-											* ((double) (possitionHeight / 2) / downImgData.height));
-									e.gc.drawImage(down, 0, 0, downImgData.width, downImgData.height, x, y, width,
-											possitionHeight / 2);
+											* ((possitionHeight / 1.5) / downImgData.height));
+									e.gc.drawImage(down, 0, 0, downImgData.width, downImgData.height, x,
+											y + (possitionHeight - (int) (possitionHeight / 1.5)), width,
+											(int) (possitionHeight / 1.5));
 								}
 
 								// Character
@@ -98,8 +90,7 @@ public class Maze2dDisplay extends MazeDisplay {
 									character.paint(e, x + (widthDimensionDiff / 2), y + (heightDimensionDiff / 2),
 											minDimension, minDimension);
 								// Goal
-								else if (currentPosition.z == goalPosition.z && goalPosition.y == i
-										&& goalPosition.x == j)
+								if (currentPosition.z == goalPosition.z && goalPosition.y == i && goalPosition.x == j)
 									e.gc.drawImage(goal, 0, 0, goalImgData.width, goalImgData.height,
 											x + (widthDimensionDiff / 2), y + (heightDimensionDiff / 2), minDimension,
 											minDimension);
@@ -110,5 +101,4 @@ public class Maze2dDisplay extends MazeDisplay {
 			}
 		});
 	}
-
 }

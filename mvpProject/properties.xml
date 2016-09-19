@@ -13,6 +13,9 @@
   <void property="hintLength">
    <double>0.5</double>
   </void>
+  <void property="mazeDisplay">
+   <string>3d</string>
+  </void>
   <void property="mySQL">
    <boolean>false</boolean>
   </void>
