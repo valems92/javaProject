@@ -17,23 +17,47 @@ import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 
+/**
+ * <h1>ButtonDisplay</h1>
+ * A custom widget for buttons in program. Contains an image and text.
+ * <p>
+ * @author Valentina Munoz & Moris Amon
+ */
 public class ButtonDisplay extends Canvas {
 	private final int FONT_SIZE = 16;
+	
+	private Image bg;
+	private Image bgOpacity;
+	
 	private Label bgLabel;
 	private Label text;
 
+	/**
+	 * Initialize data and change cursor to wifget on mouse over
+	 * <p>
+	 * @param parent widget parent
+	 * @param txt text of button
+	 */
 	public ButtonDisplay(Composite parent, String txt) {
 		super(parent, SWT.NONE);
 		this.setCursor(new Cursor(getDisplay(), SWT.CURSOR_HAND));
 		this.setBackgroundMode(SWT.INHERIT_NONE);
 		this.setLayout(null);
 		
-		Image bg = new Image(this.getDisplay(), "images/button.png");
-		Image bgOpacity = new Image(this.getDisplay(), "images/buttonOpacity.png");
+		bg = new Image(this.getDisplay(), "images/button.png");
+		bgOpacity = new Image(this.getDisplay(), "images/buttonOpacity.png");
 
-		Color enable = new Color(null, 139, 207, 130);
-		Color disable = new Color(null, 170, 185, 129);
-
+		initWidgets(txt);
+	}
+	
+	/**
+	 * <h1>initWidgets</h1>
+	 * Create the widgets inside de button. The button contains two labels, one for
+	 * the image and one for the text. 
+	 * <p>
+	 * @param txt text of button
+	 */
+	private void initWidgets(String txt){
 		Rectangle rect = bg.getBounds();
 		int width = rect.width;
 		int height = rect.height;
@@ -50,8 +74,24 @@ public class ButtonDisplay extends Canvas {
 
 		text.setSize(size.x, size.y);
 		text.setBounds(size.x, size.y, size.x, size.y);
+		
+		drawBtn(width, height, size);
+	}
 
+	/**
+	 * <h1>drawBtn</h1>
+	 * Change button (labels) position to be at the center. Also, if button should be disable,
+	 * change image and text color.
+	 * <p>
+	 * @param width bg image width
+	 * @param height bg image height
+	 * @param size text size
+	 */
+	private void drawBtn(int width, int height, Point size){
+		Color enable = new Color(null, 139, 207, 130);
+		Color disable = new Color(null, 170, 185, 129);
 		int shadow = 5;
+		
 		this.addPaintListener(new PaintListener() {
 			@Override
 			public void paintControl(PaintEvent e) {
@@ -73,7 +113,13 @@ public class ButtonDisplay extends Canvas {
 			}
 		});
 	}
-
+	
+	/**
+	 * <h1>setLabel</h1>
+	 * Create the button text label and change it font size.
+	 * <p>
+	 * @param txt text of button
+	 */
 	private void setLabel(String txt) {
 		text = new Label(this, SWT.NONE);
 		text.setText(txt);
@@ -83,11 +129,23 @@ public class ButtonDisplay extends Canvas {
 		text.setFont(new Font(getDisplay(), fontData[0]));
 	}
 
+	/**
+	 * <h1>setMouseListener</h1>
+	 * Get a mouse listener, and add it to each label in button
+	 * <p>
+	 * @param mouseListener mouse listener to add to button
+	 */
 	public void setMouseListener(MouseListener mouseListener) {
 		bgLabel.addMouseListener(mouseListener);
 		text.addMouseListener(mouseListener);
 	}
 	
+	/**
+	 * <h1>setKeyListener</h1>
+	 * Get a key event, and add it to button
+	 * <p>
+	 * @param keyEvent key event to add to button
+	 */
 	public void setKeyListener(KeyAdapter keyEvent) {
 		bgLabel.addKeyListener(keyEvent);
 	}

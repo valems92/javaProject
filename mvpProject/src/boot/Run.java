@@ -24,8 +24,12 @@ public class Run {
 		try {
 			readProperties();
 		} catch (Exception e) {
-			generateProperties();
-			return;
+			try {
+				generateProperties();
+			} catch (Exception e1) {
+				System.out.println("There was an error while generating properties file.");
+				return;
+			}
 		}
 
 		CommonMaze3dView view;
@@ -34,8 +38,10 @@ public class Run {
 			view = new GameMaze3dTextView();
 		else if (viewType.equals("gui"))
 			view = new GameMaze3dGuiView();
-		else
+		else {
+			System.out.println("View type in properties file is incorrect. It should be 'text' or 'gui'");
 			return;
+		}
 
 		GameMaze3dModel model = new GameMaze3dModel();
 
@@ -63,7 +69,7 @@ public class Run {
 		encoder.close();
 	}
 
-	private static void generateProperties() {
+	private static void generateProperties() throws Exception {
 		Properties.properites.setViewType("gui");
 		Properties.properites.setViewHeight(820);
 		Properties.properites.setViewWidth(1200);
@@ -77,10 +83,6 @@ public class Run {
 		Properties.properites.setAnimationSpeed(200);
 		Properties.properites.setMazeDisplay("3d");
 
-		try {
-			writeProperties();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		writeProperties();
 	}
 }

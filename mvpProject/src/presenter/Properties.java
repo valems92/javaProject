@@ -1,5 +1,12 @@
 package presenter;
 
+/**
+ * <h1>Properties</h1>
+ * Serializable class. Allows setting and getting of all properties needed.
+ * On init program, load an xml file into a Properties object from which we get data program needs. 
+ * @author Valentina Munoz & Moris Amon
+ *
+ */
 public class Properties {
 	public static Properties properites = new Properties();
 	private String viewType;
@@ -90,30 +97,18 @@ public class Properties {
 		this.viewWidth = viewWidth;
 	}
 
-	/**
-	 * @return the mySQL
-	 */
 	public Boolean getMySQL() {
 		return MySQL;
 	}
 
-	/**
-	 * @param mySQL the mySQL to set
-	 */
 	public void setMySQL(Boolean mySQL) {
 		MySQL = mySQL;
 	}
 
-	/**
-	 * @return the hintLen
-	 */
 	public double getHintLength() {
 		return hintLength;
 	}
 
-	/**
-	 * @param hintLen the hintLen to set
-	 */
 	public void setHintLength(double hintLength) {
 		this.hintLength = hintLength;
 	}

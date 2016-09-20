@@ -9,6 +9,12 @@ import algorithms.mazeGenerators.Maze3d;
 import algorithms.mazeGenerators.Position;
 import algorithms.search.Solution;
 
+/**
+ * <h1>GameMaze3dTextView</h1>
+ * Implements all View interface functoins for text (console) view.
+ * <p>
+ * @author Valentina Munoz & Moris Amon
+ */
 public class GameMaze3dTextView extends CommonMaze3dView {
 	private BufferedReader in;
 	private PrintWriter out;

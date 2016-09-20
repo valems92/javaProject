@@ -7,12 +7,21 @@ import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
 
+/**
+ * <h1>WelcomeDisplay</h1>
+ * A custom widget for welcome disaply.
+ * <p>
+ * @author Valentina Munoz & Moris Amon
+ */
 public class WelcomeDisplay extends Canvas {
-	Maze3dGameWindow gameView;
-
-	public WelcomeDisplay(Composite parent, int style, Maze3dGameWindow gameView) {
+	/**
+	 * Create widget and add to it an image.
+	 * <p>
+	 * @param parent widget parent
+	 * @param style widget style
+	 */
+	public WelcomeDisplay(Composite parent, int style) {
 		super(parent, style);
-		this.gameView = gameView;
 
 		Image bgImg = new Image(this.getDisplay(), "images/welcome.jpg");
 		ImageData imgData = bgImg.getImageData();		

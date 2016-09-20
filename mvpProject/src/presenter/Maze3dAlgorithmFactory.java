@@ -20,12 +20,10 @@ import algorithms.search.State;
  * <h1>Maze3dAlgorithmFactory</h1> A factory that create and return an instance
  * of a searcher or generator class, according to received algorithm. Also, if
  * this algorithm use another class (such as a comparator for the searcher or a
- * select cell method for the generator), this script also create an instance of
+ * select cell method for the generator), this script create an instance of
  * it and send it as an argument in the needed constructor.
  * <p>
- * 
  * @author Valentina Munoz & Moris Amon
- *
  */
 public class Maze3dAlgorithmFactory {
 	ConcurrentHashMap<String, solveCreator> solve;
@@ -35,8 +33,8 @@ public class Maze3dAlgorithmFactory {
 	ConcurrentHashMap<String, selectCellCreator> selectCell;
 
 	/**
-	 * <h1>Maze3dAlgorithmFactory</h1> Initialize hashmaps with all existing
-	 * algorithms to generate or solve a 3D maze
+	 * <h1>Maze3dAlgorithmFactory</h1> 
+	 * Initialize hashmaps with all existing algorithms to generate or solve a 3D maze
 	 * <p>
 	 */
 	public Maze3dAlgorithmFactory() {
@@ -59,14 +57,11 @@ public class Maze3dAlgorithmFactory {
 	}
 
 	/**
-	 * <h1>createSeacherAlgorithm</h1> Create and return a maze 3D searcher
-	 * algorithm class
+	 * <h1>createSeacherAlgorithm</h1> 
+	 * Create and return a maze 3D searcher algorithm class
 	 * <p>
-	 * 
-	 * @param alg
-	 *            Searcher algorithm wanted
-	 * @param arg
-	 *            Argument fot the searcher if needed (a Comparator)
+	 * @param alg Searcher algorithm wanted
+	 * @param arg Argument fot the searcher if needed (a Comparator)
 	 * @return A instance of the wanted searcher class.
 	 */
 	public Searcher<Position> createSeacherAlgorithm(String alg, String arg) {
@@ -77,12 +72,10 @@ public class Maze3dAlgorithmFactory {
 	}
 
 	/**
-	 * <h1>createComperatorAlgorithm</h1> Create and return a state comperator
-	 * algorithm class
-	 * <p>
-	 * 
-	 * @param alg
-	 *            Comperator algorithm wanted
+	 * <h1>createComperatorAlgorithm</h1> 
+	 * Create and return a state comperator algorithm class
+	 * <p> 
+	 * @param alg Comperator algorithm wanted
 	 * @returnA instance of the wanted comperator class.
 	 */
 	public Comparator<State<Position>> createComperatorAlgorithm(String alg) {
@@ -93,14 +86,11 @@ public class Maze3dAlgorithmFactory {
 	}
 
 	/**
-	 * <h1>createGenerateAlgorithm</h1> Create and return a maze 3D generate
-	 * algorithm class
-	 * <p>
-	 * 
-	 * @param alg
-	 *            Generate algorithm wanted
-	 * @param arg
-	 *            Argument fot the generate if needed (a select cell method)
+	 * <h1>createGenerateAlgorithm</h1> 
+	 * Create and return a maze 3D generate algorithm class
+	 * <p> 
+	 * @param alg Generate algorithm wanted
+	 * @param arg Argument fot the generate if needed (a select cell method)
 	 * @return A instance of the wanted generate class.
 	 */
 	public Maze3dGenerator createGenerateAlgorithm(String alg, String arg) {
@@ -111,12 +101,10 @@ public class Maze3dAlgorithmFactory {
 	}
 
 	/**
-	 * <h1>createSelectCellAlgorithm</h1> Create and return a select cell method
-	 * algorithm class
-	 * <p>
-	 * 
-	 * @param alg
-	 *            SelectMethod algorithm wanted
+	 * <h1>createSelectCellAlgorithm</h1> 
+	 * Create and return a select cell method algorithm class
+	 * <p> 
+	 * @param alg SelectMethod algorithm wanted
 	 * @returnA instance of the wanted select cell method class.
 	 */
 	public SelectMethod createSelectCellAlgorithm(String alg) {
@@ -127,10 +115,9 @@ public class Maze3dAlgorithmFactory {
 	}
 
 	/**
-	 * <h1>generateCreator</h1> Create and return a maze 3D generate class
-	 * instace
-	 * <p>
-	 * 
+	 * <h1>generateCreator</h1> 
+	 * Create and return a maze 3D generate class instace
+	 * <p> 
 	 * @author Valentina Munoz & Moris Amon
 	 */
 	private interface generateCreator {
@@ -155,10 +142,9 @@ public class Maze3dAlgorithmFactory {
 	}
 
 	/**
-	 * <h1>selectCellCreator</h1> Create and return a select method class
-	 * instace
-	 * <p>
-	 * 
+	 * <h1>selectCellCreator</h1> 
+	 * Create and return a select method class instace
+	 * <p>  
 	 * @author Valentina Munoz & Moris Amon
 	 */
 	private interface selectCellCreator {
@@ -180,9 +166,9 @@ public class Maze3dAlgorithmFactory {
 	}
 
 	/**
-	 * <h1>solveCreator</h1> Create and return a maze 3D searcher class instace
-	 * <p>
-	 * 
+	 * <h1>solveCreator</h1> 
+	 * Create and return a maze 3D searcher class instace
+	 * <p> 
 	 * @author Valentina Munoz & Moris Amon
 	 */
 	private interface solveCreator {
@@ -211,9 +197,9 @@ public class Maze3dAlgorithmFactory {
 	}
 
 	/**
-	 * <h1>comperatorCreator</h1> Create and return a comperator class instace
-	 * <p>
-	 * 
+	 * <h1>comperatorCreator</h1> 
+	 * Create and return a comperator class instace
+	 * <p> 
 	 * @author Valentina Munoz & Moris Amon
 	 */
 	private interface comperatorCreator {

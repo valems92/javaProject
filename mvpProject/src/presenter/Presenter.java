@@ -7,11 +7,25 @@ import java.util.Observer;
 import model.Model;
 import view.View;
 
+/**
+ * <h1>Presenter</h1> 
+ * Responsible for communicate between model and the ui. 
+ * The class observe the model and de ui, and when a notification is recived from them, 
+ * it execute the command received through the command manager.
+ * <p>
+ * @author Valentina Munoz & Moris Amon
+ */
 public class Presenter implements Observer {
 	private View ui;
 	private Model model;
 	private CommandsManager commandsManager;
 
+	/**
+	 * Initialize the data members and try to load data from SQL / Zip.
+	 * @param ui UI of the program
+	 * @param model Model of the program
+	 * @param commandsManager Command manager wich execute the commands received
+	 */
 	public Presenter(View ui, Model model, CommandsManager commandsManager) {
 		this.ui = ui;
 		this.model = model;
@@ -20,7 +34,7 @@ public class Presenter implements Observer {
 		try {
 			model.loadData();
 		} catch (Exception e) {
-			e.printStackTrace();
+			System.out.println(e.getMessage());
 		}
 	}
 

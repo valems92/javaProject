@@ -3,7 +3,6 @@ package view;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.events.KeyEvent;
-import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.graphics.Color;
@@ -13,17 +12,20 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Text;
 
 import algorithms.mazeGenerators.Position;
 
+/**
+ * <h1>MenuDisplay</h1>
+ * A custom widget for menu disaply.
+ * <p>
+ * @author Valentina Munoz & Moris Amon
+ */
 public class MenuDisplay extends Canvas {
 	private final int FONT_SIZE = 16;
 	private Maze3dGameWindow gameView;
@@ -49,6 +51,11 @@ public class MenuDisplay extends Canvas {
 		initWidgets();
 	}
 
+	/**
+	 * <h1>initWidgets</h1>
+	 * Initialize the widget with the start, load-save and exit groups.
+	 * <p>
+	 */
 	private void initWidgets() {
 		displayStartGame();
 
@@ -56,6 +63,12 @@ public class MenuDisplay extends Canvas {
 		endExitGame();
 	}
 
+	/**
+	 * <h1>startGame</h1>
+	 * Create a new group that contains labels, texts and a button to generate a new game.
+	 * Add to button mouse up and enter key event. Both events calls the same function: onStartBtnPressed.
+	 * <p>
+	 */
 	protected void startGame() {
 		startGameGroup = new Group(this, SWT.NONE);
 		startGameGroup.setLayout(new GridLayout(2, true));
@@ -77,7 +90,7 @@ public class MenuDisplay extends Canvas {
 		KeyAdapter ketAdapter = new KeyAdapter() {
 			public void keyPressed(KeyEvent e) {
 				if(e.keyCode == SWT.CR)
-					startBtnPressed(nameInput, zInput, yInput, xInput);
+					onStartBtnPressed(nameInput, zInput, yInput, xInput);
 			}
 		};
 		
@@ -91,7 +104,7 @@ public class MenuDisplay extends Canvas {
 		startBtn.setMouseListener(new MouseListener() {
 			@Override
 			public void mouseUp(MouseEvent arg0) {
-				startBtnPressed(nameInput, zInput, yInput, xInput);
+				onStartBtnPressed(nameInput, zInput, yInput, xInput);
 			}
 
 			@Override
@@ -104,7 +117,18 @@ public class MenuDisplay extends Canvas {
 		});
 	}
 
-	private void startBtnPressed(Text nameInput, Text zInput, Text yInput, Text xInput){
+	/**
+	 * <h1>onStartBtnPressed</h1>
+	 * When start button pressed, check if all needed data was entered.
+	 * If no maze name was entered, the program disaply a massage. Else,
+	 * throws a notification to presenter with all data.
+	 * <p>
+	 * @param nameInput name Text widget 
+	 * @param zInput floors Text widget
+	 * @param yInput columns Text widget
+	 * @param xInput rows Text widget
+	 */
+	private void onStartBtnPressed(Text nameInput, Text zInput, Text yInput, Text xInput){
 		String name = nameInput.getText();
 		if (name.length() == 0) {
 			gameView.view.displayMessage("You have to enter the maze name.");
@@ -118,6 +142,19 @@ public class MenuDisplay extends Canvas {
 		gameView.view.update("generate_maze " + name + " " + z + " " + y + " " + x);
 	}
 	
+	/**
+	 * <h1>loadSaveGame</h1>
+	 * Create a new group that contains two buttons to save or load a maze.
+	 * <p>
+	 * The save button is available only when a maze is dislpayed. 
+	 * it opens a file dialog to select a path where to save the maze.
+	 * <p>
+	 * The load button is available only when the welcome window is dislpayed. 
+	 * it opens a file dialog to select the file wanted.
+	 * <p>
+	 * Both buttons throw the according notifications to the presenter. 
+	 * <p>
+	 */
 	private void loadSaveGame() {
 		String[] filterExt = { "*.bit" };
 
@@ -143,12 +180,10 @@ public class MenuDisplay extends Canvas {
 			}
 
 			@Override
-			public void mouseDown(MouseEvent arg0) {
-			}
+			public void mouseDown(MouseEvent arg0) {}
 
 			@Override
-			public void mouseDoubleClick(MouseEvent arg0) {
-			}
+			public void mouseDoubleClick(MouseEvent arg0) {}
 		});
 
 		FileDialog dialogOpen = new FileDialog(getShell(), SWT.OPEN);
@@ -180,6 +215,13 @@ public class MenuDisplay extends Canvas {
 		});
 	}
 
+	/**
+	 * <h1>goalGuide</h1>
+	 * Create a new group. The group contains labels that represent the goal and current positions, and two buttons: Hint and Solve.
+	 * <p>
+	 * Both buttons throw a solve notification to the presenter with different types.
+	 * <p>
+	 */
 	private void goalGuide() {
 		goalGroup = new Group(this, SWT.NONE);
 		goalGroup.setLayout(new GridLayout(2, false));
@@ -203,12 +245,10 @@ public class MenuDisplay extends Canvas {
 			}
 
 			@Override
-			public void mouseDown(MouseEvent arg0) {
-			}
+			public void mouseDown(MouseEvent arg0) {}
 
 			@Override
-			public void mouseDoubleClick(MouseEvent arg0) {
-			}
+			public void mouseDoubleClick(MouseEvent arg0) {}
 		});
 
 		ButtonDisplay solveBtn = new ButtonDisplay(goalGroup, "Solve ");
@@ -222,15 +262,24 @@ public class MenuDisplay extends Canvas {
 			}
 
 			@Override
-			public void mouseDown(MouseEvent arg0) {
-			}
+			public void mouseDown(MouseEvent arg0) {}
 
 			@Override
-			public void mouseDoubleClick(MouseEvent arg0) {
-			}
+			public void mouseDoubleClick(MouseEvent arg0) {}
 		});
 	}
 
+	/**
+	 * <h1>endExitGame</h1>
+	 * Create a new group that contains and two buttons: end game and exit game.
+	 * <p>
+	 * The end game button is available only when a maze is dislpayed. 
+	 * On pressing on it, it display a massage box, and if the YES button is pressed, 
+	 * the game ends and welcome window in created instead of maze. 
+	 * <p>
+	 * The exit game button, close game shell and exit game.
+	 * <p>
+	 */
 	private void endExitGame() {
 		Group group = new Group(this, SWT.NONE);
 		group.setLayout(new GridLayout(2, true));
@@ -252,12 +301,10 @@ public class MenuDisplay extends Canvas {
 			}
 
 			@Override
-			public void mouseDown(MouseEvent arg0) {
-			}
+			public void mouseDown(MouseEvent arg0) {}
 
 			@Override
-			public void mouseDoubleClick(MouseEvent arg0) {
-			}
+			public void mouseDoubleClick(MouseEvent arg0) {}
 		});
 
 		ButtonDisplay exitBtn = new ButtonDisplay(group, "Exit Game");
@@ -269,27 +316,45 @@ public class MenuDisplay extends Canvas {
 			}
 
 			@Override
-			public void mouseDown(MouseEvent arg0) {
-			}
+			public void mouseDown(MouseEvent arg0) {}
 
 			@Override
-			public void mouseDoubleClick(MouseEvent arg0) {
-			}
+			public void mouseDoubleClick(MouseEvent arg0) {}
 		});
 	}
 
+	/**
+	 * <h1>setCurrentFloorText</h1>
+	 * Set the text that represent the current floor in the goal group.
+	 * <p>
+	 * @param z current floor
+	 */
 	public void setCurrentFloorText(int z) {
 		String txt = "" + (z + 1);
 		currentFloor.setText(txt);
 		goalFloor.getParent().layout();
 	}
 
+	/**
+	 * <h1>setGoalFloorText</h1>
+	 * Set the text that represent the goal floor in the goal group.
+	 * <p>
+	 * @param z goal floor
+	 */
 	public void setGoalFloorText(int z) {
 		String txt = "" + (z + 1);
 		goalFloor.setText(txt);
 		goalFloor.getParent().layout();
 	}
 
+	/**
+	 * <h1>displayGoalGuide</h1>
+	 * Create the goal group, and place it instead of the start group.
+	 * Dispose the start group.
+	 * <p>
+	 * Change load button, end button and save button availability.
+	 * <p>
+	 */
 	public void displayGoalGuide() {
 		goalGuide();
 		if (startGameGroup != null) {
@@ -303,6 +368,14 @@ public class MenuDisplay extends Canvas {
 		this.layout(true);
 	}
 
+	/**
+	 * <h1>displayStartGame</h1>
+	 * Create the start group, and place it instead of the goal group.
+	 * Dispose the goal group.
+	 * <p>
+	 * Change load button, end button and save button availability.
+	 * <p>
+	 */
 	public void displayStartGame() {
 		startGame();
 		if (goalGroup != null) {
@@ -316,6 +389,13 @@ public class MenuDisplay extends Canvas {
 		this.layout(true);
 	}
 
+	/**
+	 * <h1>setButtonEnabled</h1>
+	 * Change button received availability.
+	 * <p>
+	 * @param btn button to change it availability
+	 * @param enable true/false
+	 */
 	private void setButtonEnabled(ButtonDisplay btn, boolean enable) {
 		if (btn != null) {
 			btn.setEnabled(enable);
@@ -323,6 +403,14 @@ public class MenuDisplay extends Canvas {
 		}
 	}
 
+	/**
+	 * <h1>createLabel</h1>
+	 * Create a new label. Change it font size.
+	 * <p>
+	 * @param parent label parent
+	 * @param txt label text
+	 * @return the new label
+	 */
 	private Label createLabel(Composite parent, String txt) {
 		Label label = new Label(parent, SWT.NONE);
 		label.setText(txt);
@@ -335,6 +423,14 @@ public class MenuDisplay extends Canvas {
 		return label;
 	}
 
+	/**
+	 * <h1>createText</h1>
+	 * Create a new text. Change it font size.
+	 * <p>
+	 * @param parent text parent
+	 * @param txt text content
+	 * @return the new Text
+	 */
 	private Text createText(Composite parent) {
 		Text text = new Text(parent, SWT.BORDER);
 		text.setText("");

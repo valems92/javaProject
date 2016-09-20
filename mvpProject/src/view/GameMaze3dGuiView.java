@@ -7,13 +7,18 @@ import algorithms.mazeGenerators.Position;
 import algorithms.search.Solution;
 import presenter.Properties;
 
+/**
+ * <h1>GameMaze3dGuiView</h1>
+ * Implements all View interface functoins for gui view.
+ * <p>
+ * @author Valentina Munoz & Moris Amon
+ */
 public class GameMaze3dGuiView extends CommonMaze3dView {
 	private Maze3dGameWindow window;
 
 	@Override
 	public void start() {
-		window = new Maze3dGameWindow(Properties.properites.getViewWidth(), Properties.properites.getViewHeight(),
-				this);
+		window = new Maze3dGameWindow(Properties.properites.getViewWidth(), Properties.properites.getViewHeight(), this);
 		window.run();
 	}
 
@@ -37,6 +42,7 @@ public class GameMaze3dGuiView extends CommonMaze3dView {
 		window.displayMessage(msg + "\n Do you want to load it?", SWT.ICON_QUESTION | SWT.YES | SWT.NO, maze, name);
 	}
 
+	@Override
 	public void displayCrossSection(int[][] crossSection) {
 		window.displayCrossSection(crossSection);
 	}
@@ -46,6 +52,12 @@ public class GameMaze3dGuiView extends CommonMaze3dView {
 
 	}
 
+	/**
+	 * <h1>update</h1>
+	 * Get a command and send it via notification to the presenter.
+	 * <p>
+	 * @param command command to send to presenter
+	 */
 	public void update(String command) {
 		setChanged();
 		notifyObservers(command);

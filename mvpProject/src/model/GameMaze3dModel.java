@@ -24,7 +24,6 @@ import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
 import DB.DBOperational;
-//import DBOperational.DBOperational;
 import algorithms.demo.Maze3dDomain;
 import algorithms.mazeGenerators.Maze3d;
 import algorithms.mazeGenerators.Maze3dGenerator;
@@ -37,6 +36,12 @@ import io.MyCompressorOutputStream;
 import io.MyDecompressorInputStream;
 import presenter.Properties;
 
+/**
+ * <h1>GameMaze3dModel</h1> 
+ * Implements all Model interface functoins. Also save all mazes created / loaded and their's solution if were solved.
+ * <p>
+ * @author Valentina Munoz & Moris Amon
+ */
 public class GameMaze3dModel extends Observable implements Model {
 	public ConcurrentHashMap<String, Maze3d> generatedMazes;
 	private ConcurrentHashMap<String, Solution<Position>> solutions;
@@ -106,8 +111,9 @@ public class GameMaze3dModel extends Observable implements Model {
 		Maze3d maze = generatedMazes.get(name);
 		
 		if (solutions.containsKey(name) && state != null && state.getState().equals(maze.getStartPosition())) {
+			lastSolution = solutions.get(name);
 			setChanged();
-			notifyObservers("display_solution " + name + " " + type);
+			notifyObservers("display_solution " + type);
 			return;
 		}
 	
@@ -135,7 +141,7 @@ public class GameMaze3dModel extends Observable implements Model {
 			mazeDomain.setInitialState(prevInitial);
 			
 			setChanged();
-			notifyObservers("display_solution " + name + " " + type);
+			notifyObservers("display_solution " + type);
 
 		} catch (InterruptedException e) {
 			e.printStackTrace();
@@ -145,7 +151,7 @@ public class GameMaze3dModel extends Observable implements Model {
 	}
 
 	@Override
-	public Solution<Position> getLastSolution(String name) {
+	public Solution<Position> getLastSolution() {
 		return lastSolution;
 	}
 
@@ -306,6 +312,7 @@ public class GameMaze3dModel extends Observable implements Model {
 		notifyObservers("display_cross_section");
 	}
 
+	@Override
 	public int[][] getLastCrossSection() {
 		return crossSection;
 	}
@@ -317,10 +324,8 @@ public class GameMaze3dModel extends Observable implements Model {
 			System.out.println("Data loded from DB");
 			DBOperational myOperational = new DBOperational();
 			try {
-				ConcurrentHashMap<String, Maze3d> generatedMazes_loaded = (ConcurrentHashMap<String, Maze3d>) myOperational
-						.getObject(1);
-				ConcurrentHashMap<String, Solution<Position>> solutions_loaded = (ConcurrentHashMap<String, Solution<Position>>) myOperational
-						.getObject(2);
+				ConcurrentHashMap<String, Maze3d> generatedMazes_loaded = (ConcurrentHashMap<String, Maze3d>) myOperational.getObject(1);
+				ConcurrentHashMap<String, Solution<Position>> solutions_loaded = (ConcurrentHashMap<String, Solution<Position>>) myOperational.getObject(2);
 
 				if (generatedMazes_loaded != null && solutions_loaded != null) {
 					this.generatedMazes = generatedMazes_loaded;
@@ -328,9 +333,8 @@ public class GameMaze3dModel extends Observable implements Model {
 				}
 
 				myOperational.conn.close();
-
 			} catch (Exception e) {
-				e.printStackTrace();
+				System.out.println("There was an error getting data from SQL.");
 			}
 		} else if (!mySQL.booleanValue()) {
 			ObjectInputStream in;
@@ -340,11 +344,11 @@ public class GameMaze3dModel extends Observable implements Model {
 				this.generatedMazes = (ConcurrentHashMap<String, Maze3d>) in.readObject();
 				this.solutions = (ConcurrentHashMap<String, Solution<Position>>) in.readObject();
 			} catch (FileNotFoundException e) {
-				// File doesn't exist. On exit game, it will be crated.
+				System.out.println("Zip file with data doesn't exist. On exit game, it will be created.");
 			} catch (IOException e) {
-				e.printStackTrace();
+				System.out.println("There was an error getting data from the zip file.");
 			}
 		} else
-			throw new ExceptionInInitializerError("mySQL field's value invalid!");
+			throw new ExceptionInInitializerError("The property mySQL in properties file has an invalid value.");
 	}
 }

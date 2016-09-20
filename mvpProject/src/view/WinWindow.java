@@ -21,6 +21,12 @@ import org.eclipse.swt.widgets.Monitor;
 
 import presenter.Properties;
 
+/**
+ * <h1>WinWindow</h1>
+ * Create a new shell, representing the win window.
+ * <p>
+ * @author Valentina Munoz & Moris Amon
+ */
 public class WinWindow extends DialogWindow {
 	private final int FONT_SIZE = 36;
 	private final String txt = "Congratulation \n\nYou win! ";
@@ -34,6 +40,16 @@ public class WinWindow extends DialogWindow {
 		this.gameView = gameView;
 	}
 
+	/**
+	 * <h1>initWidgets</h1>
+	 * Locate the new shell in monitor's center. Set it's size and background color.
+	 * Also, add the text to the window and a image.
+	 * <p>
+	 * Add to the shell a close event.
+	 * When shell is closed, the welocme window is displayed instead of the maze window.
+	 * <p>
+	 * <p>
+	 */
 	@Override
 	protected void initWidgets() {
 		winPage = new Canvas(this.shell, SWT.NONE);
@@ -80,6 +96,12 @@ public class WinWindow extends DialogWindow {
 		});
 	}
 	
+	/**
+	 * <h1>initText</h1>
+	 * Create a new label with congratulation text.
+	 * Change the style and calcualte it's size.
+	 * <p>
+	 */
 	private void initText(){
 		text = new Label(winPage, SWT.CENTER);
 		text.setText(txt);

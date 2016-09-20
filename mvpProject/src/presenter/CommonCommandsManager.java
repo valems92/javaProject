@@ -5,6 +5,12 @@ import java.util.concurrent.ConcurrentHashMap;
 import model.Model;
 import view.View;
 
+/**
+ * <h1>CommonCommandsManager</h1> 
+ * Implements all CommandsManager interface functoins.
+ * <p>
+ * @author Valentina Munoz & Moris Amon
+ */
 public abstract class CommonCommandsManager implements CommandsManager{
 	
 	protected Model model;
@@ -21,7 +27,7 @@ public abstract class CommonCommandsManager implements CommandsManager{
 		String[] values = commandLine.split(" ");		
 		Command cmd = commands.get(values[0]);
 		if (cmd == null){
-			//view.println("Invalid command");
+			ui.displayMessage("Invalid command");
 			return;
 		}
 		cmd.doCommand(values);
@@ -32,5 +38,4 @@ public abstract class CommonCommandsManager implements CommandsManager{
 		this.model = model;
 		this.ui = ui;
 	}
-
 }

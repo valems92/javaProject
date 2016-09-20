@@ -10,6 +10,11 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+/**
+ * <h1>DBOperational</h1>
+ * <p>
+ *  @author Valentina Munoz & Moris Amon
+ */
 public class DBOperational {
 	public Object javaObject = null;
 	public Connection conn = null;
@@ -21,7 +26,7 @@ public class DBOperational {
 		try {
 			conn = DriverManager.getConnection(url, username, password);
 		} catch (SQLException e) {
-			e.printStackTrace();
+			System.out.println("There was a problem trying to coonect to Database");
 		}
 		System.out.println("Database connected!");
 	}
@@ -47,7 +52,7 @@ public class DBOperational {
 			bos.close();
 
 			byte[] data = bos.toByteArray();
-			
+
 			ps = conn.prepareStatement("insert into maze (javaObject) values(?)");
 			ps.setObject(1, data);
 			ps.executeUpdate();
