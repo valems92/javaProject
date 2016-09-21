@@ -18,6 +18,7 @@ import org.eclipse.swt.widgets.Text;
 public class FormGUI extends BasicWindow {
 	Form formCtrl;
 	ArrayList<Text> textFields = new ArrayList<Text>();
+	private int count = 0;
 
 	public FormGUI(int width, int height, Form formCntrl) {
 		super(width, height);
@@ -33,19 +34,22 @@ public class FormGUI extends BasicWindow {
 	}
 
 	public void initGroups(Composite parent, Class<?> myClass) {
-		Group myGroup = new Group(parent, SWT.BORDER);
-		myGroup.setLayout(new GridLayout(2, false));
-		myGroup.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 2, 1));
-		myGroup.setText(myClass.getName());
+		if (myClass.equals(formCtrl.myfirstClass) && count == 0) {
+			Group myGroup = new Group(parent, SWT.BORDER);
+			myGroup.setLayout(new GridLayout(2, false));
+			myGroup.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 2, 1));
+			myGroup.setText(myClass.getName());
 
-		Field[] fields = myClass.getDeclaredFields();
+			Field[] fields = myClass.getDeclaredFields();
 
-		for (int i = 0; i < fields.length; i++) {
-			Class<?> cls = fields[i].getType();
-			if (formCtrl.primitiveClasses.contains(cls)) {
-				createFieldLabel(myGroup, fields[i].getName(), cls);
-			} else {
-				initGroups(myGroup, cls);
+			for (int i = 0; i < fields.length; i++) {
+				Class<?> cls = fields[i].getType();
+				if (formCtrl.primitiveClasses.contains(cls)) {
+					createFieldLabel(myGroup, fields[i].getName(), cls);
+				} else {
+					count++;
+					initGroups(myGroup, cls);
+				}
 			}
 		}
 	}

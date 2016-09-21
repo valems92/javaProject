@@ -10,6 +10,7 @@ public class Form {
 	FormGUI gui;
 	Class<?> myfirstClass;
 	int setFieldsCounter = 0;
+	private int count=0;
 
 	ArrayList<Class<?>> primitiveClasses = new ArrayList<Class<?>>(); // primitive
 
@@ -68,23 +69,27 @@ public class Form {
 	}
 
 	private Object setFieldsValue(String[] allValues, Class<?> myClass) throws Exception {
-		Field[] fields = myClass.getDeclaredFields();
-		Object o = myClass.newInstance();
+		if (myClass.equals(myfirstClass)&& this.count==0) {
+			Field[] fields = myClass.getDeclaredFields();
+			Object o = myClass.newInstance();
 
-		for (int i = 0; i < fields.length; i++) {
-			Field currentField = fields[i];
-			makeAccessible(currentField);
-			Class<?> cls = fields[i].getType();
+			for (int i = 0; i < fields.length; i++) {
+				Field currentField = fields[i];
+				makeAccessible(currentField);
+				Class<?> cls = fields[i].getType();
 
-			if (primitiveClasses.contains(cls)) {
-				currentField.set(o, createObjectByType(allValues[setFieldsCounter], cls));
-				setFieldsCounter++;
-			} else {
-				currentField.set(o, setFieldsValue(allValues, cls));
+				if (primitiveClasses.contains(cls)) {
+					currentField.set(o, createObjectByType(allValues[setFieldsCounter], cls));
+					setFieldsCounter++;
+				} else {
+					count++;
+					currentField.set(o, setFieldsValue(allValues, cls));
+				}
 			}
+
+			return o;
 		}
-		
-		return o;
+		return null;
 	}
 
 	public void makeAccessible(Field field) {
