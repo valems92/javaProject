@@ -1,5 +1,9 @@
 package view;
 
+import java.beans.XMLEncoder;
+import java.io.BufferedOutputStream;
+import java.io.FileOutputStream;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.events.KeyEvent;
@@ -19,6 +23,7 @@ import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Text;
 
 import algorithms.mazeGenerators.Position;
+import presenter.Properties;
 
 /**
  * <h1>MenuDisplay</h1>
@@ -29,7 +34,7 @@ import algorithms.mazeGenerators.Position;
 public class MenuDisplay extends Canvas {
 	private final int FONT_SIZE = 16;
 	private Maze3dGameWindow gameView;
-
+	
 	private Group startGameGroup;
 	private Group goalGroup;
 
@@ -285,6 +290,23 @@ public class MenuDisplay extends Canvas {
 		group.setLayout(new GridLayout(2, true));
 		group.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, true, 2, 1));
 		group.setBackground(new Color(null, 212, 169, 127));
+		
+		ButtonDisplay settingBtn = new ButtonDisplay(group, "Settings");
+		settingBtn.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, true, true, 2, 1));
+		settingBtn.setMouseListener(new MouseListener() {
+
+		@Override
+			public void mouseUp(MouseEvent arg0) {
+				Properties prop=new Properties();
+				new Form(prop.getClass(),gameView.display,gameView);			
+			}
+
+			@Override
+			public void mouseDown(MouseEvent arg0) {}
+
+			@Override
+			public void mouseDoubleClick(MouseEvent arg0) {}
+		});
 
 		endBtn = new ButtonDisplay(group, "End Game");
 		endBtn.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, true, true, 2, 1));
@@ -321,6 +343,9 @@ public class MenuDisplay extends Canvas {
 			@Override
 			public void mouseDoubleClick(MouseEvent arg0) {}
 		});
+		
+		
+	
 	}
 
 	/**

@@ -29,6 +29,7 @@ import presenter.Properties;
 public class Maze3dGameWindow extends BasicWindow {
 	protected GameMaze3dGuiView view;
 	protected String mazeName;
+	protected Object settings;
 
 	protected MenuDisplay menu;
 	protected WelcomeDisplay welcome;
@@ -230,4 +231,19 @@ public class Maze3dGameWindow extends BasicWindow {
 		maze.scale = 1;
 		maze.displaySolution(solution, type);
 	}
+
+	public void sendSettings(Object settings) {
+		this.settings=settings;
+		view.update("settings_change");
+	}
+
+	/**
+	 * @return the settings
+	 */
+	public Object getSettings() {
+		return settings;
+	}
+	
+	
+	
 }

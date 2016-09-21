@@ -1,6 +1,10 @@
 package presenter;
 
+import java.beans.XMLEncoder;
+import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 
 import algorithms.mazeGenerators.Maze3d;
 import algorithms.mazeGenerators.Maze3dGenerator;
@@ -17,6 +21,8 @@ import algorithms.search.State;
  */
 public class Maze3dCommands extends CommonCommandsManager {
 	private Maze3dAlgorithmFactory algorithms;
+	private final static String FILE_NAME = "properties.xml";
+
 
 	public Maze3dCommands() {
 		super();
@@ -36,6 +42,7 @@ public class Maze3dCommands extends CommonCommandsManager {
 		commands.put("display_solution", new DisplaySolutionCommand());
 		commands.put("display_cross_section", new DisplayCrossSectionCommand());
 		commands.put("display_message", new DisplayMessageCommand());
+		commands.put("settings_change", new GetSettings());
 		commands.put("exit", new ExitCommand());
 	}
 
@@ -282,6 +289,43 @@ public class Maze3dCommands extends CommonCommandsManager {
 
 			ui.displayMessage(msg);
 		}
+	}
+	
+	class GetSettings implements Command {
+
+		@Override
+		public void doCommand(String[] args) {
+			
+			Properties properties =new Properties();
+			properties=(Properties) ui.getSettings();
+			
+			Properties.properites=new Properties();
+			Properties.properites.setViewType(properties.getViewType());
+			Properties.properites.setViewHeight(properties.getViewHeight());
+			Properties.properites.setViewWidth(properties.getViewWidth());
+			Properties.properites.setGenerateAlgorithm(properties.getGenerateAlgorithm());
+			Properties.properites.setSelectCellMethod(properties.getSelectCellMethod());
+			Properties.properites.setSolveAlgorithm(properties.getSolveAlgorithm());
+			Properties.properites.setComparator(properties.getComparator());
+			Properties.properites.setNumberOfThreads(properties.getNumberOfThreads());
+			Properties.properites.setMySQL(properties.getMySQL());
+			Properties.properites.setHintLength(properties.getHintLength());
+			Properties.properites.setAnimationSpeed(properties.getAnimationSpeed());
+			Properties.properites.setMazeDisplay(properties.getMazeDisplay());
+			
+			try {
+				XMLEncoder encoder;
+				encoder = new XMLEncoder(new BufferedOutputStream(new FileOutputStream(FILE_NAME)));
+				encoder.writeObject(Properties.properites);
+				encoder.close();
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			
+		}
+		
 	}
 
 	/**

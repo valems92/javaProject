@@ -88,4 +88,10 @@ public class GameMaze3dTextView extends CommonMaze3dView {
 		displayMaze(maze, name);
 	}
 
+	@Override
+	public Object getSettings() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

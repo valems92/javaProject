@@ -63,4 +63,6 @@ public interface View  {
 	 * <p>
 	 */
 	public void exit();
+
+	public Object getSettings();
 }

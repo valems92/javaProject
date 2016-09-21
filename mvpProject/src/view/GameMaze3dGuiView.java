@@ -15,6 +15,7 @@ import presenter.Properties;
  */
 public class GameMaze3dGuiView extends CommonMaze3dView {
 	private Maze3dGameWindow window;
+	protected Object settings;
 
 	@Override
 	public void start() {
@@ -62,4 +63,10 @@ public class GameMaze3dGuiView extends CommonMaze3dView {
 		setChanged();
 		notifyObservers(command);
 	}
+
+	@Override
+	public Object getSettings() {
+		return window.getSettings();
+	}
+
 }
