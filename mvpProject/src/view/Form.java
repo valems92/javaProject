@@ -59,7 +59,7 @@ public class Form {
 	private void readDataMembers(Class<?> myclass, Display display) {
 		myfirstClass = myclass;
 
-		gui = new FormGUI(500, 800, this);
+		gui = new FormGUI(300, 450, this);
 		gui.start(display);
 	}
 

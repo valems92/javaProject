@@ -4,8 +4,11 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -19,14 +22,22 @@ public class FormGUI extends DialogWindow {
 	Form formCtrl;
 	ArrayList<Text> textFields = new ArrayList<Text>();
 	private boolean firstInteraction=true;
+	private int width;
+	private int height;
 	
 	public FormGUI(int width, int height, Form formCntrl) {
 		this.formCtrl = formCntrl;
+		this.width=width;
+		this.height=height;
 	}
 
 	@Override
 	public void initWidgets() {
 		shell.setLayout(new GridLayout(2, false));
+		shell.setSize(this.width,this.height);
+		shell.setText("Settings Page");
+		shell.setBackground(new Color(null, 139, 207, 130));
+		shell.setAlpha(500);
 
 		initGroups(shell, formCtrl.myfirstClass);
 		initButton();
@@ -35,6 +46,7 @@ public class FormGUI extends DialogWindow {
 	public void initGroups(Composite parent, Class<?> myClass) {
 		if (myClass.equals(formCtrl.myfirstClass) && firstInteraction) {
 			Group myGroup = new Group(parent, SWT.BORDER);
+			myGroup.setBackground(new Color(null, 212, 169, 127));
 			myGroup.setLayout(new GridLayout(2, false));
 			myGroup.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 2, 1));
 			myGroup.setText(myClass.getName());
@@ -59,7 +71,7 @@ public class FormGUI extends DialogWindow {
 		String clsTypeName = cls.getTypeName();
 		if (clsTypeName.indexOf(".") >= 0)
 			clsTypeName = clsTypeName.substring(clsTypeName.lastIndexOf(".") + 1);
-
+		label.setBackground(new Color(null, 212, 169, 127));
 		label.setText(dataName + " ( " + clsTypeName + " )" + " : ");
 		label.setLayoutData(new GridData(SWT.LEFT, SWT.LEFT, false, false, 1, 1));
 
@@ -73,7 +85,8 @@ public class FormGUI extends DialogWindow {
 		Button button = new Button(this.shell, SWT.PUSH);
 		button.setText("Create object");
 		button.setLayoutData(new GridData(SWT.LEFT, SWT.LEFT, false, false, 1, 1));
-
+		button.setBackground(new Color(null, 139, 207, 130));
+		
 		button.addSelectionListener(new SelectionListener() {
 			@Override
 			public void widgetSelected(SelectionEvent arg0) {
@@ -85,6 +98,24 @@ public class FormGUI extends DialogWindow {
 			public void widgetDefaultSelected(SelectionEvent arg0) {
 			}
 		});
+		
+		Button cancelButton = new Button(this.shell, SWT.PUSH);
+		cancelButton.setText("Cancel");
+		cancelButton.setLayoutData(new GridData(SWT.LEFT, SWT.LEFT, false, false, 1, 1));
+		cancelButton.setBackground(new Color(null, 139, 207, 130));
+		
+		cancelButton.addSelectionListener(new SelectionListener() {
+			@Override
+			public void widgetSelected(SelectionEvent arg0) {
+				shell.close();
+			}
+
+			@Override
+			public void widgetDefaultSelected(SelectionEvent arg0) {
+			}
+		});
+		
+		
 	}
 
 	private void createObject() {
