@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="mvcProject/src"/>
+	<classpathentry kind="src" path="mvpProject/src"/>
+	<classpathentry kind="src" path="myAlgorithm/src"/>
+	<classpathentry kind="lib" path="mvcProject/lib/myAlgorithm.jar"/>
+	<classpathentry kind="lib" path="mvpProject/lib/myAlgorithm.jar"/>
+	<classpathentry kind="lib" path="mvpProject/lib/mysql-connector-java-5.1.39-bin.jar"/>
+	<classpathentry kind="lib" path="mvpProject/lib/swt.jar"/>
+	<classpathentry kind="lib" path="myAlgorithm.jar"/>
+	<classpathentry kind="lib" path="part3/mvcProject.jar"/>
+	<classpathentry kind="lib" path="part3/myAlgorithm.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="output" path="mvcProject/bin"/>
+</classpath>
