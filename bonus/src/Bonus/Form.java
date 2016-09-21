@@ -13,10 +13,6 @@ public class Form {
 
 	ArrayList<Class<?>> primitiveClasses = new ArrayList<Class<?>>(); // primitive
 
-	ArrayList<Field> allFields = new ArrayList<Field>();
-	ArrayList<Object> allObjects = new ArrayList<Object>();
-	ArrayList<String> objectsTypes = new ArrayList<String>();
-
 	public Form(Class<?> myclass) {
 		initPrimitiveClasses();
 		readDataMembers(myclass);
