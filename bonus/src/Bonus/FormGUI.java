@@ -18,8 +18,8 @@ import org.eclipse.swt.widgets.Text;
 public class FormGUI extends BasicWindow {
 	Form formCtrl;
 	ArrayList<Text> textFields = new ArrayList<Text>();
-	private int count = 0;
-
+	private boolean firstInteraction=true;
+	
 	public FormGUI(int width, int height, Form formCntrl) {
 		super(width, height);
 		this.formCtrl = formCntrl;
@@ -34,7 +34,7 @@ public class FormGUI extends BasicWindow {
 	}
 
 	public void initGroups(Composite parent, Class<?> myClass) {
-		if (myClass.equals(formCtrl.myfirstClass) && count == 0) {
+		if (myClass.equals(formCtrl.myfirstClass) && firstInteraction) {
 			Group myGroup = new Group(parent, SWT.BORDER);
 			myGroup.setLayout(new GridLayout(2, false));
 			myGroup.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 2, 1));
@@ -47,7 +47,7 @@ public class FormGUI extends BasicWindow {
 				if (formCtrl.primitiveClasses.contains(cls)) {
 					createFieldLabel(myGroup, fields[i].getName(), cls);
 				} else {
-					count++;
+					firstInteraction=false;
 					initGroups(myGroup, cls);
 				}
 			}

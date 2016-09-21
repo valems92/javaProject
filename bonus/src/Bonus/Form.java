@@ -10,7 +10,7 @@ public class Form {
 	FormGUI gui;
 	Class<?> myfirstClass;
 	int setFieldsCounter = 0;
-	private int count=0;
+	private boolean firstInteraction=true;
 
 	ArrayList<Class<?>> primitiveClasses = new ArrayList<Class<?>>(); // primitive
 
@@ -69,7 +69,7 @@ public class Form {
 	}
 
 	private Object setFieldsValue(String[] allValues, Class<?> myClass) throws Exception {
-		if (myClass.equals(myfirstClass)&& this.count==0) {
+		if (myClass.equals(myfirstClass)&& firstInteraction) {
 			Field[] fields = myClass.getDeclaredFields();
 			Object o = myClass.newInstance();
 
@@ -82,7 +82,7 @@ public class Form {
 					currentField.set(o, createObjectByType(allValues[setFieldsCounter], cls));
 					setFieldsCounter++;
 				} else {
-					count++;
+					firstInteraction=false;
 					currentField.set(o, setFieldsValue(allValues, cls));
 				}
 			}
