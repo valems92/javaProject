@@ -14,15 +14,15 @@ import algorithms.search.Solution;
 import algorithms.search.State;
 
 /**
- * <h1>Maze3dCommands</h1> 
- * This class includes the Maze3d commands and implanted all command according the protocol
+ * <h1>Maze3dCommands</h1> This class includes the Maze3d commands and implanted
+ * all command according the protocol
  * <p>
+ * 
  * @author Valentina Munoz & Moris Amon
  */
 public class Maze3dCommands extends CommonCommandsManager {
 	private Maze3dAlgorithmFactory algorithms;
 	private final static String FILE_NAME = "properties.xml";
-
 
 	public Maze3dCommands() {
 		super();
@@ -42,14 +42,15 @@ public class Maze3dCommands extends CommonCommandsManager {
 		commands.put("display_solution", new DisplaySolutionCommand());
 		commands.put("display_cross_section", new DisplayCrossSectionCommand());
 		commands.put("display_message", new DisplayMessageCommand());
-		commands.put("settings_change", new GetSettings());
+		commands.put("change_settings", new ChangeSettingsCommand());
+		commands.put("save_settings", new SaveSettingsCommand());
 		commands.put("exit", new ExitCommand());
 	}
 
 	/**
-	 * <h1>DirCommand</h1> 
-	 * Get a path and display a list of all files in it.
+	 * <h1>DirCommand</h1> Get a path and display a list of all files in it.
 	 * <p>
+	 * 
 	 * @author Valentina Munoz & Moris Amon
 	 */
 	class DirCommand implements Command {
@@ -71,11 +72,15 @@ public class Maze3dCommands extends CommonCommandsManager {
 		}
 
 		/**
-		 * <h1>PrintDIRhelp</h1>
-		 * Get a files array and display each file. If the file is a direcotry, recursively, display it files too.
-		 * @param files an array with all files in directory
-		 * @param tabs numbers of tabs to display before file name is displayed
-		 * @param dirResult the string builder that contains all displayed data
+		 * <h1>PrintDIRhelp</h1> Get a files array and display each file. If the
+		 * file is a direcotry, recursively, display it files too.
+		 * 
+		 * @param files
+		 *            an array with all files in directory
+		 * @param tabs
+		 *            numbers of tabs to display before file name is displayed
+		 * @param dirResult
+		 *            the string builder that contains all displayed data
 		 */
 		private void PrintDIRhelp(File[] files, int tabs, StringBuilder dirResult) {
 			for (File file : files) {
@@ -90,9 +95,10 @@ public class Maze3dCommands extends CommonCommandsManager {
 	}
 
 	/**
-	 * <h1>GenerateMazeCommand</h1> 
-	 * Get all data needed to generate a maze and send it to generateMaze method in model.
+	 * <h1>GenerateMazeCommand</h1> Get all data needed to generate a maze and
+	 * send it to generateMaze method in model.
 	 * <p>
+	 * 
 	 * @author Valentina Munoz & Moris Amon
 	 */
 	class GenerateMazeCommand implements Command {
@@ -106,24 +112,25 @@ public class Maze3dCommands extends CommonCommandsManager {
 					z = Integer.parseInt(args[2]);
 					y = Integer.parseInt(args[3]);
 					x = Integer.parseInt(args[4]);
-					
-					Maze3dGenerator mg = algorithms.createGenerateAlgorithm(Properties.properites.getGenerateAlgorithm(),
-							Properties.properites.getSelectCellMethod());
+
+					Maze3dGenerator mg = algorithms.createGenerateAlgorithm(
+							Properties.properites.getGenerateAlgorithm(), Properties.properites.getSelectCellMethod());
 					model.generateMaze(name, z, y, x, mg);
-					
+
 				} catch (NumberFormatException e) {
 					ui.displayMessage("The maze dimension should be in number format.");
 				}
-			} else 
+			} else
 				ui.displayMessage("Missing parameters.");
 		}
 	}
 
 	/**
-	 * <h1>DisplayMazeCommand</h1> 
-	 * Get a maze name and if exist, send it to displayMaze or displayExistingMaze (display message before) method in UI.
-	 * <p> 
-	 * @author Valentina Munoz & Moris Amon    
+	 * <h1>DisplayMazeCommand</h1> Get a maze name and if exist, send it to
+	 * displayMaze or displayExistingMaze (display message before) method in UI.
+	 * <p>
+	 * 
+	 * @author Valentina Munoz & Moris Amon
 	 */
 	class DisplayMazeCommand implements Command {
 		@Override
@@ -143,9 +150,10 @@ public class Maze3dCommands extends CommonCommandsManager {
 	}
 
 	/**
-	 * <h1>SolveMazeCommand</h1> 
-	 * Get all data needed to solve a maze and send it to solveMaze method in model.
+	 * <h1>SolveMazeCommand</h1> Get all data needed to solve a maze and send it
+	 * to solveMaze method in model.
 	 * <p>
+	 * 
 	 * @author Valentina Munoz & Moris Amon
 	 */
 	class SolveMazeCommand implements Command {
@@ -177,9 +185,10 @@ public class Maze3dCommands extends CommonCommandsManager {
 	}
 
 	/**
-	 * <h1>DisplaySolutionCommand</h1> 
-	 * Get the last solution calculated and send it to displaySolution method in UI.
+	 * <h1>DisplaySolutionCommand</h1> Get the last solution calculated and send
+	 * it to displaySolution method in UI.
 	 * <p>
+	 * 
 	 * @author Valentina Munoz & Moris Amon
 	 */
 	class DisplaySolutionCommand implements Command {
@@ -193,9 +202,10 @@ public class Maze3dCommands extends CommonCommandsManager {
 	}
 
 	/**
-	 * <h1>SaveMazeCommand</h1> 
-	 * Get the maze name and a file path. Send it to saveMaze method in model.
-	 * <p> 
+	 * <h1>SaveMazeCommand</h1> Get the maze name and a file path. Send it to
+	 * saveMaze method in model.
+	 * <p>
+	 * 
 	 * @author Valentina Munoz & Moris Amon
 	 */
 	class SaveMazeCommand implements Command {
@@ -209,10 +219,10 @@ public class Maze3dCommands extends CommonCommandsManager {
 	}
 
 	/**
-	 * <h1>LoadMazeCommand</h1> 
-	 * Get the maze name and a file path. send it to loadMaze method in model.
-	 * name
+	 * <h1>LoadMazeCommand</h1> Get the maze name and a file path. send it to
+	 * loadMaze method in model. name
 	 * <p>
+	 * 
 	 * @author Valentina Munoz & Moris Amon
 	 */
 	class LoadMazeCommand implements Command {
@@ -226,9 +236,10 @@ public class Maze3dCommands extends CommonCommandsManager {
 	}
 
 	/**
-	 * <h1>LoadPropertiesCommand</h1> 
-	 * Get the proerties file path and send it to loadGameProperties in model.
+	 * <h1>LoadPropertiesCommand</h1> Get the proerties file path and send it to
+	 * loadGameProperties in model.
 	 * <p>
+	 * 
 	 * @author Valentina Munoz & Moris Amon
 	 */
 	class LoadPropertiesCommand implements Command {
@@ -240,10 +251,11 @@ public class Maze3dCommands extends CommonCommandsManager {
 	}
 
 	/**
-	 * <h1>GenerateCrossSectionCommand</h1> 
-	 * Get all data needed to generate a cross section of a 3D maze a maze and send it to displayCrossSection method in model.
-	 * section
+	 * <h1>GenerateCrossSectionCommand</h1> Get all data needed to generate a
+	 * cross section of a 3D maze a maze and send it to displayCrossSection
+	 * method in model. section
 	 * <p>
+	 * 
 	 * @author Valentina Munoz & Moris Amon
 	 */
 	class GenerateCrossSectionCommand implements Command {
@@ -261,9 +273,10 @@ public class Maze3dCommands extends CommonCommandsManager {
 	}
 
 	/**
-	 * <h1>DisplayCrossSectionCommand</h1> 
-	 * Get the last cross section generated and send it to displayCrossSection method in UI.
+	 * <h1>DisplayCrossSectionCommand</h1> Get the last cross section generated
+	 * and send it to displayCrossSection method in UI.
 	 * <p>
+	 * 
 	 * @author Valentina Munoz & Moris Amon
 	 */
 	class DisplayCrossSectionCommand implements Command {
@@ -275,9 +288,10 @@ public class Maze3dCommands extends CommonCommandsManager {
 	}
 
 	/**
-	 * <h1>DisplayMessageCommand</h1> 
-	 * Get a message (string) from model and display it in UI.
+	 * <h1>DisplayMessageCommand</h1> Get a message (string) from model and
+	 * display it in UI.
 	 * <p>
+	 * 
 	 * @author Valentina Munoz & Moris Amon
 	 */
 	class DisplayMessageCommand implements Command {
@@ -290,48 +304,38 @@ public class Maze3dCommands extends CommonCommandsManager {
 			ui.displayMessage(msg);
 		}
 	}
-	
-	class GetSettings implements Command {
 
+	class ChangeSettingsCommand implements Command {
 		@Override
 		public void doCommand(String[] args) {
-			
-			Properties properties =new Properties();
-			properties=(Properties) ui.getSettings();
-			
-			Properties.properites=new Properties();
-			Properties.properites.setViewType(properties.getViewType());
-			Properties.properites.setViewHeight(properties.getViewHeight());
-			Properties.properites.setViewWidth(properties.getViewWidth());
-			Properties.properites.setGenerateAlgorithm(properties.getGenerateAlgorithm());
-			Properties.properites.setSelectCellMethod(properties.getSelectCellMethod());
-			Properties.properites.setSolveAlgorithm(properties.getSolveAlgorithm());
-			Properties.properites.setComparator(properties.getComparator());
-			Properties.properites.setNumberOfThreads(properties.getNumberOfThreads());
-			Properties.properites.setMySQL(properties.getMySQL());
-			Properties.properites.setHintLength(properties.getHintLength());
-			Properties.properites.setAnimationSpeed(properties.getAnimationSpeed());
-			Properties.properites.setMazeDisplay(properties.getMazeDisplay());
-			
+			String fieldsValues = "";
+			for (int i = 1; i < args.length; i++)
+				fieldsValues += args[i] + " ";
+
+			model.generateClass(fieldsValues);
+		}
+	}
+
+	class SaveSettingsCommand implements Command {
+		@Override
+		public void doCommand(String[] args) {
+			Properties.properites = (Properties) model.getGeneratedObject();
+
 			try {
 				XMLEncoder encoder;
 				encoder = new XMLEncoder(new BufferedOutputStream(new FileOutputStream(FILE_NAME)));
 				encoder.writeObject(Properties.properites);
 				encoder.close();
 			} catch (FileNotFoundException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-
-			
 		}
-		
 	}
 
 	/**
-	 * <h1>ExitCommand</h1> 
-	 * Exit game. Call exit method in model and UI.
+	 * <h1>ExitCommand</h1> Exit game. Call exit method in model and UI.
 	 * <p>
+	 * 
 	 * @author Valentina Munoz & Moris Amon
 	 */
 	class ExitCommand implements Command {

@@ -1,15 +1,11 @@
 package view;
 
-import java.util.ArrayList;
-
 import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.widgets.Composite;
-
-import algorithms.mazeGenerators.Position;
 
 public class Maze3dDisplay extends MazeDisplay {
 
@@ -49,12 +45,6 @@ public class Maze3dDisplay extends MazeDisplay {
 		Image goal = new Image(this.getDisplay(), "images/honey.png");
 		ImageData goalImgData = goal.getImageData();
 
-		Image up = new Image(this.getDisplay(), "images/stairs.png");
-		ImageData upImgData = up.getImageData();
-
-		Image down = new Image(this.getDisplay(), "images/snake.png");
-		ImageData downImgData = down.getImageData();
-
 		this.addPaintListener(new PaintListener() {
 			@Override
 			public void paintControl(PaintEvent e) {
@@ -71,7 +61,6 @@ public class Maze3dDisplay extends MazeDisplay {
 				double w = (width / cross[0].length) * scale;
 				double h = (height / cross.length) * scale;
 
-				ArrayList<String> possibleMoves;
 				for (int i = 0; i < cross.length; i++) {
 					double w0 = 0.7 * w + 0.3 * w * i / cross.length;
 					double w1 = 0.7 * w + 0.3 * w * (i + 1) / cross.length;
@@ -85,8 +74,6 @@ public class Maze3dDisplay extends MazeDisplay {
 						minDimension = (int) Math.round((w0 + w1) / 2);
 
 					for (int j = 0; j < cross[i].length; j++) {
-						possibleMoves = maze.getPossibleMoves(new Position(currentPosition.z, i, j));
-
 						double[] dpoints = { start + j * w0, i * h, start + j * w0 + w0, i * h, start1 + j * w1 + w1,
 								i * h + h, start1 + j * w1, i * h + h };
 						double cheight = h / 2;
@@ -102,21 +89,6 @@ public class Maze3dDisplay extends MazeDisplay {
 						if (cross[i][j] != 0)
 							paintCube(dpoints, cheight, e);
 						else {
-							if (possibleMoves.contains("Up")) {
-								int widthImg = (int) (upImgData.width * ((h / 1.5) / upImgData.height));
-								e.gc.drawImage(up, 0, 0, upImgData.width, upImgData.height,
-										(int) (Math.round(dpoints[0]) + w - widthImg),
-										(int) (Math.round(dpoints[1] - cheight / 2)), widthImg,
-										(int) (h / 1.5));
-							}
-							if (possibleMoves.contains("Down")) {
-								int widthImg = (int) (downImgData.width * ((h / 1.5) / downImgData.height));
-								e.gc.drawImage(down, 0, 0, downImgData.width, downImgData.height,
-										(int) Math.round(dpoints[0]),
-										(int) (Math.round(dpoints[1] - cheight / 2) + (h - (int) (h / 1.5))), widthImg,
-										(int) (h / 1.5));
-							}
-
 							if (i == currentPosition.y && j == currentPosition.x) {
 								character.paint(e, (int) Math.round(dpoints[0]),
 										(int) Math.round(dpoints[1] - cheight / 2), minDimension, minDimension);

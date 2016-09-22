@@ -4,49 +4,99 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.MouseEvent;
-import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.Font;
+import org.eclipse.swt.graphics.FontData;
+import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.MessageBox;
+import org.eclipse.swt.widgets.Monitor;
 import org.eclipse.swt.widgets.Text;
 
-public class FormGUI extends DialogWindow {
-	Form formCtrl;
-	ArrayList<Text> textFields = new ArrayList<Text>();
-	private boolean firstInteraction=true;
+public class PropertiesFormWindow extends DialogWindow {
+	private final int FONT_SIZE = 14;
+	
+	private Maze3dGameWindow gameView;
+	private ArrayList<Class<?>> primitiveClasses = new ArrayList<Class<?>>(); 
+	private ArrayList<Text> textFields = new ArrayList<Text>();
+	private boolean firstInteraction = true;
+	
+	private Class<?> topClass;
 	private int width;
 	private int height;
+
+	public PropertiesFormWindow(int width, int height, Class<?> topClass, Maze3dGameWindow gameView) {
+		this.gameView = gameView;
+		this.topClass = topClass;
+		
+		this.width = width;
+		this.height = height;
+		
+		initPrimitiveClasses();
+	}
 	
-	public FormGUI(int width, int height, Form formCntrl) {
-		this.formCtrl = formCntrl;
-		this.width=width;
-		this.height=height;
+	private void initPrimitiveClasses() {
+		primitiveClasses.add(Void.class);
+		primitiveClasses.add(void.class);
+
+		primitiveClasses.add(Integer.class);
+		primitiveClasses.add(int.class);
+
+		primitiveClasses.add(Float.class);
+		primitiveClasses.add(float.class);
+
+		primitiveClasses.add(Byte.class);
+		primitiveClasses.add(byte.class);
+
+		primitiveClasses.add(Short.class);
+		primitiveClasses.add(short.class);
+
+		primitiveClasses.add(Character.class);
+		primitiveClasses.add(char.class);
+
+		primitiveClasses.add(Double.class);
+		primitiveClasses.add(double.class);
+
+		primitiveClasses.add(String.class);
+
+		primitiveClasses.add(Boolean.class);
+		primitiveClasses.add(boolean.class);
+
+		primitiveClasses.add(Long.class);
+		primitiveClasses.add(long.class);
 	}
 
 	@Override
 	public void initWidgets() {
 		shell.setLayout(new GridLayout(2, false));
-		shell.setSize(this.width,this.height);
+		shell.setSize(this.width, this.height);
 		shell.setText("Settings Page");
 		shell.setBackground(new Color(null, 139, 207, 130));
 		shell.setAlpha(500);
-
-		initGroups(shell, formCtrl.myfirstClass);
+		
+		Monitor primary = shell.getDisplay().getPrimaryMonitor();
+		Rectangle bounds = primary.getBounds();
+		Rectangle rect = shell.getBounds();
+		int x = bounds.x + (bounds.width - rect.width) / 2;
+		int y = bounds.y + (bounds.height - rect.height) / 2;
+		shell.setLocation(x, y);
+		
+		initGroups(shell, topClass);
 		initButton();
 	}
 
+	
 	public void initGroups(Composite parent, Class<?> myClass) {
-		if (myClass.equals(formCtrl.myfirstClass) && firstInteraction) {
+		if (myClass.equals(topClass) && firstInteraction) {
 			Group myGroup = new Group(parent, SWT.BORDER);
 			myGroup.setBackground(new Color(null, 212, 169, 127));
+			
 			myGroup.setLayout(new GridLayout(2, false));
 			myGroup.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 2, 1));
 			myGroup.setText(myClass.getName());
@@ -55,10 +105,10 @@ public class FormGUI extends DialogWindow {
 
 			for (int i = 0; i < fields.length; i++) {
 				Class<?> cls = fields[i].getType();
-				if (formCtrl.primitiveClasses.contains(cls)) {
+				if (primitiveClasses.contains(cls)) {
 					createFieldLabel(myGroup, fields[i].getName(), cls);
 				} else {
-					firstInteraction=false;
+					firstInteraction = false;
 					initGroups(myGroup, cls);
 				}
 			}
@@ -74,9 +124,17 @@ public class FormGUI extends DialogWindow {
 		label.setBackground(new Color(null, 212, 169, 127));
 		label.setText(dataName + " ( " + clsTypeName + " )" + " : ");
 		label.setLayoutData(new GridData(SWT.LEFT, SWT.LEFT, false, false, 1, 1));
-
+		
+		FontData[] fontData = label.getFont().getFontData();
+		fontData[0].setHeight(FONT_SIZE);
+		label.setFont(new Font(this.shell.getDisplay(), fontData[0]));
+		
 		Text text = new Text(parent, SWT.BORDER);
 		text.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1));
+		
+		fontData = text.getFont().getFontData();
+		fontData[0].setHeight(FONT_SIZE);
+		text.setFont(new Font(this.shell.getDisplay(), fontData[0]));
 
 		textFields.add(text);
 	}
@@ -86,24 +144,23 @@ public class FormGUI extends DialogWindow {
 		button.setText("Create object");
 		button.setLayoutData(new GridData(SWT.LEFT, SWT.LEFT, false, false, 1, 1));
 		button.setBackground(new Color(null, 139, 207, 130));
-		
+
 		button.addSelectionListener(new SelectionListener() {
 			@Override
 			public void widgetSelected(SelectionEvent arg0) {
 				createObject();
-				shell.close();
 			}
 
 			@Override
 			public void widgetDefaultSelected(SelectionEvent arg0) {
 			}
 		});
-		
+
 		Button cancelButton = new Button(this.shell, SWT.PUSH);
 		cancelButton.setText("Cancel");
 		cancelButton.setLayoutData(new GridData(SWT.LEFT, SWT.LEFT, false, false, 1, 1));
 		cancelButton.setBackground(new Color(null, 139, 207, 130));
-		
+
 		cancelButton.addSelectionListener(new SelectionListener() {
 			@Override
 			public void widgetSelected(SelectionEvent arg0) {
@@ -114,8 +171,6 @@ public class FormGUI extends DialogWindow {
 			public void widgetDefaultSelected(SelectionEvent arg0) {
 			}
 		});
-		
-		
 	}
 
 	private void createObject() {
@@ -125,7 +180,7 @@ public class FormGUI extends DialogWindow {
 		for (int i = 0; i < textFields.size(); i++) {
 			content = textFields.get(i).getText();
 			if (content.length() == 0) {
-				displayMassage();
+				gameView.displayMessage("You need to fill all the fields.", SWT.ICON_INFORMATION | SWT.OK, null, "");
 				return;
 			}
 
@@ -133,13 +188,7 @@ public class FormGUI extends DialogWindow {
 			allContentFields += content + " ";
 		}
 
-		formCtrl.createObjects(allContentFields);
-	}
-
-	private void displayMassage() {
-		MessageBox messageBox = new MessageBox(shell, SWT.ICON_INFORMATION | SWT.OK);
-		messageBox.setMessage("You need to fill all the fields.");
-
-		messageBox.open();
+		gameView.view.update("change_settings " + allContentFields);
+		shell.close();
 	}
 }

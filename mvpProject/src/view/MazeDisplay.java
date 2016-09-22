@@ -22,9 +22,9 @@ import algorithms.search.Solution;
 import presenter.Properties;
 
 /**
- * <h1>MazeDisplay</h1>
- * A custom widget for maze disaply.
+ * <h1>MazeDisplay</h1> A custom widget for maze disaply.
  * <p>
+ * 
  * @author Valentina Munoz & Moris Amon
  */
 public abstract class MazeDisplay extends Canvas {
@@ -37,26 +37,32 @@ public abstract class MazeDisplay extends Canvas {
 	protected Maze3d maze;
 	protected boolean win = false;
 	protected float scale = 1;
-	
+
 	public MazeDisplay(Composite parent, int style) {
 		super(parent, style);
 		this.setBackground(new Color(null, 233, 232, 233));
 		this.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
-	
+
 		initKeyEvents();
 	}
-	
+
 	/**
-	 * <h1>initMaze</h1>
-	 * Get a maze. Initalize some data and display the maze start position floor - 
-	 * throws the generate cross section notification to the presenter. 
+	 * <h1>initMaze</h1> Get a maze. Initalize some data and display the maze
+	 * start position floor - throws the generate cross section notification to
+	 * the presenter.
 	 * <p>
-	 * Finally, create the game character according to images pathes received and draw the maze.
+	 * Finally, create the game character according to images pathes received
+	 * and draw the maze.
 	 * <p>
-	 * @param maze the displayed maze
-	 * @param mazeName the displayed maze name
-	 * @param charcterImgPath the path of the character (left)
-	 * @param charcterFlipImgPath the path of the character (right)
+	 * 
+	 * @param maze
+	 *            the displayed maze
+	 * @param mazeName
+	 *            the displayed maze name
+	 * @param charcterImgPath
+	 *            the path of the character (left)
+	 * @param charcterFlipImgPath
+	 *            the path of the character (right)
 	 */
 	public void initMaze(Maze3d maze, String mazeName, String charcterImgPath, String charcterFlipImgPath) {
 		this.maze = maze;
@@ -64,7 +70,7 @@ public abstract class MazeDisplay extends Canvas {
 
 		Position startPosition = maze.getStartPosition();
 		this.currentPosition = new Position(startPosition.z, startPosition.y, startPosition.x);
-		
+
 		this.goalPosition = maze.getGoalPosition();
 
 		int floor = currentPosition.z;
@@ -72,14 +78,34 @@ public abstract class MazeDisplay extends Canvas {
 
 		this.character = new GameCharacter(this.getDisplay(), charcterImgPath, charcterFlipImgPath);
 
+		checkArrowsPosition();
 		drawMaze();
 	}
 
 	/**
-	 * <h1>displayCrossSection</h1>
-	 * Get a cross section to display and redraw the maze.
+	 * <h1>checkArrowsPosition</h1> Each time the character moves, check if
+	 * in the new position, Up or Down moves are enable and change the menu arrows
+	 * according to it.
 	 * <p>
-	 * @param displayed new cross section to display
+	 */
+	private void checkArrowsPosition() {
+		ArrayList<String> possibleMoves = maze.getPossibleMoves(currentPosition);
+		boolean arrowEnable;
+
+		arrowEnable = (possibleMoves.contains("Up")) ? true : false;
+		gameView.menu.setArrowEnabled(gameView.menu.upArrow, arrowEnable);
+
+		arrowEnable = (possibleMoves.contains("Down")) ? true : false;
+		gameView.menu.setArrowEnabled(gameView.menu.downArrow, arrowEnable);
+	}
+
+	/**
+	 * <h1>displayCrossSection</h1> Get a cross section to display and redraw
+	 * the maze.
+	 * <p>
+	 * 
+	 * @param displayed
+	 *            new cross section to display
 	 */
 	public void displayCrossSection(int[][] displayed) {
 		gameView.getMenu().setCurrentFloorText(currentPosition.z);
@@ -88,100 +114,100 @@ public abstract class MazeDisplay extends Canvas {
 	}
 
 	/**
-	 * <h1>moveUp</h1>
-	 * Get current position possible moves. 
-	 * If up is possible, update data and throws the generate cross section notification to presenter.
+	 * <h1>moveUp</h1> Get current position possible moves. If up is possible,
+	 * update data and throws the generate cross section notification to
+	 * presenter.
 	 * <p>
 	 */
-	private void moveUp() {
-		ArrayList<String> possibleMoves = maze.getPossibleMoves(currentPosition);
+	private void moveUp(ArrayList<String> possibleMoves) {
 		if (possibleMoves.contains("Up")) {
 			currentPosition.z++;
 			gameView.view.update("generate_cross_section " + mazeName + " " + currentPosition.z + " z");
+			checkArrowsPosition();
 		}
 	}
 
 	/**
-	 * <h1>moveDown</h1>
-	 * Get current position possible moves. 
-	 * If down is possible, update data and throws the generate cross section notification to presenter.
+	 * <h1>moveDown</h1> Get current position possible moves. If down is
+	 * possible, update data and throws the generate cross section notification
+	 * to presenter.
 	 * <p>
 	 */
-	private void moveDown() {
-		ArrayList<String> possibleMoves = maze.getPossibleMoves(currentPosition);
+	private void moveDown(ArrayList<String> possibleMoves) {
 		if (possibleMoves.contains("Down")) {
 			currentPosition.z--;
 			gameView.view.update("generate_cross_section " + mazeName + " " + currentPosition.z + " z");
+			checkArrowsPosition();
 		}
 	}
 
 	/**
-	 * <h1>moveLeft</h1>
-	 * Get current position possible moves. 
-	 * If left is possible, update data and redraw the maze.
+	 * <h1>moveLeft</h1> Get current position possible moves. If left is
+	 * possible, update data and redraw the maze.
 	 * <p>
 	 */
-	private void moveLeft() {
-		ArrayList<String> possibleMoves = maze.getPossibleMoves(currentPosition);
+	private void moveLeft(ArrayList<String> possibleMoves) {
 		if (possibleMoves.contains("Left")) {
 			currentPosition.x--;
 			redraw();
+			checkArrowsPosition();
 		}
 	}
 
 	/**
-	 * <h1>moveRight</h1>
-	 * Get current position possible moves. 
-	 * If right is possible, update data and redraw the maze.
+	 * <h1>moveRight</h1> Get current position possible moves. If right is
+	 * possible, update data and redraw the maze.
 	 * <p>
 	 */
-	private void moveRight() {
-		ArrayList<String> possibleMoves = maze.getPossibleMoves(currentPosition);
+	private void moveRight(ArrayList<String> possibleMoves) {
 		if (possibleMoves.contains("Right")) {
 			currentPosition.x++;
 			redraw();
+			checkArrowsPosition();
 		}
 	}
 
 	/**
-	 * <h1>moveForward</h1>
-	 * Get current position possible moves. 
-	 * If forward is possible, update data and redraw the maze.
+	 * <h1>moveForward</h1> Get current position possible moves. If forward is
+	 * possible, update data and redraw the maze.
 	 * <p>
 	 */
-	private void moveForward() {
-		ArrayList<String> possibleMoves = maze.getPossibleMoves(currentPosition);
+	private void moveForward(ArrayList<String> possibleMoves) {
 		if (possibleMoves.contains("Forward")) {
 			currentPosition.y++;
 			redraw();
+			checkArrowsPosition();
 		}
 	}
 
 	/**
-	 * <h1>moveBackward</h1>
-	 * Get current position possible moves. 
-	 * If backward is possible, update data and redraw the maze.
+	 * <h1>moveBackward</h1> Get current position possible moves. If backward is
+	 * possible, update data and redraw the maze.
 	 * <p>
 	 */
-	private void moveBackward() {
-		ArrayList<String> possibleMoves = maze.getPossibleMoves(currentPosition);
+	private void moveBackward(ArrayList<String> possibleMoves) {
 		if (possibleMoves.contains("Backward")) {
 			currentPosition.y--;
 			redraw();
+			checkArrowsPosition();
 		}
 	}
 
 	/**
-	 * <h1>displaySolution</h1>
-	 * Get the maze solution.<p>
-	 * If the type wanted is hint, it animate the character half way of the solution.
-	 * However, if length of half of the solution is smaller than 2, it shows a massage that 
-	 * the character is too close. 
+	 * <h1>displaySolution</h1> Get the maze solution.
 	 * <p>
-	 * If the type wanted is solve, it animate the character all way to the goal.
+	 * If the type wanted is hint, it animate the character half way of the
+	 * solution. However, if length of half of the solution is smaller than 2,
+	 * it shows a massage that the character is too close.
 	 * <p>
-	 * @param solution maze solution
-	 * @param type Hint/Solve
+	 * If the type wanted is solve, it animate the character all way to the
+	 * goal.
+	 * <p>
+	 * 
+	 * @param solution
+	 *            maze solution
+	 * @param type
+	 *            Hint/Solve
 	 */
 	public void displaySolution(Solution<Position> solution, String type) {
 		ArrayList<Position> solve = solution.getResults();
@@ -202,12 +228,14 @@ public abstract class MazeDisplay extends Canvas {
 	}
 
 	/**
-	 * <h1>onAnimationEnded</h1>
-	 * When character animation ends, if the type wanted was hint, it animate the characte back
-	 * to his last position.
+	 * <h1>onAnimationEnded</h1> When character animation ends, if the type
+	 * wanted was hint, it animate the characte back to his last position.
 	 * <p>
-	 * @param solve the solve path
-	 * @param type hint/solve
+	 * 
+	 * @param solve
+	 *            the solve path
+	 * @param type
+	 *            hint/solve
 	 */
 	public void onAnimationEnded(ArrayList<Position> solve, String type) {
 		if (type.equals("Hint")) {
@@ -215,15 +243,18 @@ public abstract class MazeDisplay extends Canvas {
 			initCharacterAnimation(solve, "");
 		}
 	}
-	
+
 	/**
-	 * <h1>initCharacterAnimation</h1>
-	 * Get a path of the solution and animate the character through it.
-	 * It init a a timer task, that is schedule to ocurre at a fixed rate, taken from the properties file.
-	 * When the path comes to an end, the timer is ended.
+	 * <h1>initCharacterAnimation</h1> Get a path of the solution and animate
+	 * the character through it. It init a a timer task, that is schedule to
+	 * ocurre at a fixed rate, taken from the properties file. When the path
+	 * comes to an end, the timer is ended.
 	 * <p>
-	 * @param solve the solve path
-	 * @param type hint/solve
+	 * 
+	 * @param solve
+	 *            the solve path
+	 * @param type
+	 *            hint/solve
 	 */
 	private void initCharacterAnimation(ArrayList<Position> solve, String type) {
 		AtomicInteger index = new AtomicInteger(1);
@@ -257,27 +288,26 @@ public abstract class MazeDisplay extends Canvas {
 		};
 		timer.scheduleAtFixedRate(task, 0, Properties.properites.getAnimationSpeed());
 	}
-	
+
 	/**
-	 * <h1>ShowWinWindows</h1>
-	 * When character rich the goal, show the win windows.
+	 * <h1>ShowWinWindows</h1> When character rich the goal, show the win
+	 * windows.
 	 * <p>
 	 */
 	protected void ShowWinWindows() {
 		WinWindow winWindow = new WinWindow(gameView);
 		winWindow.start(gameView.display);
 	}
-	
+
 	/**
-	 * <h1>initKeyEvents</h1>
-	 * Init key listener and mouse wheel listener.
+	 * <h1>initKeyEvents</h1> Init key listener and mouse wheel listener.
 	 * <p>
-	 * The key listener is for the character moves. 
-	 * When keyboard arrows are pressed, the character moves left/right/forward/backward.
-	 * When PgDn or PgUp is pressed, the character change maze floor.
+	 * The key listener is for the character moves. When keyboard arrows are
+	 * pressed, the character moves left/right/forward/backward. When PgDn or
+	 * PgUp is pressed, the character change maze floor.
 	 * <p>
-	 * The mouse wheel listenet is for zoom in/ zoom out the maze.
-	 * When ctrl is pressed and mouse is scrolled, zoom in or zoom out the maze.
+	 * The mouse wheel listenet is for zoom in/ zoom out the maze. When ctrl is
+	 * pressed and mouse is scrolled, zoom in or zoom out the maze.
 	 * <p>
 	 */
 	private void initKeyEvents() {
@@ -287,53 +317,53 @@ public abstract class MazeDisplay extends Canvas {
 				int wheelCount = e.count;
 				if ((e.stateMask & SWT.CONTROL) == SWT.CONTROL) {
 					if (wheelCount > 0) {
-						scale += .2;	
+						scale += .2;
 						redraw();
-					} else if(wheelCount < 0 && scale >= 1.2) {
-						scale -= .2;	
+					} else if (wheelCount < 0 && scale >= 1.2) {
+						scale -= .2;
 						redraw();
 					}
 				}
 			}
 		});
-		
+
 		this.addKeyListener(new KeyAdapter() {
 			public void keyPressed(KeyEvent e) {
+				ArrayList<String> possibleMoves = maze.getPossibleMoves(currentPosition);
+
 				if (e.keyCode == SWT.PAGE_UP || e.keyCode == SWT.SHIFT)
-					moveUp();
+					moveUp(possibleMoves);
 
 				else if (e.keyCode == SWT.PAGE_DOWN || e.keyCode == SWT.CONTROL)
-					moveDown();
+					moveDown(possibleMoves);
 
 				else if (e.keyCode == SWT.ARROW_UP)
-					moveBackward();
+					moveBackward(possibleMoves);
 
 				else if (e.keyCode == SWT.ARROW_DOWN)
-					moveForward();
+					moveForward(possibleMoves);
 
 				else if (e.keyCode == SWT.ARROW_LEFT)
-					moveLeft();
+					moveLeft(possibleMoves);
 
 				else if (e.keyCode == SWT.ARROW_RIGHT)
-					moveRight();
+					moveRight(possibleMoves);
 			}
 		});
 	}
 
 	/**
-	 * <h1>drawMaze</h1>
-	 * Create images with all grpahic needed.
-	 * Add paint listener, that draw the maze.
+	 * <h1>drawMaze</h1> Create images with all grpahic needed. Add paint
+	 * listener, that draw the maze.
 	 * <p>
 	 * To draw the cross ssection, it calculate the position dimension.
 	 * <p>
-	 * For each possition, if it's a wall, on 2d maze the wall image is drawn and on 3d maze, a cube is painted.
+	 * For each possition, if it's a wall, on 2d maze the wall image is drawn
+	 * and on 3d maze, a cube is painted.
 	 * <p>
 	 * On the current position, it draws the character.
 	 * <p>
 	 * On the goal position, it draws the goal image.
-	 * <p>
-	 * For each possition, if up or down moves are possible, it draws the right image.
 	 * <p>
 	 */
 	protected abstract void drawMaze();

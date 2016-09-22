@@ -1,28 +1,21 @@
-package view;
+package model;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 
-import org.eclipse.swt.widgets.Display;
+public class ClassGenerator {
+	private Model model;
+	
+	private Class<?> topClass;
+	private int setFieldsCounter = 0;
+	private boolean firstInteraction = true;
 
-import presenter.Properties;
+	ArrayList<Class<?>> primitiveClasses = new ArrayList<Class<?>>();
 
-public class Form {
-	final String firstClass = "topClass";
-
-	private Maze3dGameWindow gameView;
-	FormGUI gui;
-	Class<?> myfirstClass;
-	int setFieldsCounter = 0;
-	private boolean firstInteraction=true;
-
-	ArrayList<Class<?>> primitiveClasses = new ArrayList<Class<?>>(); // primitive
-
-	public Form(Class<?> myclass, Display display,Maze3dGameWindow gameView) {
-		this.gameView=gameView;
+	public ClassGenerator(Model model) {
+		this.model = model;
 		initPrimitiveClasses();
-		readDataMembers(myclass,display);
 	}
 
 	private void initPrimitiveClasses() {
@@ -56,29 +49,21 @@ public class Form {
 		primitiveClasses.add(long.class);
 	}
 
-	private void readDataMembers(Class<?> myclass, Display display) {
-		myfirstClass = myclass;
-
-		gui = new FormGUI(300, 450, this);
-		gui.start(display);
-	}
-
-	public void createObjects(String string) {
+	public void createObjects(String string, Class<?> myClass) {
 		try {
+			topClass = myClass;
 			String[] allValues = string.split(" ");
-			Object o = setFieldsValue(allValues, myfirstClass);
+			Object o = setFieldsValue(allValues, myClass);
 
-			System.out.println(o);
-			
-			gameView.sendSettings(o);
-			
+			model.setGeneratedObject(o);
+			model.update("save_settings");
 		} catch (Exception e) {
-			System.out.println("Some values are invalid. Please fix it.");
+			model.update("display_message Some values are invalid. Please fix it.");
 		}
 	}
 
 	private Object setFieldsValue(String[] allValues, Class<?> myClass) throws Exception {
-		if (myClass.equals(myfirstClass)&& firstInteraction) {
+		if (myClass.equals(topClass) && firstInteraction) {
 			Field[] fields = myClass.getDeclaredFields();
 			Object o = myClass.newInstance();
 
@@ -91,7 +76,7 @@ public class Form {
 					currentField.set(o, createObjectByType(allValues[setFieldsCounter], cls));
 					setFieldsCounter++;
 				} else {
-					firstInteraction=false;
+					firstInteraction = false;
 					currentField.set(o, setFieldsValue(allValues, cls));
 				}
 			}
@@ -147,5 +132,4 @@ public class Form {
 			return value;
 		}
 	}
-	
 }

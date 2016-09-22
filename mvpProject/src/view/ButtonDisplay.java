@@ -72,9 +72,7 @@ public class ButtonDisplay extends Canvas {
 		Point size = gc.textExtent(txt);
 		gc.dispose();
 
-		text.setSize(size.x, size.y);
-		text.setBounds(size.x, size.y, size.x, size.y);
-		
+		text.setBounds(0, 0, size.x, size.y + 3);
 		drawBtn(width, height, size);
 	}
 

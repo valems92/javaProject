@@ -45,12 +45,16 @@ import presenter.Properties;
 public class GameMaze3dModel extends Observable implements Model {
 	public ConcurrentHashMap<String, Maze3d> generatedMazes;
 	private ConcurrentHashMap<String, Solution<Position>> solutions;
+	
 	private Solution<Position> lastSolution;
 	private int[][] crossSection;
 	private final String path = "mazeAndsolution.zip";
 
 	private ExecutorService executorGenerate;
 	private ExecutorService executorSolve;
+	
+	private ClassGenerator classGenerator;
+	private Object generatedObject;
 
 	public GameMaze3dModel() {
 		generatedMazes = new ConcurrentHashMap<String, Maze3d>();
@@ -58,8 +62,20 @@ public class GameMaze3dModel extends Observable implements Model {
 
 		executorGenerate = Executors.newFixedThreadPool(Properties.properites.getNumberOfThreads());
 		executorSolve = Executors.newFixedThreadPool(Properties.properites.getNumberOfThreads());
+		
+		classGenerator = new ClassGenerator(this);
 	}
 
+	@Override
+	public void setGeneratedObject(Object o) {
+		generatedObject = o;
+	}
+	
+	@Override
+	public Object getGeneratedObject() {
+		return generatedObject;
+	}
+	
 	@Override
 	public void generateMaze(String name, int z, int y, int x, Maze3dGenerator mg) {
 		if (generatedMazes.containsKey(name)) {
@@ -350,5 +366,16 @@ public class GameMaze3dModel extends Observable implements Model {
 			}
 		} else
 			throw new ExceptionInInitializerError("The property mySQL in properties file has an invalid value.");
+	}
+	
+	@Override
+	public void generateClass(String fieldsValues) {
+		classGenerator.createObjects(fieldsValues, Properties.class);
+	}
+	
+	@Override
+	public void update(String str) {
+		setChanged();
+		notifyObservers(str);
 	}
 }
