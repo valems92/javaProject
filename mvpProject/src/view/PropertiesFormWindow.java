@@ -19,6 +19,15 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Monitor;
 import org.eclipse.swt.widgets.Text;
 
+/**
+ * <h1>PropertiesFormWindow</h1>
+ * This class is responsible for the display screen settings, settings include all parameters in the properties file
+ * In addition, also responsible for update the Presenter that changed settings
+ * <p>
+ * 
+ * @author Valentina Munoz & Moris Amon
+ */
+
 public class PropertiesFormWindow extends DialogWindow {
 	private final int FONT_SIZE = 14;
 	
@@ -31,6 +40,16 @@ public class PropertiesFormWindow extends DialogWindow {
 	private int width;
 	private int height;
 
+	/**
+	 * <h1>PropertiesFormWindow</h1>
+	 * The constructor is responsible for initialization all his data members,
+	 * also, initialization the PrimitiveClasses.
+	 * <p>
+	 * @param width - The width of setting window
+	 * @param height - The height of setting window
+	 * @param topClass - The required class for display his fields
+	 * @param gameView - Maze3dGameWindow class for update the Presenter that the setting is changed
+	 */
 	public PropertiesFormWindow(int width, int height, Class<?> topClass, Maze3dGameWindow gameView) {
 		this.gameView = gameView;
 		this.topClass = topClass;
@@ -41,6 +60,11 @@ public class PropertiesFormWindow extends DialogWindow {
 		initPrimitiveClasses();
 	}
 	
+	/**
+	 * <h1>initPrimitiveClasses</h1>
+	 * This method is responsible for add all Primitive Classes in the Java doc into ArrayList
+	 * <p>
+	 */
 	private void initPrimitiveClasses() {
 		primitiveClasses.add(Void.class);
 		primitiveClasses.add(void.class);
@@ -72,6 +96,12 @@ public class PropertiesFormWindow extends DialogWindow {
 		primitiveClasses.add(long.class);
 	}
 
+	/**
+	 * <h1>initWidgets</h1>
+	 * The method is responsible for initialization settings window.
+	 * In addition, activate the some methods that are responsible for creating the class fields by recourse
+	 * <p>
+	 */
 	@Override
 	public void initWidgets() {
 		shell.setLayout(new GridLayout(2, false));
@@ -91,7 +121,14 @@ public class PropertiesFormWindow extends DialogWindow {
 		initButton();
 	}
 
-	
+	/**
+	 * <h1>initGroups</h1>
+	 * This method is responsible for part of the window groups.
+	 * Each group defines a class is contained in the first class
+	 * <p>
+	 * @param parent - The parent window of group
+	 * @param myClass - The required class
+	 */
 	public void initGroups(Composite parent, Class<?> myClass) {
 		if (myClass.equals(topClass) && firstInteraction) {
 			Group myGroup = new Group(parent, SWT.BORDER);
@@ -114,7 +151,12 @@ public class PropertiesFormWindow extends DialogWindow {
 			}
 		}
 	}
-
+	/**
+	 * <h1>createFieldLabel</h1>
+	 * A method is responsible for recursive creation of label
+	 * and text boxes for all fields of the relevant class
+	 * <p>
+	 */
 	private void createFieldLabel(Composite parent, String dataName, Class<?> cls) {
 		Label label = new Label(parent, SWT.NONE);
 
@@ -138,7 +180,12 @@ public class PropertiesFormWindow extends DialogWindow {
 
 		textFields.add(text);
 	}
-
+	
+	/**
+	 *  <h1>initButton</h1>
+	 *  This method is responsible for initialization the "Create Object" and "Cancel" setting window's button
+	 *  <p>
+	 */
 	private void initButton() {
 		Button button = new Button(this.shell, SWT.PUSH);
 		button.setText("Create object");
@@ -172,7 +219,13 @@ public class PropertiesFormWindow extends DialogWindow {
 			}
 		});
 	}
-
+	
+	/**
+	 * <h1>createObject</h1>
+	 * Responsible for checking the input.
+	 * In addition, responsible for preparing the record, update and sending it to Presenter
+	 * <p>
+	 */
 	private void createObject() {
 		String allContentFields = "";
 		String content;
