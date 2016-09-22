@@ -83,8 +83,8 @@ public abstract class MazeDisplay extends Canvas {
 	}
 
 	/**
-	 * <h1>checkArrowsPosition</h1> Each time the character moves, check if
-	 * in the new position, Up or Down moves are enable and change the menu arrows
+	 * <h1>checkArrowsPosition</h1> Each time the character moves, check if in
+	 * the new position, Up or Down moves are enable and change the menu arrows
 	 * according to it.
 	 * <p>
 	 */
@@ -331,10 +331,10 @@ public abstract class MazeDisplay extends Canvas {
 			public void keyPressed(KeyEvent e) {
 				ArrayList<String> possibleMoves = maze.getPossibleMoves(currentPosition);
 
-				if (e.keyCode == SWT.PAGE_UP || e.keyCode == SWT.SHIFT)
+				if (e.keyCode == SWT.PAGE_UP)
 					moveUp(possibleMoves);
 
-				else if (e.keyCode == SWT.PAGE_DOWN || e.keyCode == SWT.CONTROL)
+				else if (e.keyCode == SWT.PAGE_DOWN)
 					moveDown(possibleMoves);
 
 				else if (e.keyCode == SWT.ARROW_UP)
@@ -350,6 +350,21 @@ public abstract class MazeDisplay extends Canvas {
 					moveRight(possibleMoves);
 			}
 		});
+	}
+
+	/**
+	 * <h1>addArrowsEvents</h1> When an up or down arrow was pressed, check if
+	 * the move is possible and move the character
+	 * <p>
+	 * 
+	 * @param move
+	 */
+	public void addArrowsEvents(String move) {
+		ArrayList<String> possibleMoves = maze.getPossibleMoves(currentPosition);
+		if (move.equals("Up"))
+			moveUp(possibleMoves);
+		else
+			moveDown(possibleMoves);
 	}
 
 	/**

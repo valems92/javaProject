@@ -4,9 +4,17 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 
+/**
+ * <h1>ClassGenerator</h1> This class create an object of the type class
+ * recieved. It get a string of all fields values, separated by a space. When
+ * finish creating the object, throws a notification to presenter.
+ * <p>
+ * 
+ * @author Valentina Munoz & Moris Amon
+ */
 public class ClassGenerator {
 	private Model model;
-	
+
 	private Class<?> topClass;
 	private int setFieldsCounter = 0;
 	private boolean firstInteraction = true;
@@ -18,6 +26,11 @@ public class ClassGenerator {
 		initPrimitiveClasses();
 	}
 
+	/**
+	 * <h1>initPrimitiveClasses</h1> Create an arrayList of all primitive
+	 * classes and variables.
+	 * <p>
+	 */
 	private void initPrimitiveClasses() {
 		primitiveClasses.add(Void.class);
 		primitiveClasses.add(void.class);
@@ -49,6 +62,16 @@ public class ClassGenerator {
 		primitiveClasses.add(long.class);
 	}
 
+	/**
+	 * <h1>createObjects</h1> Get the class type to create, and all it's fields
+	 * values. When finish creating or an exeption was catched, send
+	 * notification to presenter.
+	 * 
+	 * @param string
+	 *            a string with all fileds vaules separated by a space
+	 * @param myClass
+	 *            class type to create an object of
+	 */
 	public void createObjects(String string, Class<?> myClass) {
 		try {
 			topClass = myClass;
@@ -62,6 +85,20 @@ public class ClassGenerator {
 		}
 	}
 
+	/**
+	 * <h1>setFieldsValue</h1> Recursive method. Create an object of the
+	 * received class. In a loop, set the value of each field. If the field is
+	 * not of a premitive type, Call the function again with the field class
+	 * type.
+	 * <p>
+	 * 
+	 * @param allValues
+	 *            class fields values
+	 * @param myClass
+	 *            class type to create an object of it
+	 * @return the object of the class type wanted with all fields set
+	 * @throws Exception
+	 */
 	private Object setFieldsValue(String[] allValues, Class<?> myClass) throws Exception {
 		if (myClass.equals(topClass) && firstInteraction) {
 			Field[] fields = myClass.getDeclaredFields();
@@ -86,11 +123,29 @@ public class ClassGenerator {
 		return null;
 	}
 
+	/**
+	 * <h1>makeAccessible</h1> If field received is not public, set the
+	 * accessible flag of it to true
+	 * <p>
+	 * 
+	 * @param field
+	 *            field to make accessible
+	 */
 	public void makeAccessible(Field field) {
 		if (!Modifier.isPublic(field.getModifiers()) || !Modifier.isPublic(field.getDeclaringClass().getModifiers()))
 			field.setAccessible(true);
 	}
 
+	/**
+	 * <h1>createObjectByType</h1> Get a value and a type to convert it.
+	 * <p>
+	 * @param value
+	 *            value of the object
+	 * @param fieldClass
+	 *            type to covert the value
+	 * @return the object created
+	 * @throws Exception
+	 */
 	public Object createObjectByType(String value, Class<?> fieldClass) throws Exception {
 		value = value.replace("-", " ");
 		String type = fieldClass.getTypeName();

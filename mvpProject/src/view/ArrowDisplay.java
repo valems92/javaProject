@@ -11,11 +11,29 @@ import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 
+/**
+ * <h1>ArrowDisplay</h1> A custom widget for arrows in program. Arrows are
+ * enable when from character position in maze, up and down moves are possible.
+ * <p>
+ * 
+ * @author Valentina Munoz & Moris Amon
+ */
 public class ArrowDisplay extends Canvas {
 	private Image arrow;
 	private Image arrowOpacity;
 	private Label arrowLabel;
 
+	/**
+	 * Initialize data and change cursor of widget on mouse over
+	 * <p>
+	 * 
+	 * @param parent
+	 *            widget parent
+	 * @param imagePath
+	 *            iamge path of regular arrow
+	 * @param imageOpacityPath
+	 *            image path of transparent arrow
+	 */
 	public ArrowDisplay(Composite parent, String imagePath, String imageOpacityPath) {
 		super(parent, SWT.NONE);
 		this.setCursor(new Cursor(getDisplay(), SWT.CURSOR_HAND));
@@ -24,10 +42,15 @@ public class ArrowDisplay extends Canvas {
 
 		arrow = new Image(this.getDisplay(), imagePath);
 		arrowOpacity = new Image(this.getDisplay(), imageOpacityPath);
-		
+
 		initWidgets();
 	}
 
+	/**
+	 * <h1>initWidgets</h1> Create the widgets of arrow. The arrow contains a
+	 * label with image backgruund.
+	 * <p>
+	 */
 	private void initWidgets() {
 		Rectangle rect = arrow.getBounds();
 		int width = rect.width;
@@ -40,6 +63,15 @@ public class ArrowDisplay extends Canvas {
 		drawArrow(width, height);
 	}
 
+	/**
+	 * <h1>drawArrow</h1> Change arrow position to be at the center. Also, if
+	 * arrow should be disable, change image.
+	 * <p>
+	 * @param width
+	 *            arrow image width
+	 * @param height
+	 *            arrow image height
+	 */
 	private void drawArrow(int width, int height) {
 		this.addPaintListener(new PaintListener() {
 			@Override
@@ -56,14 +88,12 @@ public class ArrowDisplay extends Canvas {
 			}
 		});
 	}
-
+	
 	/**
-	 * <h1>setMouseListener</h1> Get a mouse listener, and add it to each label
-	 * in button
+	 * <h1>setMouseListener</h1>
+	 * Get a mouse listener, and add it to the arrow
 	 * <p>
-	 * 
-	 * @param mouseListener
-	 *            mouse listener to add to button
+	 * @param mouseListener mouse listener to add to the arrow
 	 */
 	public void setMouseListener(MouseListener mouseListener) {
 		arrowLabel.addMouseListener(mouseListener);

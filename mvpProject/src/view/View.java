@@ -64,5 +64,9 @@ public interface View  {
 	 */
 	public void exit();
 
+	/**
+	 * <h1>getSettings</h1>
+	 * @return
+	 */
 	public Object getSettings();
 }

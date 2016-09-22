@@ -145,17 +145,38 @@ public interface Model {
 
 	/**
 	 * <h1>generateClass</h1> Get a class type and generate an object of it. It
-	 * has to receive a string that contains all class fields value separated
-	 * by space.
+	 * has to receive a string that contains all class fields value separated by
+	 * space.
 	 * <p>
+	 * 
 	 * @param fieldsValues
 	 *            string that contains fields value
 	 */
 	public void generateClass(String fieldsValues);
-	
+
+	/**
+	 * <h1>update</h1> Get massage and send a notification of it.
+	 * <p>
+	 * 
+	 * @param createFieldLabel
+	 *            massage of notification
+	 */
 	public void update(String str);
 
+	/**
+	 * <h1>setGeneratedObject</h1> Set the last properties object
+	 * generated to the object received
+	 * <p>
+	 * 
+	 * @param o
+	 *            new object
+	 */
 	public void setGeneratedObject(Object o);
 
+	/**
+	 * <h1>getGeneratedObject</h1>
+	 * <p>
+	 * @return The last object class generated
+	 */
 	public Object getGeneratedObject();
 }

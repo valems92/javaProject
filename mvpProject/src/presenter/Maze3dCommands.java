@@ -305,6 +305,13 @@ public class Maze3dCommands extends CommonCommandsManager {
 		}
 	}
 
+	/**
+	 * <h1>ChangeSettingsCommand</h1> Get a string with an object fields values
+	 * and send it to generate class method in UI.
+	 * <p>
+	 * 
+	 * @author Valentina Munoz & Moris Amon
+	 */
 	class ChangeSettingsCommand implements Command {
 		@Override
 		public void doCommand(String[] args) {
@@ -316,6 +323,13 @@ public class Maze3dCommands extends CommonCommandsManager {
 		}
 	}
 
+	/**
+	 * <h1>SaveSettingsCommand</h1> Get the object generated form model,
+	 * set the properties object and save it.
+	 * <p>
+	 * 
+	 * @author Valentina Munoz & Moris Amon
+	 */
 	class SaveSettingsCommand implements Command {
 		@Override
 		public void doCommand(String[] args) {

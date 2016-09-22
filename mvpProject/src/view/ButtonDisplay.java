@@ -33,7 +33,7 @@ public class ButtonDisplay extends Canvas {
 	private Label text;
 
 	/**
-	 * Initialize data and change cursor to wifget on mouse over
+	 * Initialize data and change cursor of widget on mouse over
 	 * <p>
 	 * @param parent widget parent
 	 * @param txt text of button
