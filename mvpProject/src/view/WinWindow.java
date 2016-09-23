@@ -87,7 +87,7 @@ public class WinWindow extends DialogWindow {
 		
 		text.setBounds(0, 0, size.x, size.y * 2);
 
-		Image img = new Image(shell.getDisplay(), "images/win2.png");
+		Image img = new Image(shell.getDisplay(), "resources/win2.png");
 		ImageData imgData = img.getImageData();
 
 		winPage.addPaintListener(new PaintListener() {

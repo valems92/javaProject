@@ -44,8 +44,8 @@ public class ButtonDisplay extends Canvas {
 		this.setBackgroundMode(SWT.INHERIT_NONE);
 		this.setLayout(null);
 		
-		bg = new Image(this.getDisplay(), "images/button.png");
-		bgOpacity = new Image(this.getDisplay(), "images/buttonOpacity.png");
+		bg = new Image(this.getDisplay(), "resources/button.png");
+		bgOpacity = new Image(this.getDisplay(), "resources/buttonOpacity.png");
 
 		initWidgets(txt);
 	}

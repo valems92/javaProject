@@ -297,7 +297,7 @@ public class MenuDisplay extends Canvas {
 	 *            parent to add it the arrows to
 	 */
 	private void addArrows(Composite parent) {
-		upArrow = new ArrowDisplay(parent, "images/arrowUp.png", "images/arrowUpOpacity.png");
+		upArrow = new ArrowDisplay(parent, "resources/arrowUp.png", "resources/arrowUpOpacity.png");
 		upArrow.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, true, true, 2, 1));
 		upArrow.setMouseListener(new MouseListener() {
 			@Override
@@ -315,7 +315,7 @@ public class MenuDisplay extends Canvas {
 		});
 		setArrowEnabled(upArrow, false);
 
-		downArrow = new ArrowDisplay(parent, "images/arrowDown.png", "images/arrowDownOpacity.png");
+		downArrow = new ArrowDisplay(parent, "resources/arrowDown.png", "resources/arrowDownOpacity.png");
 		downArrow.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, true, true, 2, 1));
 		downArrow.setMouseListener(new MouseListener() {
 			@Override

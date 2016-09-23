@@ -42,7 +42,7 @@ public class Maze3dDisplay extends MazeDisplay {
 
 	@Override
 	protected void drawMaze() {
-		Image goal = new Image(this.getDisplay(), "images/honey.png");
+		Image goal = new Image(this.getDisplay(), "resources/honey.png");
 		ImageData goalImgData = goal.getImageData();
 
 		this.addPaintListener(new PaintListener() {

@@ -23,7 +23,7 @@ public class WelcomeDisplay extends Canvas {
 	public WelcomeDisplay(Composite parent, int style) {
 		super(parent, style);
 
-		Image bgImg = new Image(this.getDisplay(), "images/welcome.jpg");
+		Image bgImg = new Image(this.getDisplay(), "resources/welcome.jpg");
 		ImageData imgData = bgImg.getImageData();		
 		
 		this.addPaintListener(new PaintListener() {

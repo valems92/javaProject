@@ -167,7 +167,7 @@ public class Maze3dGameWindow extends BasicWindow {
 		menu.displayGoalGuide();
 		menu.setGoalFloorText(m.getGoalPosition().z);
 
-		maze.initMaze(m, name, "images/fly.png", "images/flyFlip.png");
+		maze.initMaze(m, name, "resources/fly.png", "resources/flyFlip.png");
 
 		maze.moveAbove(welcome);
 		welcome.dispose();
