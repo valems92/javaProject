@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<java version="1.8.0_101" class="java.beans.XMLDecoder">
+ <object class="presenter.Properties">
+  <void property="animationSpeed">
+   <int>200</int>
+  </void>
+  <void property="comparator">
+   <string>Cost</string>
+  </void>
+  <void property="generateAlgorithm">
+   <string>GrowingTree</string>
+  </void>
+  <void property="hintLength">
+   <double>0.5</double>
+  </void>
+  <void property="mazeDisplay">
+   <string>3d</string>
+  </void>
+  <void property="mySQL">
+   <boolean>false</boolean>
+  </void>
+  <void property="numberOfThreads">
+   <int>5</int>
+  </void>
+  <void property="selectCellMethod">
+   <string>Random</string>
+  </void>
+  <void property="solveAlgorithm">
+   <string>BFS</string>
+  </void>
+  <void property="viewHeight">
+   <int>820</int>
+  </void>
+  <void property="viewType">
+   <string>gui</string>
+  </void>
+  <void property="viewWidth">
+   <int>1200</int>
+  </void>
+ </object>
+</java>

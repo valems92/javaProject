@@ -58,7 +58,7 @@ public class ArrowDisplay extends Canvas {
 
 		arrowLabel = new Label(this, SWT.NONE);
 		arrowLabel.setImage(arrow);
-		arrowLabel.setSize(width, height);
+		arrowLabel.setSize(width, height + 10);
 
 		drawArrow(width, height);
 	}

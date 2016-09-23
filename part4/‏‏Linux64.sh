@@ -1,0 +1,1 @@
+java -classpath mvpProject.jar:myAlgorithm.jar:swt\Linux64\swt.jar boot.Run

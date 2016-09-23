@@ -59,7 +59,7 @@ public class WinWindow extends DialogWindow {
 		shell.setBackground(new Color(null, 254, 188, 0));
 		winPage.setBackground(new Color(null, 254, 207, 166));
 
-		int width = (int) (Properties.properites.getViewWidth() * 0.4);
+		int width = (int) (Properties.properites.getViewWidth() * 0.6);
 		int height = (int) (Properties.properites.getViewHeight() * 0.4);
 
 		shell.setSize(width, height);
