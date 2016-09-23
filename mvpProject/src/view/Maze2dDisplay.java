@@ -58,15 +58,15 @@ public class Maze2dDisplay extends MazeDisplay {
 								e.gc.drawImage(wall, 0, 0, wallImgData.width, wallImgData.height, x, y, possitionWidth,
 										possitionHeight);
 							} else {
-								// Character
-								if (currentPosition.y == i && currentPosition.x == j)
-									character.paint(e, x + (widthDimensionDiff / 2), y + (heightDimensionDiff / 2),
-											minDimension, minDimension);
 								// Goal
 								if (currentPosition.z == goalPosition.z && goalPosition.y == i && goalPosition.x == j)
 									e.gc.drawImage(goal, 0, 0, goalImgData.width, goalImgData.height,
 											x + (widthDimensionDiff / 2), y + (heightDimensionDiff / 2), minDimension,
 											minDimension);
+								// Character
+								if (currentPosition.y == i && currentPosition.x == j)
+									character.paint(e, x + (widthDimensionDiff / 2), y + (heightDimensionDiff / 2),
+											minDimension, minDimension);
 							}
 						}
 					}

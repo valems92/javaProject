@@ -80,7 +80,12 @@ public class WinWindow extends DialogWindow {
 		});
 
 		initText();
-		text.setSize(size.x, size.y);
+
+		GC gc = new GC(text);
+		size = gc.textExtent(txt);
+		gc.dispose();
+		
+		text.setBounds(0, 0, size.x, size.y * 2);
 
 		Image img = new Image(shell.getDisplay(), "images/win2.png");
 		ImageData imgData = img.getImageData();
@@ -90,7 +95,7 @@ public class WinWindow extends DialogWindow {
 			public void paintControl(PaintEvent e) {
 				int min = winPage.getSize().y / 2;
 
-				text.setLocation(shell.getSize().x / 2 - size.x / 2, 10);
+				text.setLocation(shell.getSize().x / 2 - size.x / 2, 0);
 
 				e.gc.drawImage(img, 0, 0, imgData.width, imgData.height, 0, winPage.getSize().y - min, min, min);
 			}
@@ -112,9 +117,5 @@ public class WinWindow extends DialogWindow {
 		fontData[0].setHeight(FONT_SIZE);
 		fontData[0].setStyle(SWT.BOLD);
 		text.setFont(new Font(shell.getDisplay(), fontData[0]));
-
-		GC gc = new GC(text);
-		size = gc.textExtent(txt);
-		gc.dispose();
 	}
 }

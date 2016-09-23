@@ -88,20 +88,19 @@ public class Maze3dDisplay extends MazeDisplay {
 
 						if (cross[i][j] != 0)
 							paintCube(dpoints, cheight, e);
-						else {
-							if (i == currentPosition.y && j == currentPosition.x) {
-								character.paint(e, (int) Math.round(dpoints[0]),
-										(int) Math.round(dpoints[1] - cheight / 2), minDimension, minDimension);
-							} else if (currentPosition.z == goalPosition.z && goalPosition.y == i
-									&& goalPosition.x == j)
+						else {	
+							if (currentPosition.z == goalPosition.z && goalPosition.y == i && goalPosition.x == j)
 								e.gc.drawImage(goal, 0, 0, goalImgData.width, goalImgData.height,
 										(int) Math.round(dpoints[0]), (int) Math.round(dpoints[1] - cheight / 2),
 										minDimension, minDimension);
+							
+							if (i == currentPosition.y && j == currentPosition.x) 
+								character.paint(e, (int) Math.round(dpoints[0]),
+										(int) Math.round(dpoints[1] - cheight / 2), minDimension, minDimension);
 						}
 					}
 				}
 			}
 		});
 	}
-
 }
