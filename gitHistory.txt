@@ -1,0 +1,91 @@
+e750e3d - morisamon, 59 minutes ago : documents and bat/shell files added
+f2637d9 - Valentina Munoz, 2 hours ago : create folder of part 4
+2c779c6 - Valentina Munoz, 6 hours ago : fix win windows gui
+1f23da5 - Valentina Munoz, 19 hours ago : javadoc
+94ecb15 - morisamon, 19 hours ago : Java Documents added
+0e773dc - Valentina Munoz, 20 hours ago : changes
+0bff173 - morisamon, 2 days ago : Form design
+e9bb16f - morisamon, 2 days ago : Successfully integrating the Form Bonus to project
+7e250bf - morisamon, 2 days ago : match to properties
+5a5e292 - morisamon, 2 days ago : Protect from: class into a same class
+e9d04e6 - Valentina Munoz, 2 days ago : remove try
+40ff4e3 - Valentina Munoz, 2 days ago : bonus
+fb7b293 - Valentina Munoz, 3 days ago : javadoc
+d8a100c - Valentina Munoz, 4 days ago : fix
+a0f4692 - Valentina Munoz, 5 days ago : 3d zoom
+ce0caa6 - Valentina Munoz, 5 days ago : 3d maze, enter, zoom in/out, win window, end game window
+aa2386a - Valentina Munoz, 5 days ago : win screen
+3d7c14a - Valentina Munoz, 7 days ago : last fixes for part 4
+57aaeb1 - morisamon, 7 days ago : GUI fixed
+e9b4910 - morisamon, 7 days ago : fix
+9300f55 - morisamon, 7 days ago : Buttun GUI fixed for windows
+0069c68 - morisamon, 8 days ago : fix the current floor info when performing hint or solve
+d86b0c0 - morisamon, 8 days ago : maze limit fixed (the .lenght receive the len of number and not the value)
+bbf4088 - morisamon, 8 days ago : limit the row and column, hint and full solution implemented, pageup and pagedown implemented, win windows (need to design it) implemented
+7d98260 - Valentina Munoz, 8 days ago : fix logic if up/down/up and down
+de2c857 - Valentina Munoz, 8 days ago : add up/down/up and  down inicate
+d080628 - Valentina Munoz, 8 days ago : flip character
+ccab509 - Valentina Munoz, 8 days ago : fix gui bug
+2bea01c - Valentina Munoz, 9 days ago : fix windows gui
+46afc2e - Valentina Munoz, 9 days ago : gui
+cec3709 - morisamon, 10 days ago : mySQL functionality implemented
+9d567c3 - morisamon, 10 days ago : add serial to solution class
+462329f - morisamon, 10 days ago : GZIP implemented
+71ee258 - Valentina Munoz, 10 days ago : changes
+b61d43e - morisamon, 11 days ago : preparation to SQL zip, dir command implemented
+90f7aa4 - Valentina Munoz, 11 days ago : welcome window
+72206d6 - Valentina Munoz, 11 days ago : gui
+461d512 - morisamon, 12 days ago : cross implemented according the MVC (notify) technique, new command added: MessageCommand - model receive the notify to presenter with "messagecommand" and this command moves the messages or string results to UI
+0fbfb24 - morisamon, 12 days ago : new jar for myalgorithm (with solution class)
+e4127ac - morisamon, 12 days ago : Solution class and the all matches implemented
+6ae6534 - morisamon, 12 days ago : Solution class created (only class), test the write to zip file on the Demo class
+3255411 - Valentina Munoz, 12 days ago : menu
+52e080e - morisamon, 13 days ago : Buttons added on the Menu section (only EXIT button implemented)
+1b82026 - Valentina Munoz, 13 days ago : open properties and exit
+5422c3b - Valentina Munoz, 13 days ago : fix projects
+e67670e - Valentina Munoz, 13 days ago : gui
+a82171a - morisamon, 13 days ago : TestUnits added
+a7359ea - Valentina Munoz, 2 weeks ago : properties
+42b3d18 - Valentina Munoz, 2 weeks ago : return solved maze if already exist
+ab82fde - Valentina Munoz, 2 weeks ago : fix collable
+16c9703 - morisamon, 2 weeks ago : Verify the "get" after submit, receivers a value
+e432503 - Valentina Munoz, 2 weeks ago : collable
+01306bb - Valentina Munoz, 2 weeks ago : mvp solve
+7cdf97f - morisamon, 2 weeks ago : fix the Copy_MVC
+23300ee - Valentina Munoz, 2 weeks ago : change algorithm jar
+2d54ef3 - Valentina Munoz, 2 weeks ago : part 3
+cd2cce9 - morisamon, 2 weeks ago : works only in the debug mode (thread problem?)
+1210c6d - morisamon, 2 weeks ago : copy_of_MVP_Projecy-for test the logics according the Exercise part 4
+56379d9 - morisamon, 2 weeks ago : Observer and Observable interfaces removed, change model and view type to specific type from the Run class
+519e348 - Valentina Munoz, 2 weeks ago : init mvp project
+853fbe2 - Valentina Munoz, 2 weeks ago : maze dimension
+15c2021 - Valentina Munoz, 2 weeks ago : some fixes
+8963c6f - morisamon, 3 weeks ago : new Archive for upload to moodle
+ffe3cb7 - morisamon, 3 weeks ago : backup to simplae algorithm
+88edc49 - morisamon, 3 weeks ago : Exit problem fixed, Concurrent HashMap added, Simple algorithm fixed
+89cc862 - Valentina Munoz, 3 weeks ago : change to thread pools
+4c8d37a - Valentina Munoz, 3 weeks ago : add lock to threads
+8abedf1 - Valentina Munoz, 3 weeks ago : finish part 3
+71feb9c - morisamon, 3 weeks ago : java docs
+9d7e4c4 - morisamon, 3 weeks ago : java docs
+0c619a2 - morisamon, 3 weeks ago : java docs added.
+62ae582 - morisamon, 3 weeks ago : java doc added
+afb44f5 - morisamon, 3 weeks ago : Adding a feature to also continue the thread that caused the invalid command.
+fb51701 - morisamon, 3 weeks ago : exit command implanted, java docs added to view package
+1e36814 - Valentina Munoz, 3 weeks ago : add javadoc
+18d0b63 - Valentina Munoz, 3 weeks ago : algorithm factory
+c51e352 - morisamon, 4 weeks ago : no changes
+0cea60e - morisamon, 4 weeks ago : .jar file changed
+e4a3c45 - morisamon, 4 weeks ago : The setters for z y x are added + the cross command implemented
+24708b6 - Valentina Munoz, 4 weeks ago : solve and load maze
+a916160 - morisamon, 4 weeks ago : Load method
+021d2ca - Valentina Munoz, 4 weeks ago : save decompressed array size
+624a6d1 - Valentina Munoz, 4 weeks ago : commands
+29398e6 - Valentina Munoz, 4 weeks ago : generate_maze init
+035bf64 - Valentina Munoz, 4 weeks ago : add to path errors msg and tab
+3da19d8 - Valentina Munoz, 4 weeks ago : Add javadoc to all classes in myalgorithm
+20d0d75 - morisamon, 4 weeks ago : part 3 commands
+a04f405 - morisamon, 4 weeks ago : park3!!!!!!!!!!!!!
+f12ed68 - Valentina Munoz, 4 weeks ago : final project
+38f46ea - Valentina Munoz, 4 weeks ago : my algorithm
+fc39255 - Valentina Munoz, 4 weeks ago : my algorithm

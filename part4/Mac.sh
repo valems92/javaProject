@@ -1,1 +1,1 @@
-java -classpath mvpProject.jar:myAlgorithm.jar:swt\Mac\swt.jar boot.Run
+java -XstartOnFirstThread -classpath mvpProject.jar:myAlgorithm.jar:swt/Mac/swt.jar boot.Run
