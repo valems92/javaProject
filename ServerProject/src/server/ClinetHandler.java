@@ -3,6 +3,10 @@ package server;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import Common.Common;
+
 public interface ClinetHandler {
-	void handleClient(InputStream inFromClient, OutputStream outToClient);
+	public void handleClient(InputStream inFromClient, OutputStream outToClient);
+	
+	public void write(Common o);
 }

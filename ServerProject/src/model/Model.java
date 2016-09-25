@@ -64,12 +64,6 @@ public interface Model {
 	public void solveMaze(Searcher<Position> searcher, String name, String type, State<Position> state);
 
 	/**
-	 * <h1>getLastSolution</h1> Get the last solution calcualted.
-	 * <p>
-	 */
-	public Solution<Position> getLastSolution();
-
-	/**
 	 * <h1>saveMaze</h1> Get a maze name, and if exist, save it compressed to a
 	 * file.
 	 * <p>
@@ -92,16 +86,6 @@ public interface Model {
 	 *            The name of the new maze
 	 */
 	public void loadMaze(String fileName, String name);
-
-	/**
-	 * <h1>loadGameProperties</h1> Get the path of the properties file, load it
-	 * and set the file in Properties class.
-	 * <p>
-	 * 
-	 * @param path
-	 *            The properties file path
-	 */
-	public void loadGameProperties(String path);
 
 	/**
 	 * <h1>exit</h1> Shutdown all executors. i.e, executors won't accept new
@@ -127,12 +111,6 @@ public interface Model {
 	public void displayCrossSection(String name, int index, String section);
 
 	/**
-	 * <h1>getLastCrossSection</h1> Get the last cross section generated.
-	 * <p>
-	 */
-	public int[][] getLastCrossSection();
-
-	/**
 	 * <h1>loadData</h1> Load user data from SQL or zip file. If zip was
 	 * required (in properties file) and there wasn't any last data, it create a
 	 * new empty file.
@@ -143,16 +121,7 @@ public interface Model {
 	 */
 	public void loadData() throws Exception;
 
-	/**
-	 * <h1>generateClass</h1> Get a class type and generate an object of it. It
-	 * has to receive a string that contains all class fields value separated by
-	 * space.
-	 * <p>
-	 * 
-	 * @param fieldsValues
-	 *            string that contains fields value
-	 */
-	public void generateClass(String fieldsValues);
+
 
 	/**
 	 * <h1>update</h1> Get massage and send a notification of it.
@@ -162,21 +131,4 @@ public interface Model {
 	 *            massage of notification
 	 */
 	public void update(String str);
-
-	/**
-	 * <h1>setGeneratedObject</h1> Set the last properties object
-	 * generated to the object received
-	 * <p>
-	 * 
-	 * @param o
-	 *            new object
-	 */
-	public void setGeneratedObject(Object o);
-
-	/**
-	 * <h1>getGeneratedObject</h1>
-	 * <p>
-	 * @return The last object class generated
-	 */
-	public Object getGeneratedObject();
 }

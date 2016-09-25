@@ -2,6 +2,7 @@ package presenter;
 
 import java.io.IOException;
 
+import Common.Common;
 import model.Model;
 import view.View;
 
@@ -20,6 +21,8 @@ public interface CommandsManager {
 	 * @throws IOException - Exception throws when the invalid command inserts        
 	 */
 	public void executeCommand(String commandLine) throws IOException;
+	
+	public void executeCommand(Common o);
 	
 	/**
 	 * <h1>setCommands</h1> Responsible for define the all commands for a command manager

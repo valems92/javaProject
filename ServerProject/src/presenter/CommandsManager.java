@@ -2,6 +2,7 @@ package presenter;
 
 import java.io.IOException;
 
+import Common.Common;
 import model.Model;
 
 /**
@@ -18,7 +19,7 @@ public interface CommandsManager {
 	 * @param commandLine - The string that include the relevant command    
 	 * @throws IOException - Exception throws when the invalid command inserts        
 	 */
-	public void executeCommand(String[] commandLine) throws IOException;
+	public void executeCommand(Common o) throws IOException;
 	
 	/**
 	 * <h1>setCommands</h1> Responsible for define the all commands for a command manager
@@ -26,13 +27,5 @@ public interface CommandsManager {
 	 */
 	public void setCommands();
 	
-	/**
-	 * <h1>setModelView</h1> 
-	 * Responsible for link the command manager to view and model
-	 * <p>
-	 * @param model - Type of model
-	 * @param view - Type of view
-	 */
-	public void setModelView(Model model/*, View view*/);
-
+	public void setModel(Model model);
 }
