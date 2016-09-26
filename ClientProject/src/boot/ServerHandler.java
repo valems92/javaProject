@@ -13,56 +13,56 @@ import presenter.CommandsManager;
 import presenter.Properties;
 
 public class ServerHandler {
-    private Socket server;
-    private ObjectInputStream inFromServer;
-    private ObjectOutputStream outToServer;
+	private Socket server;
+	private ObjectInputStream inFromServer;
+	private ObjectOutputStream outToServer;
 
-    private CommandsManager commandManager;
+	private CommandsManager commandManager;
 
-    public ServerHandler(CommandsManager commandManager)
-	    throws UnknownHostException, IOException, ClassNotFoundException {
-	this.commandManager = commandManager;
+	public ServerHandler(CommandsManager commandManager)
+			throws UnknownHostException, IOException, ClassNotFoundException {
+		this.commandManager = commandManager;
 
-	server = new Socket("localhost", 5400);
+		server = new Socket("localhost", 5400);
 
-	OutputStream out = server.getOutputStream();
-	outToServer = new ObjectOutputStream(out);
+		OutputStream out = server.getOutputStream();
+		outToServer = new ObjectOutputStream(out);
 
-	InputStream in = server.getInputStream();
-	inFromServer = new ObjectInputStream(in);
-	 
-	Object[] data = { "set_properties", Properties.properites };
-	CommonData o = new CommonData(data);
-	write(o);
-    }
+		InputStream in = server.getInputStream();
+		inFromServer = new ObjectInputStream(in);
 
-    public void write(CommonData o) {
-	try {
-	    outToServer.writeObject(o);
-	} catch (IOException e) {
-	    e.printStackTrace();
+		Object[] data = { "set_properties", Properties.properites };
+		CommonData o = new CommonData(data);
+		write(o);
 	}
-    }
 
-    public void read() {
-	CommonData cmd;
-	try {
-	    cmd = (CommonData) inFromServer.readObject();
-	    commandManager.executeCommand(cmd);
-
-	} catch (ClassNotFoundException | IOException e) {
-	    e.printStackTrace();
+	public void write(CommonData o) {
+		try {
+			outToServer.writeObject(o);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
-    }
 
-    public void close() {
-	try {
-	    inFromServer.close();
-	    outToServer.close();
+	public void read() {
+		CommonData cmd;
+		try {
+			cmd = (CommonData) inFromServer.readObject();
+			commandManager.executeCommand(cmd);
 
-	    server.close();
-	} catch (IOException e) {
-	    e.printStackTrace();
+		} catch (ClassNotFoundException | IOException e) {
+			e.printStackTrace();
+		}
 	}
-    }
+
+	public void close() {
+		try {
+			inFromServer.close();
+			outToServer.close();
+
+			server.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 }
