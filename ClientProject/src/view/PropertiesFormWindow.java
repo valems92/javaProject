@@ -233,7 +233,7 @@ public class PropertiesFormWindow extends DialogWindow {
      * responsible for preparing the record, update and sending it to Presenter
      * <p>
      */
-    private void createObject() {
+	private void createObject() {
 	String allContentFields = "";
 	String content;
 

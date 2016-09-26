@@ -13,6 +13,7 @@ import presenter.CommandsManager;
 import presenter.Maze3dCommands;
 
 public class Maze3dClientHandler implements ClientHandler {
+	private String id = "1";
 	private CommandsManager commandManager;
 
 	private ObjectInputStream inFromClient;
@@ -26,6 +27,10 @@ public class Maze3dClientHandler implements ClientHandler {
 		commandManager.setModel(model);
 	}
 
+	public String getID(){
+		return id;
+	}
+	
 	@Override
 	public void handleClient(InputStream inFromClient, OutputStream outToClient) {
 		try {
