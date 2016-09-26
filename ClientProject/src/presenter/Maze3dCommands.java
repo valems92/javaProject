@@ -27,20 +27,27 @@ public class Maze3dCommands extends CommonCommandsManager {
     @Override
     public void setCommands() {
 	commands.put("dir", new DirCommand());
+
 	commands.put("generate_maze", new GenerateMazeCommand());
-	commands.put("solve", new SolveMazeCommand());
-	commands.put("save_maze", new SaveMazeCommand());
-	commands.put("load_maze", new LoadMazeCommand());
-	commands.put("generate_cross_section", new GenerateCrossSectionCommand());
-	commands.put("load_properties", new LoadPropertiesCommand());
-	commands.put("display_solution", new DisplaySolutionCommand());
-	commands.put("display_cross_section", new DisplayCrossSectionCommand());
-	commands.put("display_message", new DisplayMessageCommand());
-	commands.put("change_settings", new ChangeSettingsCommand());
-	commands.put("save_settings", new SaveSettingsCommand());
-	commands.put("exit", new ExitCommand());
 	commands.put("display_maze", new DisplayMazeCommand());
 
+	commands.put("solve", new SolveMazeCommand());
+	commands.put("display_solution", new DisplaySolutionCommand());
+
+	commands.put("generate_cross_section", new GenerateCrossSectionCommand());
+	commands.put("display_cross_section", new DisplayCrossSectionCommand());
+
+	commands.put("save_maze", new SaveMazeCommand());
+	commands.put("load_maze", new LoadMazeCommand());
+
+	commands.put("display_message", new DisplayMessageCommand());
+
+	commands.put("load_properties", new LoadPropertiesCommand());
+	commands.put("change_settings", new ChangeSettingsCommand());
+	commands.put("save_settings", new SaveSettingsCommand());
+
+	commands.put("exit", new ExitCommand());
+	commands.put("save_data", new SaveDataCommand());
     }
 
     /**
@@ -115,7 +122,6 @@ public class Maze3dCommands extends CommonCommandsManager {
 	@Override
 	public void doCommand(Object[] args) {
 	    String name = (String) args[1];
-
 	    Maze3d maze = (Maze3d) args[2];
 
 	    if (args.length > 3) {
@@ -153,7 +159,7 @@ public class Maze3dCommands extends CommonCommandsManager {
     class DisplaySolutionCommand implements Command {
 	@Override
 	public void doCommand(Object[] args) {
-	    String type = (String) args[1]; 
+	    String type = (String) args[1];
 	    Solution<Position> solution = (Solution<Position>) args[2];
 	    ui.displaySolution(solution, type);
 	}
@@ -169,10 +175,7 @@ public class Maze3dCommands extends CommonCommandsManager {
     class SaveMazeCommand implements Command {
 	@Override
 	public void doCommand(Object[] args) {
-	    String name = (String) args[1];
-	    String fileName = (String) args[2];
-
-	    model.saveMaze(name, fileName);
+	    model.saveMaze((String[]) args);
 	}
     }
 
@@ -186,25 +189,7 @@ public class Maze3dCommands extends CommonCommandsManager {
     class LoadMazeCommand implements Command {
 	@Override
 	public void doCommand(Object[] args) {
-	    String fileName = (String) args[1];
-	    String name = (String) args[2];
-
-	    model.loadMaze(fileName, name);
-	}
-    }
-
-    /**
-     * <h1>LoadPropertiesCommand</h1> Get the proerties file path and send it to
-     * loadGameProperties in model.
-     * <p>
-     * 
-     * @author Valentina Munoz & Moris Amon
-     */
-    class LoadPropertiesCommand implements Command {
-	@Override
-	public void doCommand(Object[] args) {
-	    String path = (String) args[1];
-	    model.loadGameProperties(path);
+	    model.loadMaze((String[]) args);
 	}
     }
 
@@ -253,6 +238,21 @@ public class Maze3dCommands extends CommonCommandsManager {
 		msg += (String) args[i] + " ";
 
 	    ui.displayMessage(msg);
+	}
+    }
+
+    /**
+     * <h1>LoadPropertiesCommand</h1> Get the proerties file path and send it to
+     * loadGameProperties in model.
+     * <p>
+     * 
+     * @author Valentina Munoz & Moris Amon
+     */
+    class LoadPropertiesCommand implements Command {
+	@Override
+	public void doCommand(Object[] args) {
+	    String path = (String) args[1];
+	    model.loadGameProperties(path);
 	}
     }
 
@@ -308,6 +308,13 @@ public class Maze3dCommands extends CommonCommandsManager {
 	public void doCommand(Object[] args) {
 	    model.exit();
 	    ui.exit();
+	}
+    }
+
+    class SaveDataCommand implements Command {
+	@Override
+	public void doCommand(Object[] args) {
+	    model.saveData(args);
 	}
     }
 }

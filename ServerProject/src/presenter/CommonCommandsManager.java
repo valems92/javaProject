@@ -2,7 +2,7 @@ package presenter;
 
 import java.util.concurrent.ConcurrentHashMap;
 
-import Common.Common;
+import CommonData.CommonData;
 import model.Model;
 
 /**
@@ -22,7 +22,7 @@ public abstract class CommonCommandsManager implements CommandsManager {
 	setCommands();
     }
 
-    public void executeCommand(Common o) {
+    public void executeCommand(CommonData o) {
 	Command cmd = commands.get((String) o.data[0]);
 	cmd.doCommand(o.data);
     }

@@ -1,126 +1,127 @@
 package presenter;
 
+import java.io.Serializable;
+
 /**
- * <h1>Properties</h1>
- * Serializable class. Allows setting and getting of all properties needed.
- * On init program, load an xml file into a Properties object from which we get data program needs. 
+ * <h1>Properties</h1> Serializable class. Allows setting and getting of all
+ * properties needed. On init program, load an xml file into a Properties object
+ * from which we get data program needs.
+ * 
  * @author Valentina Munoz & Moris Amon
  *
  */
-public class Properties {
-	public static Properties properites = new Properties();
-	private String viewType;
-	private int viewWidth;
-	private int viewHeight;
-	
-	private String generateAlgorithm;
-	private String selectCellMethod;
-	private String solveAlgorithm;
-	private String comparator;
-	private String mazeDisplay;
-	
-	private int numberOfThreads;
-	private Boolean MySQL;
-	
-	private double hintLength;
-	private int animationSpeed;
-	
-	public int getAnimationSpeed() {
-		return animationSpeed;
-	}
+public class Properties implements Serializable{
+    public static Properties properites = new Properties();
+    private String viewType;
+    private int viewWidth;
+    private int viewHeight;
 
-	public void setAnimationSpeed(int animationSpeed) {
-		this.animationSpeed = animationSpeed;
-	}
+    private String generateAlgorithm;
+    private String selectCellMethod;
+    private String solveAlgorithm;
+    private String comparator;
+    private String mazeDisplay;
 
-	public String getGenerateAlgorithm() {
-		return generateAlgorithm;
-	}
+    private int numberOfThreads;
+    private Boolean MySQL;
 
-	public void setGenerateAlgorithm(String generateAlgorithm) {
-		this.generateAlgorithm = generateAlgorithm;
-	}
+    private double hintLength;
+    private int animationSpeed;
 
-	public String getSelectCellMethod() {
-		return selectCellMethod;
-	}
+    public int getAnimationSpeed() {
+	return animationSpeed;
+    }
 
-	public void setSelectCellMethod(String selectCellMethod) {
-		this.selectCellMethod = selectCellMethod;
-	}
+    public void setAnimationSpeed(int animationSpeed) {
+	this.animationSpeed = animationSpeed;
+    }
 
-	public String getSolveAlgorithm() {
-		return solveAlgorithm;
-	}
+    public String getGenerateAlgorithm() {
+	return generateAlgorithm;
+    }
 
-	public void setSolveAlgorithm(String solveAlgorithm) {
-		this.solveAlgorithm = solveAlgorithm;
-	}
+    public void setGenerateAlgorithm(String generateAlgorithm) {
+	this.generateAlgorithm = generateAlgorithm;
+    }
 
-	public String getComparator() {
-		return comparator;
-	}
+    public String getSelectCellMethod() {
+	return selectCellMethod;
+    }
 
-	public void setComparator(String comparator) {
-		this.comparator = comparator;
-	}
+    public void setSelectCellMethod(String selectCellMethod) {
+	this.selectCellMethod = selectCellMethod;
+    }
 
-	public int getNumberOfThreads() {
-		return numberOfThreads;
-	}
+    public String getSolveAlgorithm() {
+	return solveAlgorithm;
+    }
 
-	public void setNumberOfThreads(int numberOfThreads) {
-		this.numberOfThreads = numberOfThreads;
-	}
+    public void setSolveAlgorithm(String solveAlgorithm) {
+	this.solveAlgorithm = solveAlgorithm;
+    }
 
-	public String getViewType() {
-		return viewType;
-	}
+    public String getComparator() {
+	return comparator;
+    }
 
-	public void setViewType(String viewType) {
-		this.viewType = viewType;
-	}
+    public void setComparator(String comparator) {
+	this.comparator = comparator;
+    }
 
-	public int getViewHeight() {
-		return viewHeight;
-	}
+    public int getNumberOfThreads() {
+	return numberOfThreads;
+    }
 
-	public void setViewHeight(int viewHeight) {
-		this.viewHeight = viewHeight;
-	}
+    public void setNumberOfThreads(int numberOfThreads) {
+	this.numberOfThreads = numberOfThreads;
+    }
 
-	public int getViewWidth() {
-		return viewWidth;
-	}
+    public String getViewType() {
+	return viewType;
+    }
 
-	public void setViewWidth(int viewWidth) {
-		this.viewWidth = viewWidth;
-	}
+    public void setViewType(String viewType) {
+	this.viewType = viewType;
+    }
 
-	public Boolean getMySQL() {
-		return MySQL;
-	}
+    public int getViewHeight() {
+	return viewHeight;
+    }
 
-	public void setMySQL(Boolean mySQL) {
-		MySQL = mySQL;
-	}
+    public void setViewHeight(int viewHeight) {
+	this.viewHeight = viewHeight;
+    }
 
-	public double getHintLength() {
-		return hintLength;
-	}
+    public int getViewWidth() {
+	return viewWidth;
+    }
 
-	public void setHintLength(double hintLength) {
-		this.hintLength = hintLength;
-	}
+    public void setViewWidth(int viewWidth) {
+	this.viewWidth = viewWidth;
+    }
 
-	public String getMazeDisplay() {
-		return mazeDisplay;
-	}
+    public Boolean getMySQL() {
+	return MySQL;
+    }
 
-	public void setMazeDisplay(String mazeDisplay) {
-		this.mazeDisplay = mazeDisplay;
-	}
-	
-	
-	
+    public void setMySQL(Boolean mySQL) {
+	MySQL = mySQL;
+    }
+
+    public double getHintLength() {
+	return hintLength;
+    }
+
+    public void setHintLength(double hintLength) {
+	this.hintLength = hintLength;
+    }
+
+    public String getMazeDisplay() {
+	return mazeDisplay;
+    }
+
+    public void setMazeDisplay(String mazeDisplay) {
+	this.mazeDisplay = mazeDisplay;
+    }
+
 }

@@ -6,21 +6,21 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 
-import Common.Common;
+import CommonData.CommonData;
 import model.GameMaze3dModel;
 import model.Model;
 import presenter.CommandsManager;
 import presenter.Maze3dCommands;
 
-public class Maze3dClientHandler implements ClinetHandler {
+public class Maze3dClientHandler implements ClientHandler {
     private CommandsManager commandManager;
-    
+
     private ObjectInputStream inFromClient;
     private ObjectOutputStream outToClient;
 
     public Maze3dClientHandler() {
 	Model model = new GameMaze3dModel(this);
-	
+
 	commandManager = new Maze3dCommands(this);
 	commandManager.setCommands();
 	commandManager.setModel(model);
@@ -40,20 +40,17 @@ public class Maze3dClientHandler implements ClinetHandler {
 
     private void read() {
 	try {
-	    Common cmd = (Common) inFromClient.readObject();
-	    String command = (String) cmd.data[0];
-	    
+	    CommonData cmd;
+	    String command = "";
+
 	    while (!command.equals("exit")) {
-		System.out.println(cmd);
-
-		commandManager.executeCommand(cmd);
-		
-		cmd = (Common) inFromClient.readObject();
+		cmd = (CommonData) inFromClient.readObject();
 		command = (String) cmd.data[0];
+		
+		commandManager.executeCommand(cmd);
 	    }
-	    write(cmd);
 
-	    inFromClient.close();
+	    close();
 	} catch (ClassNotFoundException e) {
 	    e.printStackTrace();
 	} catch (IOException e) {
@@ -62,9 +59,18 @@ public class Maze3dClientHandler implements ClinetHandler {
     }
 
     @Override
-    public void write(Common o) {
+    public void write(CommonData o) {
 	try {
 	    outToClient.writeObject(o);
+	} catch (IOException e) {
+	    e.printStackTrace();
+	}
+    }
+
+    public void close() {
+	try {
+	    inFromClient.close();
+	    outToClient.close();
 	} catch (IOException e) {
 	    e.printStackTrace();
 	}
