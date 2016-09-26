@@ -346,7 +346,7 @@ public class MenuDisplay extends Canvas {
 	public void setArrowEnabled(ArrowDisplay arrow, boolean enable) {
 		if (arrow != null) {
 			arrow.setEnabled(enable);
-			arrow.redraw();
+			arrow.changeArrowImg();
 		}
 	}
 

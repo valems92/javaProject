@@ -22,6 +22,7 @@ public class ArrowDisplay extends Canvas {
 	private Image arrow;
 	private Image arrowOpacity;
 	private Label arrowLabel;
+	private String lastArrow = "arrow";
 
 	/**
 	 * Initialize data and change cursor of widget on mouse over
@@ -44,6 +45,7 @@ public class ArrowDisplay extends Canvas {
 		arrowOpacity = new Image(this.getDisplay(), imageOpacityPath);
 
 		initWidgets();
+
 	}
 
 	/**
@@ -59,41 +61,39 @@ public class ArrowDisplay extends Canvas {
 		arrowLabel = new Label(this, SWT.NONE);
 		arrowLabel.setImage(arrow);
 		arrowLabel.setSize(width, height + 10);
-
-		drawArrow(width, height);
 	}
 
 	/**
 	 * <h1>drawArrow</h1> Change arrow position to be at the center. Also, if
 	 * arrow should be disable, change image.
 	 * <p>
+	 * 
 	 * @param width
 	 *            arrow image width
 	 * @param height
 	 *            arrow image height
-	 */
-	private void drawArrow(int width, int height) {
-		this.addPaintListener(new PaintListener() {
-			@Override
-			public void paintControl(PaintEvent e) {
-				arrowLabel.setLocation(getSize().x / 2 - width / 2, getSize().y / 2 - height / 2);
+	 */		
 
-				if (!isEnabled()) {
-					if (arrowLabel.getImage() != arrowOpacity)
-						arrowLabel.setImage(arrowOpacity);
-				} else {
-					if (arrowLabel.getImage() != arrow)
-						arrowLabel.setImage(arrow);
-				}
+	public void changeArrowImg(){
+		if (!isEnabled()) {
+			if (lastArrow.equals("arrow")) {
+				arrowLabel.setImage(arrowOpacity);
+				lastArrow = "arrowOpacity";
 			}
-		});
+		} else {
+			if (lastArrow.equals("arrowOpacity")) {
+				arrowLabel.setImage(arrow);
+				lastArrow = "arrow";
+			}
+		}
 	}
 	
 	/**
-	 * <h1>setMouseListener</h1>
-	 * Get a mouse listener, and add it to the arrow
+	 * <h1>setMouseListener</h1> Get a mouse listener, and add it to the arrow
 	 * <p>
-	 * @param mouseListener mouse listener to add to the arrow
+	 * 
+	 * @param mouseListener
+	 *            mouse listener to add to the arrow
 	 */
 	public void setMouseListener(MouseListener mouseListener) {
 		arrowLabel.addMouseListener(mouseListener);
