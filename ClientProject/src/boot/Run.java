@@ -32,11 +32,8 @@ public class Run {
 	    }
 	}
 
-	// Server
-	System.out.println("Client Side");
-
 	ServerHandler theServer;
-	try {	 
+	try {
 	    CommonMaze3dView view;
 	    String viewType = Properties.properites.getViewType();
 
@@ -51,19 +48,19 @@ public class Run {
 
 	    CommandsManager commandManager = new Maze3dCommands();
 	    commandManager.setCommands();
-	    
+
 	    theServer = new ServerHandler(commandManager);
 	    GameMaze3dModel model = new GameMaze3dModel(theServer);
 
 	    commandManager.setModelView(model, view);
 
 	    Presenter presenter = new Presenter(view, model, commandManager);
-	    
+
 	    view.addObserver(presenter);
 	    model.addObserver(presenter);
 
 	    view.start();
-	    
+
 	} catch (IOException e) {
 	    e.printStackTrace();
 	} catch (ClassNotFoundException e) {

@@ -1,15 +1,5 @@
 package model;
 
-import java.io.InputStream;
-import java.io.OutputStream;
-
-import algorithms.mazeGenerators.Maze3d;
-import algorithms.mazeGenerators.Position;
-import algorithms.search.Searcher;
-import algorithms.search.Solution;
-import algorithms.search.State;
-import presenter.CommandsManager;
-
 /**
  * <h1>Model</h1> Responsible for all the maze3D logic.
  * <p>
@@ -57,48 +47,6 @@ public interface Model {
     public void solveMaze(String[] args);
 
     /**
-     * <h1>saveMaze</h1> Get a maze name, and if exist, save it compressed to a
-     * file.
-     * <p>
-     * 
-     * @param name
-     *            The maze name
-     * @param fileName
-     *            The name of the new file
-     */
-    public void saveMaze(String name, String fileName);
-
-    /**
-     * <h1>loadMaze</h1> Get a file name, and if exist, read it, decompress it
-     * and create a maze with the received name.
-     * <p>
-     * 
-     * @param fileName
-     *            The file wanted to load
-     * @param name
-     *            The name of the new maze
-     */
-    public void loadMaze(String fileName, String name);
-
-    /**
-     * <h1>loadGameProperties</h1> Get the path of the properties file, load it
-     * and set the file in Properties class.
-     * <p>
-     * 
-     * @param path
-     *            The properties file path
-     */
-    public void loadGameProperties(String path);
-
-    /**
-     * <h1>exit</h1> Shutdown all executors. i.e, executors won't accept new
-     * task. Also waits until all the task that have already been submitted
-     * finish what they are doing (or until the timeout is reached = which
-     * problably won't happen)
-     */
-    public void exit();
-
-    /**
      * <h1>displayCrossSection</h1> Get a maze name, and if exist, get a 2D
      * array of the cross section wanted. When finish, it throws a notification
      * to the presenter to display it.
@@ -112,6 +60,42 @@ public interface Model {
      *            The wanted section
      */
     public void displayCrossSection(Object[] data);
+
+    /**
+     * <h1>saveMaze</h1> Get a maze name, and if exist, save it compressed to a
+     * file.
+     * <p>
+     * 
+     * @param name
+     *            The maze name
+     * @param fileName
+     *            The name of the new file
+     */
+    public void saveMaze(String[] args);
+
+    /**
+     * <h1>loadMaze</h1> Get a file name, and if exist, read it, decompress it
+     * and create a maze with the received name.
+     * <p>
+     * 
+     * @param fileName
+     *            The file wanted to load
+     * @param name
+     *            The name of the new maze
+     */
+    public void loadMaze(String[] args);
+
+    /**
+     * <h1>loadGameProperties</h1> Get the path of the properties file, load it
+     * and set the file in Properties class.
+     * <p>
+     * 
+     * @param path
+     *            The properties file path
+     */
+    public void loadGameProperties(String path);
+
+    public void saveData(Object[] data);
 
     /**
      * <h1>loadData</h1> Load user data from SQL or zip file. If zip was
@@ -161,4 +145,12 @@ public interface Model {
      * @return The last object class generated
      */
     public Object getGeneratedObject();
+
+    /**
+     * <h1>exit</h1> Shutdown all executors. i.e, executors won't accept new
+     * task. Also waits until all the task that have already been submitted
+     * finish what they are doing (or until the timeout is reached = which
+     * problably won't happen)
+     */
+    public void exit();
 }

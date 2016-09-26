@@ -8,8 +8,9 @@ import java.io.OutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
-import Common.Common;
+import CommonData.CommonData;
 import presenter.CommandsManager;
+import presenter.Properties;
 
 public class ServerHandler {
     private Socket server;
@@ -29,9 +30,13 @@ public class ServerHandler {
 
 	InputStream in = server.getInputStream();
 	inFromServer = new ObjectInputStream(in);
+	 
+	Object[] data = { "set_properties", Properties.properites };
+	CommonData o = new CommonData(data);
+	write(o);
     }
 
-    public void write(Common o) {
+    public void write(CommonData o) {
 	try {
 	    outToServer.writeObject(o);
 	} catch (IOException e) {
@@ -40,9 +45,9 @@ public class ServerHandler {
     }
 
     public void read() {
-	Common cmd;
+	CommonData cmd;
 	try {
-	    cmd = (Common) inFromServer.readObject();
+	    cmd = (CommonData) inFromServer.readObject();
 	    commandManager.executeCommand(cmd);
 
 	} catch (ClassNotFoundException | IOException e) {

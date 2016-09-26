@@ -12,7 +12,7 @@ public class MyTCPIPServer {
     int port;
     ServerSocket server;
 
-    ClinetHandler clinetHandler;
+    ClientHandler clinetHandler;
     int numOfClients;
 
     volatile boolean stop;
@@ -22,7 +22,7 @@ public class MyTCPIPServer {
 
     int clientsHandled = 0;
 
-    public MyTCPIPServer(int port, ClinetHandler clinetHandler, int numOfClients) {
+    public MyTCPIPServer(int port, ClientHandler clinetHandler, int numOfClients) {
 	this.port = port;
 	this.clinetHandler = clinetHandler;
 	this.numOfClients = numOfClients;

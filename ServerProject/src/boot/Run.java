@@ -11,14 +11,14 @@ public class Run {
     public static void main(String[] args) {
 	System.out.println("Server Side");
 
-	try {    
+	try {
 	    MyTCPIPServer server = new MyTCPIPServer(5400, new Maze3dClientHandler(), 10);
 	    server.start();
 
 	    BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
 	    while (!(in.readLine()).equals("close the server"));
 	    server.close();
-	    
+
 	} catch (Exception e) {
 	    System.out.println(e);
 	}

@@ -1,7 +1,5 @@
 package model;
 
-import java.beans.XMLDecoder;
-import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -17,7 +15,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
-import Common.Common;
+import CommonData.CommonData;
 import algorithms.demo.Maze3dDomain;
 import algorithms.mazeGenerators.Maze3d;
 import algorithms.mazeGenerators.Maze3dGenerator;
@@ -28,8 +26,7 @@ import algorithms.search.Solution;
 import algorithms.search.State;
 import io.MyCompressorOutputStream;
 import io.MyDecompressorInputStream;
-import presenter.Properties;
-import server.ClinetHandler;
+import server.ClientHandler;
 
 /**
  * <h1>GameMaze3dModel</h1> Implements all Model interface functoins. Also save
@@ -39,7 +36,7 @@ import server.ClinetHandler;
  * @author Valentina Munoz & Moris Amon
  */
 public class GameMaze3dModel extends Observable implements Model {
-    private ClinetHandler client;
+    private ClientHandler client;
 
     public ConcurrentHashMap<String, Maze3d> generatedMazes;
     private ConcurrentHashMap<String, Solution<Position>> solutions;
@@ -50,7 +47,7 @@ public class GameMaze3dModel extends Observable implements Model {
     private ExecutorService executorGenerate;
     private ExecutorService executorSolve;
 
-    public GameMaze3dModel(ClinetHandler client) {
+    public GameMaze3dModel(ClientHandler client) {
 	this.client = client;
 
 	generatedMazes = new ConcurrentHashMap<String, Maze3d>();
@@ -61,25 +58,33 @@ public class GameMaze3dModel extends Observable implements Model {
     }
 
     @Override
+    public void loadData(Object[] data) {
+	generatedMazes = (ConcurrentHashMap<String, Maze3d>) data[1];
+	solutions = (ConcurrentHashMap<String, Solution<Position>>) data[2];
+    }
+
+    @Override
     public void generateMaze(String name, int z, int y, int x, Maze3dGenerator mg) {
 
 	if (generatedMazes.containsKey(name)) {
-	    Object[] data = { "display_maze", name, " Maze called " + name + " already exist." };
-	    Common o = new Common(data);
+	    Object[] data = { "display_maze", name, generatedMazes.get(name),
+		    " Maze called " + name + " already exist." };
+	    CommonData o = new CommonData(data);
 	    client.write(o);
 	    return;
 	}
 
 	if (z == 0 || y == 0 || x == 0) {
 	    Object[] data = { "display_message", "Maze dimension is missing." };
-	    Common o = new Common(data);
-	    client.write(o); 
+	    CommonData o = new CommonData(data);
+	    client.write(o);
 	    return;
 	}
 
 	if (z > 30 || y > 30 || x > 30 || y < 4 || x < 4) {
-	    Object[] data = { "display_message", "Maze dimensions have to be smaller than 30. Also, rows and Columns should be bugger than 4." };
-	    Common o = new Common(data);
+	    Object[] data = { "display_message",
+		    "Maze dimensions have to be smaller than 30. Also, rows and Columns should be bugger than 4." };
+	    CommonData o = new CommonData(data);
 	    client.write(o);
 	    return;
 	}
@@ -96,7 +101,7 @@ public class GameMaze3dModel extends Observable implements Model {
 	try {
 	    maze = generatedMaze.get();
 	    generatedMazes.put(name, maze);
-
+	    
 	} catch (InterruptedException e) {
 	    e.printStackTrace();
 	} catch (ExecutionException e) {
@@ -116,11 +121,11 @@ public class GameMaze3dModel extends Observable implements Model {
 
 	if (solutions.containsKey(name) && state != null && state.getState().equals(maze.getStartPosition())) {
 	    lastSolution = solutions.get(name);
-	    
-	    Object[] data = { "display_solution", type , lastSolution};
-	    Common o = new Common(data);
+
+	    Object[] data = { "display_solution", type, lastSolution };
+	    CommonData o = new CommonData(data);
 	    client.write(o);
-	    
+
 	    return;
 	}
 
@@ -148,7 +153,7 @@ public class GameMaze3dModel extends Observable implements Model {
 	    mazeDomain.setInitialState(prevInitial);
 
 	    Object[] data = { "display_solution", type, lastSolution };
-	    Common o = new Common(data);
+	    CommonData o = new CommonData(data);
 	    client.write(o);
 
 	} catch (InterruptedException e) {
@@ -169,18 +174,23 @@ public class GameMaze3dModel extends Observable implements Model {
 		out.flush();
 		out.close();
 
-		setChanged();
-		notifyObservers("display_message Maze saved");
+		Object[] data = { "display_message", "Maze saved" };
+		CommonData o = new CommonData(data);
+		client.write(o);
+
 	    } catch (FileNotFoundException e) {
-		setChanged();
-		notifyObservers("display_message Error occured while creating file");
+		Object[] data = { "display_message", "Error occured while creating file" };
+		CommonData o = new CommonData(data);
+		client.write(o);
 	    } catch (IOException e) {
-		setChanged();
-		notifyObservers("display_message Error occured while writing to file");
+		Object[] data = { "display_message", "Error occured while writing to file" };
+		CommonData o = new CommonData(data);
+		client.write(o);
 	    }
 	} else {
-	    setChanged();
-	    notifyObservers("display_message Maze with name " + name + " doesn't exist");
+	    Object[] data = { "display_message", "Maze with name " + name + " doesn't exist" };
+	    CommonData o = new CommonData(data);
+	    client.write(o);
 	}
     }
 
@@ -201,38 +211,39 @@ public class GameMaze3dModel extends Observable implements Model {
 		Maze3d mazeLoaded = new Maze3d(b);
 		generatedMazes.put(name, mazeLoaded);
 
-		setChanged();
-		notifyObservers("display_maze " + name);
+		Object[] data = { "display_maze", name, mazeLoaded };
+		CommonData o = new CommonData(data);
+		client.write(o);
 
 	    } catch (FileNotFoundException e) {
-		setChanged();
-		notifyObservers("display_message Error occured while finding file");
+		Object[] data = { "display_message", "Error occured while finding file" };
+		CommonData o = new CommonData(data);
+		client.write(o);
 	    } catch (IOException e) {
-		setChanged();
-		notifyObservers("display_message Error occured while reading to file");
+		Object[] data = { "display_message", "Error occured while reading to file" };
+		CommonData o = new CommonData(data);
+		client.write(o);
 	    }
 	} else {
-	    setChanged();
-	    notifyObservers("display_maze " + name);
+	    Object[] data = { "display_maze", name, generatedMazes.get(name),
+		    " Maze called " + name + " already exist." };
+	    CommonData o = new CommonData(data);
+	    client.write(o);
 	}
-    }
-
-    @Override
-    public void exit() {
     }
 
     @Override
     public void displayCrossSection(String name, int index, String section) {
 	if (index < 0) {
 	    Object[] data = { "display_message", "Invalid Index!" };
-	    Common o = new Common(data);
+	    CommonData o = new CommonData(data);
 	    client.write(o);
 	    return;
 	}
 
 	if (!generatedMazes.containsKey(name)) {
 	    Object[] data = { "display_message", "Maze with name " + name + " doesn't exist" };
-	    Common o = new Common(data);
+	    CommonData o = new CommonData(data);
 	    client.write(o);
 	    return;
 	}
@@ -249,23 +260,20 @@ public class GameMaze3dModel extends Observable implements Model {
 
 	else {
 	    Object[] data = { "display_message", "Invalid Section!" };
-	    Common o = new Common(data);
+	    CommonData o = new CommonData(data);
 	    client.write(o);
 	    return;
 	}
 
-	Object[] data = { "display_cross_section", crossSection};
-	Common o = new Common(data);
+	Object[] data = { "display_cross_section", crossSection };
+	CommonData o = new CommonData(data);
 	client.write(o);
     }
 
     @Override
-    public void loadData() throws Exception {
-    }
-
-    @Override
-    public void update(String str) {
-	setChanged();
-	notifyObservers(str);
+    public void exit() {
+	Object[] data = { "save_data", generatedMazes, solutions };
+	CommonData o = new CommonData(data);
+	client.write(o);
     }
 }
