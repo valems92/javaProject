@@ -23,7 +23,7 @@ public class ServerHandler {
 			throws UnknownHostException, IOException, ClassNotFoundException {
 		this.commandManager = commandManager;
 
-		server = new Socket("localhost", 5400);
+		server = new Socket(Properties.properites.getIpAddress(), Properties.properites.getPort());
 
 		OutputStream out = server.getOutputStream();
 		outToServer = new ObjectOutputStream(out);

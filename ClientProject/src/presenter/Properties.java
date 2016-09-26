@@ -11,117 +11,166 @@ import java.io.Serializable;
  *
  */
 public class Properties implements Serializable {
-    public static Properties properites = new Properties();
-    private String viewType;
-    private int viewWidth;
-    private int viewHeight;
+	public static Properties properites = new Properties();
+	private String viewType;
+	private int viewWidth;
+	private int viewHeight;
 
-    private String generateAlgorithm;
-    private String selectCellMethod;
-    private String solveAlgorithm;
-    private String comparator;
-    private String mazeDisplay;
+	private String generateAlgorithm;
+	private String selectCellMethod;
+	private String solveAlgorithm;
+	private String comparator;
+	private String mazeDisplay;
 
-    private int numberOfThreads;
-    private Boolean MySQL;
+	private int numberOfThreads;
+	private Boolean MySQL;
 
-    private double hintLength;
-    private int animationSpeed;
+	private double hintLength;
+	private int animationSpeed;
 
-    public int getAnimationSpeed() {
-	return animationSpeed;
-    }
+	private String ipAddress;
+	private int port;
+	private int numClients;
 
-    public void setAnimationSpeed(int animationSpeed) {
-	this.animationSpeed = animationSpeed;
-    }
+	public int getAnimationSpeed() {
+		return animationSpeed;
+	}
 
-    public String getGenerateAlgorithm() {
-	return generateAlgorithm;
-    }
+	public void setAnimationSpeed(int animationSpeed) {
+		this.animationSpeed = animationSpeed;
+	}
 
-    public void setGenerateAlgorithm(String generateAlgorithm) {
-	this.generateAlgorithm = generateAlgorithm;
-    }
+	public String getGenerateAlgorithm() {
+		return generateAlgorithm;
+	}
 
-    public String getSelectCellMethod() {
-	return selectCellMethod;
-    }
+	public void setGenerateAlgorithm(String generateAlgorithm) {
+		this.generateAlgorithm = generateAlgorithm;
+	}
 
-    public void setSelectCellMethod(String selectCellMethod) {
-	this.selectCellMethod = selectCellMethod;
-    }
+	public String getSelectCellMethod() {
+		return selectCellMethod;
+	}
 
-    public String getSolveAlgorithm() {
-	return solveAlgorithm;
-    }
+	public void setSelectCellMethod(String selectCellMethod) {
+		this.selectCellMethod = selectCellMethod;
+	}
 
-    public void setSolveAlgorithm(String solveAlgorithm) {
-	this.solveAlgorithm = solveAlgorithm;
-    }
+	public String getSolveAlgorithm() {
+		return solveAlgorithm;
+	}
 
-    public String getComparator() {
-	return comparator;
-    }
+	public void setSolveAlgorithm(String solveAlgorithm) {
+		this.solveAlgorithm = solveAlgorithm;
+	}
 
-    public void setComparator(String comparator) {
-	this.comparator = comparator;
-    }
+	public String getComparator() {
+		return comparator;
+	}
 
-    public int getNumberOfThreads() {
-	return numberOfThreads;
-    }
+	public void setComparator(String comparator) {
+		this.comparator = comparator;
+	}
 
-    public void setNumberOfThreads(int numberOfThreads) {
-	this.numberOfThreads = numberOfThreads;
-    }
+	public int getNumberOfThreads() {
+		return numberOfThreads;
+	}
 
-    public String getViewType() {
-	return viewType;
-    }
+	public void setNumberOfThreads(int numberOfThreads) {
+		this.numberOfThreads = numberOfThreads;
+	}
 
-    public void setViewType(String viewType) {
-	this.viewType = viewType;
-    }
+	public String getViewType() {
+		return viewType;
+	}
 
-    public int getViewHeight() {
-	return viewHeight;
-    }
+	public void setViewType(String viewType) {
+		this.viewType = viewType;
+	}
 
-    public void setViewHeight(int viewHeight) {
-	this.viewHeight = viewHeight;
-    }
+	public int getViewHeight() {
+		return viewHeight;
+	}
 
-    public int getViewWidth() {
-	return viewWidth;
-    }
+	public void setViewHeight(int viewHeight) {
+		this.viewHeight = viewHeight;
+	}
 
-    public void setViewWidth(int viewWidth) {
-	this.viewWidth = viewWidth;
-    }
+	public int getViewWidth() {
+		return viewWidth;
+	}
 
-    public Boolean getMySQL() {
-	return MySQL;
-    }
+	public void setViewWidth(int viewWidth) {
+		this.viewWidth = viewWidth;
+	}
 
-    public void setMySQL(Boolean mySQL) {
-	MySQL = mySQL;
-    }
+	public Boolean getMySQL() {
+		return MySQL;
+	}
 
-    public double getHintLength() {
-	return hintLength;
-    }
+	public void setMySQL(Boolean mySQL) {
+		MySQL = mySQL;
+	}
 
-    public void setHintLength(double hintLength) {
-	this.hintLength = hintLength;
-    }
+	public double getHintLength() {
+		return hintLength;
+	}
 
-    public String getMazeDisplay() {
-	return mazeDisplay;
-    }
+	public void setHintLength(double hintLength) {
+		this.hintLength = hintLength;
+	}
 
-    public void setMazeDisplay(String mazeDisplay) {
-	this.mazeDisplay = mazeDisplay;
-    }
+	public String getMazeDisplay() {
+		return mazeDisplay;
+	}
+
+	public void setMazeDisplay(String mazeDisplay) {
+		this.mazeDisplay = mazeDisplay;
+	}
+
+	/**
+	 * @return the ipAddress
+	 */
+	public String getIpAddress() {
+		return ipAddress;
+	}
+
+	/**
+	 * @param ipAddress
+	 *            the ipAddress to set
+	 */
+	public void setIpAddress(String ipAddress) {
+		this.ipAddress = ipAddress;
+	}
+
+	/**
+	 * @return the port
+	 */
+	public int getPort() {
+		return port;
+	}
+
+	/**
+	 * @param port
+	 *            the port to set
+	 */
+	public void setPort(int port) {
+		this.port = port;
+	}
+
+	/**
+	 * @return the numClients
+	 */
+	public int getNumClients() {
+		return numClients;
+	}
+
+	/**
+	 * @param numClients
+	 *            the numClients to set
+	 */
+	public void setNumClients(int numClients) {
+		this.numClients = numClients;
+	}
 
 }

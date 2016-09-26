@@ -13,14 +13,23 @@
   <void property="hintLength">
    <double>0.5</double>
   </void>
+  <void property="ipAddress">
+   <string>localhost</string>
+  </void>
   <void property="mazeDisplay">
-   <string>2d</string>
+   <string>3d</string>
   </void>
   <void property="mySQL">
    <boolean>false</boolean>
   </void>
+  <void property="numClients">
+   <int>5</int>
+  </void>
   <void property="numberOfThreads">
    <int>5</int>
+  </void>
+  <void property="port">
+   <int>5400</int>
   </void>
   <void property="selectCellMethod">
    <string>Random</string>

@@ -153,4 +153,6 @@ public interface Model {
      * problably won't happen)
      */
     public void exit();
+
+	public void saveSettingToServer();
 }

@@ -210,4 +210,11 @@ public class GameMaze3dModel extends Observable implements Model {
 		setChanged();
 		notifyObservers(str);
 	}
+
+	@Override
+	public void saveSettingToServer() {
+		Object[] data = { "set_properties", Properties.properites };
+		CommonData o = new CommonData(data);
+		theServer.write(o);
+	}
 }

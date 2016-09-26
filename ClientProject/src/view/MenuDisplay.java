@@ -376,7 +376,7 @@ public class MenuDisplay extends Canvas {
 
 	    @Override
 	    public void mouseUp(MouseEvent arg0) {
-		PropertiesFormWindow properties = new PropertiesFormWindow(350, 435, Properties.class, gameView);
+		PropertiesFormWindow properties = new PropertiesFormWindow(400, 700, Properties.class, gameView);
 		properties.start(gameView.display);
 	    }
 

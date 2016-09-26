@@ -45,7 +45,7 @@ public class MyTCPIPServer {
 								public void run() {
 									try {
 										Maze3dClientHandler clinetHandler = new Maze3dClientHandler();
-										clientsView.addClient(clinetHandler);
+										//clientsView.addClient(clinetHandler);
 										
 										clinetHandler.handleClient(someClient.getInputStream(),
 												someClient.getOutputStream());

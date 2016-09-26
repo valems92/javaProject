@@ -93,6 +93,9 @@ public class Run {
 		Properties.properites.setHintLength(0.5);
 		Properties.properites.setAnimationSpeed(200);
 		Properties.properites.setMazeDisplay("3d");
+		Properties.properites.setIpAddress("localhost");
+		Properties.properites.setPort(5400);
+		Properties.properites.setNumClients(5);
 
 		writeProperties();
 	}

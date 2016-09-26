@@ -294,6 +294,8 @@ public class Maze3dCommands extends CommonCommandsManager {
 			} catch (FileNotFoundException e) {
 				e.printStackTrace();
 			}
+			
+			model.saveSettingToServer();
 		}
 	}
 

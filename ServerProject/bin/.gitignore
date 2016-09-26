@@ -1,3 +1,6 @@
-/view/
+/CommonData/
 /boot/
+/model/
+/presenter/
 /server/
+/view/
