@@ -1,0 +1,1 @@
+java -XstartOnFirstThread -classpath mvpProject.jar:myAlgorithm.jar:swt/Linux32/swt.jar:mysql-connector-java-5.1.39-bin.jar boot.Run
